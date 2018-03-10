@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".AddEntryActivity">
+    <item
+        android:id="@+id/action_save_template"
+        android:icon="@drawable/ic_action_template_save"
+        android:title="@string/entry_template_txt"
+        android:orderInCategory="100"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_save_entry"
+        android:icon="@drawable/ic_action_done"
+        android:title="@string/entry_save_txt"
+        android:orderInCategory="200"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
+    <!-- Settings, should always be in the overflow -->
+</menu>

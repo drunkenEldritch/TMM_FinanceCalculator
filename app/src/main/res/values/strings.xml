@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">TMM_FinanceCalculator</string>
+
+    <!--Add entry menu-->
+    <string name="entry_template_txt">Template</string>
+    <string name="entry_save_txt">Save</string>
+    <string name="entry_category_txt">Category</string>
+
+    <string name="hint_entry_name">Name</string>
+    <string name="hint_entry_price">Price</string>
+    <string name="hint_entry_date">Date</string>
+    <string name="hint_entry_desc">Description</string>
+    <string name="add_new_entry_txt">Add new entry</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+</resources>
