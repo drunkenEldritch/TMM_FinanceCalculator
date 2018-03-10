@@ -7,30 +7,38 @@ import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import kotlinx.android.synthetic.main.fragment_add_entry_dialog.*
+import kotlinx.android.synthetic.main.fragment_add_entry_dialog.view.*
 
 
 class AddEntryDialogFragment : DialogFragment() {
 
-    private var layout: Int? = null
+    private var type: String? = null
 
     private var mListenerAddDialog: OnAddDialogFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
-            layout = arguments.getInt(LAYOUT_PARAM)
+            type = arguments.getString(TYPE)
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_add_entry_dialog!!, container, false)
+        var view: View? = null
+
+        when(type){
+            DATEDIALOG -> view =  inflater!!.inflate(R.layout.fragment_add_entry_dialog!!, container, false)
+        }
+
+        return view
     }
 
-    fun onOkButtonPressed(uri: Uri) {
+    fun onOkButtonPressed() {
         if (mListenerAddDialog != null) {
-            mListenerAddDialog!!.onFragmentInteraction(uri)
+            mListenerAddDialog!!.onFragmentInteraction()
         }
     }
 
@@ -49,16 +57,20 @@ class AddEntryDialogFragment : DialogFragment() {
     }
 
     interface OnAddDialogFragmentInteractionListener {
-        fun onFragmentInteraction(uri: Uri)
+        fun onFragmentInteraction()
     }
 
     companion object {
-        private val LAYOUT_PARAM = "layout"
+        private val TYPE = "mode"
+        private val HEADER = "header"
 
-        fun newInstance(resource: Int): AddEntryDialogFragment {
+        const val DATEDIALOG = "date_dialog"
+
+        fun newInstance(header: String, type: String): AddEntryDialogFragment {
             val fragment = AddEntryDialogFragment()
             val args = Bundle()
-            args.putInt(LAYOUT_PARAM, resource)
+            args.putString(TYPE, type)
+            args.putString(HEADER, header)
             fragment.arguments = args
             return fragment
         }
