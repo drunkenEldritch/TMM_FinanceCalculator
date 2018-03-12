@@ -86,7 +86,7 @@
             android:ems="10"
             android:hint="@string/hint_entry_price"
             android:inputType="numberDecimal"
-            android:text="0.00"
+            android:text="@string/entry_standard_price"
             app:layout_constraintEnd_toStartOf="@+id/guideline_50"
             app:layout_constraintStart_toStartOf="parent" />
     </android.support.design.widget.TextInputLayout>
@@ -133,17 +133,6 @@
             android:hint="@string/hint_entry_desc" />
     </android.support.design.widget.TextInputLayout>
 
-    <TextView
-        android:id="@+id/entry_txt_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/entry_category_txt"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/entry_acc_spinner" />
-
     <RadioGroup
         android:id="@+id/entry_radiogroup"
         android:layout_width="104dp"
@@ -161,15 +150,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="in" />
+            android:text="@string/entry_radio_in" />
 
         <RadioButton
             android:id="@+id/entry_out_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="out" />
+            android:text="@string/entry_radio_out" />
     </RadioGroup>
+
+    <TextView
+        android:id="@+id/entry_txt_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/entry_txt_acc"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/entry_layout_description" />
 
     <Spinner
         android:id="@+id/entry_acc_spinner"
@@ -178,20 +178,23 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:popupElevation="4dp"
+        android:requiresFadingEdge="none"
+        android:spinnerMode="dialog"
         app:layout_constraintEnd_toStartOf="@+id/guideline66"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/entry_txt_account" />
 
     <TextView
-        android:id="@+id/entry_txt_account"
+        android:id="@+id/entry_txt_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="16dp"
-        android:text="Account"
+        android:text="@string/entry_txt_category"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/entry_layout_description" />
+        app:layout_constraintTop_toBottomOf="@+id/entry_acc_spinner" />
 
     <Spinner
         android:id="@+id/entry_category_spinner"
@@ -200,8 +203,34 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:spinnerMode="dialog"
         app:layout_constraintEnd_toStartOf="@+id/guideline66"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/entry_txt_category" />
+
+    <Button
+        android:id="@+id/entry_add_category_btn"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/entry_btn_category"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline66"
+        app:layout_constraintTop_toBottomOf="@+id/entry_radiogroup" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        app:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_add_template" />
 
 </android.support.constraint.ConstraintLayout>

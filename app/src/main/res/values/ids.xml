@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Avoid "Couldn't resolve resource @id/visible" error in design view  when using TextInputLayout-->
+<resources>
+    <item name="visible" type="id"/>
+    <item name="masked" type="id"/>
+</resources>
