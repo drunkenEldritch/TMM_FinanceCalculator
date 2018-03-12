@@ -1,19 +1,13 @@
 package com.dreldritch.tmmfinancecalculator
 
-import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_add_entry.*
-import android.R.array
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.widget.ArrayAdapter
-import android.widget.Spinner
-import java.text.DecimalFormat
-import java.text.NumberFormat
 
 
 class AddEntryActivity: AppCompatActivity(), AddEntryDialogFragment.OnAddDialogFragmentInteractionListener {
@@ -50,7 +44,7 @@ class AddEntryActivity: AppCompatActivity(), AddEntryDialogFragment.OnAddDialogF
         entry_edit_price.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(s: Editable?) {
                 val price = s.toString()
-                var decimalPos : Int? = null
+                val decimalPos : Int
                 if(!price.contains(priceFormat)) return else decimalPos = price.indexOf(priceFormat)
 
                 if (price.substring(decimalPos).length > 3){
@@ -96,13 +90,13 @@ class AddEntryActivity: AppCompatActivity(), AddEntryDialogFragment.OnAddDialogF
     override fun onFragmentInteraction() {
     }
 
-    fun openDialog(header: String, type: String){
+    private fun openDialog(header: String, type: String){
         val fm = supportFragmentManager
         val dialog = AddEntryDialogFragment.newInstance(header, type)
         dialog.show(fm, "DialogFragment")
     }
 
-    fun openDateDialog(){
+    private fun openDateDialog(){
         openDialog("", AddEntryDialogFragment.DATEDIALOG)
     }
 
