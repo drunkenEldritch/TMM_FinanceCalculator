@@ -7,12 +7,18 @@ import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_add_entry.*
 import android.R.array
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-
+import java.text.DecimalFormat
+import java.text.NumberFormat
 
 
 class AddEntryActivity: AppCompatActivity(), AddEntryDialogFragment.OnAddDialogFragmentInteractionListener {
+
+    val priceFormat = "."
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,9 +41,30 @@ class AddEntryActivity: AppCompatActivity(), AddEntryDialogFragment.OnAddDialogF
 
         //Category Spinner
         val categorySpinner = entry_category_spinner
-        val categoryAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayOf("Essen", "Miete", "Essen", "Miete", "Essen", "Miete", "Essen", "Miete"))
+        val categoryAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayOf("Essen", "Miete", "Essen", "Miete", "Essen", "Miete", "Essen", "Miete", "Essen", "Miete", "Essen", "Miete", "Essen", "Miete", "Essen", "Miete"))
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         categorySpinner.adapter = categoryAdapter
+
+        //Price editText configuration
+        entry_edit_price.setSelectAllOnFocus(true)
+        entry_edit_price.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                val price = s.toString()
+                var decimalPos : Int? = null
+                if(!price.contains(priceFormat)) return else decimalPos = price.indexOf(priceFormat)
+
+                if (price.substring(decimalPos).length > 3){
+                    val newPrice = price.substring(0..decimalPos + 2)
+                    entry_edit_price.removeTextChangedListener(this)
+                    entry_edit_price.setText(newPrice)
+                    entry_edit_price.setSelection(newPrice.length)
+                    entry_edit_price.addTextChangedListener(this)
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
 
     }
 
@@ -78,4 +105,6 @@ class AddEntryActivity: AppCompatActivity(), AddEntryDialogFragment.OnAddDialogF
     fun openDateDialog(){
         openDialog("", AddEntryDialogFragment.DATEDIALOG)
     }
+
+
 }
