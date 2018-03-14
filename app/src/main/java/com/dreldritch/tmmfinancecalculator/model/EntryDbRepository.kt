@@ -31,7 +31,10 @@ class EntryDbRepository(application: Application){
 
     private class InsertAsyncTask(val entryDao: EntryDao, val dateDao: DateDao) : AsyncTask<EntryDataObject, Void, Void>() {
         override fun doInBackground(vararg entry: EntryDataObject): Void? {
-            val dateId = dateDao.insert(DateEntity(null, entry[0].date))
+
+            var dateId = dateDao.insert(DateEntity(null, entry[0].date))
+            if(dateId < 0) dateId = dateDao.getDateId(entry[0].date)
+
             entryDao.insert(EntryEntity(null,
                     entry[0].name,
                     entry[0].price,

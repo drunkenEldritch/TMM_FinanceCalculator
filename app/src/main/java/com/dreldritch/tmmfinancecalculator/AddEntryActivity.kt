@@ -1,5 +1,6 @@
 package com.dreldritch.tmmfinancecalculator
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -91,6 +92,7 @@ class AddEntryActivity: AppCompatActivity(), DateDialogFragment.OnAddDialogFragm
             val entryRepository = EntryDbRepository(application)
             entryRepository.insert(createEntryDbObject())
             Toast.makeText(this, "Entry saved!", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, MainActivity::class.java))
             true
         }
 
