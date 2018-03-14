@@ -13,4 +13,7 @@ abstract class  CategoryDao: BaseDao<CategoryEntitiy>(){
 
     @Query("DELETE FROM ${CategoryEntitiy.TABLE_NAME}")
     abstract fun deleteAll()
+
+    @Query("SELECT id FROM ${CategoryEntitiy.TABLE_NAME} WHERE category = :category")
+    abstract fun getCategoryId(category: String): Long
 }

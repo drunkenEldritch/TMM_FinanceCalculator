@@ -13,4 +13,7 @@ abstract class  AccountDao: BaseDao<AccountEntity>(){
 
     @Query("DELETE FROM ${AccountEntity.TABLE_NAME}")
     abstract fun deleteAll()
+
+    @Query("SELECT id FROM ${AccountEntity.TABLE_NAME} WHERE account = :account")
+    abstract fun getAccountId(account: String): Long
 }
