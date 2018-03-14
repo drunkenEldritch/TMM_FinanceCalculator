@@ -2,17 +2,26 @@ package com.dreldritch.tmmfinancecalculator
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
+import android.support.v4.app.Fragment
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_add_entry.*
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.ArrayAdapter
+import java.text.SimpleDateFormat
+import java.util.*
 
 
-class AddEntryActivity: AppCompatActivity(), AddEntryDialogFragment.OnAddDialogFragmentInteractionListener {
+class AddEntryActivity: AppCompatActivity(), DateDialogFragment.OnAddDialogFragmentInteractionListener {
 
+    //TODO
     val priceFormat = "."
+    val DATESORT = "yyyy-MM-dd"
+    val DATESLASH = "dd/MM/yyyy"
+    val DATEPOINT = "dd.MM.yyyy"
+    val preferedFormat = DATESORT
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,8 +32,9 @@ class AddEntryActivity: AppCompatActivity(), AddEntryDialogFragment.OnAddDialogF
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        entry_edit_date.setOnClickListener {
-            openDateDialog()
+        entry_txt_date.setText(SimpleDateFormat(preferedFormat).format(Date()))
+        entry_txt_date.setOnClickListener {
+            openDialog("DateDialog", DateDialogFragment.newInstance())
         }
 
         //Account Spinner
@@ -40,7 +50,7 @@ class AddEntryActivity: AppCompatActivity(), AddEntryDialogFragment.OnAddDialogF
         categorySpinner.adapter = categoryAdapter
 
         //Price editText configuration
-        entry_edit_price.setSelectAllOnFocus(true)
+        /*entry_edit_price.setSelectAllOnFocus(true)*/
         entry_edit_price.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(s: Editable?) {
                 val price = s.toString()
@@ -87,17 +97,13 @@ class AddEntryActivity: AppCompatActivity(), AddEntryDialogFragment.OnAddDialogF
         }
     }
 
-    override fun onFragmentInteraction() {
+    override fun onDateDialogInteraction(date: String) {
+        entry_txt_date.setText(date)
     }
 
-    private fun openDialog(header: String, type: String){
+    private fun openDialog(tag: String, dialog: DialogFragment){
         val fm = supportFragmentManager
-        val dialog = AddEntryDialogFragment.newInstance(header, type)
-        dialog.show(fm, "DialogFragment")
-    }
-
-    private fun openDateDialog(){
-        openDialog("", AddEntryDialogFragment.DATEDIALOG)
+        dialog.show(fm, tag)
     }
 
 

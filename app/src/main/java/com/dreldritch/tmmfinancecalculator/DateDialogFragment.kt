@@ -1,45 +1,59 @@
 package com.dreldritch.tmmfinancecalculator
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.fragment_add_entry_dialog.*
-import kotlinx.android.synthetic.main.fragment_add_entry_dialog.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
-class AddEntryDialogFragment : DialogFragment() {
+class DateDialogFragment : DialogFragment() {
 
-    private var type: String? = null
+    val DATESORT = "yyyy-MM-dd"
+    val DATESLASH = "dd/MM/yyyy"
+    val DATEPOINT = "dd.MM.yyyy"
+
+    val preferedFormat = DATESORT
 
     private var mListenerAddDialog: OnAddDialogFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            type = arguments.getString(TYPE)
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        var view: View? = null
+        return inflater!!.inflate(R.layout.fragment_add_entry_dialog!!, container, false)
+    }
 
-        when(type){
-            DATEDIALOG -> view =  inflater!!.inflate(R.layout.fragment_add_entry_dialog!!, container, false)
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        dialog_btn_ok.setOnClickListener {
+            onOkButtonPressed()
+            dismiss()
         }
 
-        return view
+        dialog_btn_dismiss.setOnClickListener {
+            dismiss()
+        }
     }
 
     fun onOkButtonPressed() {
         if (mListenerAddDialog != null) {
-            mListenerAddDialog!!.onFragmentInteraction()
+            mListenerAddDialog!!.onDateDialogInteraction(getDate(preferedFormat))
         }
+    }
+
+    private fun getDate(format: String): String{
+        val calendar = GregorianCalendar(datePicker.year,
+                datePicker.month,
+                datePicker.dayOfMonth)
+        return SimpleDateFormat(format).format(calendar.timeInMillis)
     }
 
     override fun onAttach(context: Context?) {
@@ -57,22 +71,12 @@ class AddEntryDialogFragment : DialogFragment() {
     }
 
     interface OnAddDialogFragmentInteractionListener {
-        fun onFragmentInteraction()
+        fun onDateDialogInteraction(date: String)
     }
 
     companion object {
-        private val TYPE = "mode"
-        private val HEADER = "header"
-
-        const val DATEDIALOG = "date_dialog"
-
-        fun newInstance(header: String, type: String): AddEntryDialogFragment {
-            val fragment = AddEntryDialogFragment()
-            val args = Bundle()
-            args.putString(TYPE, type)
-            args.putString(HEADER, header)
-            fragment.arguments = args
-            return fragment
+        fun newInstance(): DateDialogFragment {
+            return DateDialogFragment()
         }
     }
 }// Required empty public constructor
