@@ -3,7 +3,7 @@ package com.dreldritch.tmmfinancecalculator.model.entities
 /**
  * Created by cerox on 14.03.2018.
  */
-class EntryDataObject(
+data class EntryDataObject(
         val id: Long?,
         var name: String,
         var price: Double,

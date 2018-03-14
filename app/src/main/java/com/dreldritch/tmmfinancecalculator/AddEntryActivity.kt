@@ -10,6 +10,9 @@ import kotlinx.android.synthetic.main.activity_add_entry.*
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.ArrayAdapter
+import android.widget.Toast
+import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
+import com.dreldritch.tmmfinancecalculator.model.entities.EntryDataObject
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -85,16 +88,13 @@ class AddEntryActivity: AppCompatActivity(), DateDialogFragment.OnAddDialogFragm
         }
 
         R.id.action_save_entry -> {
-            // User chose the "Favorite" action, mark the current item
-            // as a favorite...
+            val entryRepository = EntryDbRepository(application)
+            entryRepository.insert(createEntryDbObject())
+            Toast.makeText(this, "Entry saved!", Toast.LENGTH_SHORT).show()
             true
         }
 
-        else -> {
-            // If we got here, the user's action was not recognized.
-            // Invoke the superclass to handle it.
-            super.onOptionsItemSelected(item)
-        }
+        else -> { super.onOptionsItemSelected(item) }
     }
 
     override fun onDateDialogInteraction(date: String) {
@@ -106,5 +106,20 @@ class AddEntryActivity: AppCompatActivity(), DateDialogFragment.OnAddDialogFragm
         dialog.show(fm, tag)
     }
 
+    private fun createEntryDbObject()
+            : EntryDataObject{
 
+        val inOut = if(entry_in_btn.isChecked) 1 else 0
+        return EntryDataObject(null,
+                entry_edit_name.text.toString(),
+                entry_edit_price.text.toString().toDouble(),
+                entry_edit_description.text.toString(),
+                inOut,
+                null,
+                entry_txt_date.text.toString(),
+                null,
+                "none",
+                null,
+                "konto1")
+    }
 }
