@@ -7,7 +7,7 @@ import android.arch.persistence.room.PrimaryKey
 
 @Entity(tableName = DateEntity.TABLE_NAME, indices = [Index(value = ["date"], unique = true)])
 data class DateEntity(
-        @PrimaryKey(autoGenerate = true) val id: Long,
+        @PrimaryKey(autoGenerate = true) val id: Long?,
         @ColumnInfo(name = "date") var date: String)
 {
     companion object {

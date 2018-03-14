@@ -5,7 +5,7 @@ import android.arch.persistence.room.*
 @Dao
 abstract class BaseDao<T>{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(obj: T)
+    abstract fun insert(obj: T): Long
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     abstract fun update(obj: T)

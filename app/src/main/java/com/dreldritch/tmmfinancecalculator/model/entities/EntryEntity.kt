@@ -6,7 +6,7 @@ import android.arch.persistence.room.PrimaryKey
 
 @Entity(tableName = EntryEntity.TABLE_NAME)
 data class EntryEntity(
-        @PrimaryKey(autoGenerate = true) val id: Long,
+        @PrimaryKey(autoGenerate = true) val id: Long?,
         @ColumnInfo(name = "name") var name: String,
         @ColumnInfo(name = "price") var price: Double,
         @ColumnInfo(name = "description") var description: String,
