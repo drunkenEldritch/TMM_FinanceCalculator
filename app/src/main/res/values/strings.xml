@@ -21,6 +21,7 @@
     <string name="entry_btn_templates">TEMPLATES</string>
     <string name="entry_btn_category">Add new</string>
     <string name="date_header">Date</string>
+    <string name="account_dialog_header">Account</string>
 
 
 </resources>

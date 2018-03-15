@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.fragment_account_dialog.*
 class AccountDialogFragment : DialogFragment() {
 
     //TODO Change string mock to db query
-    val acc_mock = arrayOf("Acc1", "Acc2")
 
     private var mListenerAccountDialog: OnAccountDialogInteractionListener? = null
 
@@ -28,11 +27,12 @@ class AccountDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        acc_dialog_list_view.adapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, acc_mock)
+        val adapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, arrayOf("Acc1", "Acc2"))
+        acc_dialog_list_view.adapter = adapter
         acc_dialog_list_view.setOnItemClickListener { parent, view, position, id ->
             val result = acc_dialog_list_view.getItemAtPosition(position) as String
             onItemPressed(result)
+            dismiss()
         }
     }
 
