@@ -4,21 +4,23 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.support.v4.app.Fragment
 import android.view.Menu
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_add_entry.*
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.ArrayAdapter
 import android.widget.Toast
+import com.dreldritch.tmmfinancecalculator.dialogs.AccountDialogFragment
+import com.dreldritch.tmmfinancecalculator.dialogs.CategoryDialogFragment
+import com.dreldritch.tmmfinancecalculator.dialogs.DateDialogFragment
 import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryDataObject
+import kotlinx.android.synthetic.main.activity_add_entry.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class AddEntryActivity: AppCompatActivity(), DateDialogFragment.OnAddDialogFragmentInteractionListener {
+class AddEntryActivity: AppCompatActivity(), DateDialogFragment.OnAddDialogFragmentInteractionListener,
+AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment.OnCategoryInteractionListener{
 
     //TODO
     val priceFormat = "."
@@ -37,24 +39,12 @@ class AddEntryActivity: AppCompatActivity(), DateDialogFragment.OnAddDialogFragm
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         entry_txt_date.setText(SimpleDateFormat(preferedFormat).format(Date()))
-        entry_txt_date.setOnClickListener {
-            openDialog("DateDialog", DateDialogFragment.newInstance())
-        }
 
-        //Account Spinner
-        val accSpinner = entry_acc_spinner
-        val accAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayOf("Konto1", "Konto2"))
-        accAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        accSpinner.adapter = accAdapter
-
-        //Category Spinner
-        val categorySpinner = entry_category_spinner
-        val categoryAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayOf("Essen", "Miete", "Essen", "Miete", "Essen", "Miete", "Essen", "Miete", "Essen", "Miete", "Essen", "Miete", "Essen", "Miete", "Essen", "Miete"))
-        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        categorySpinner.adapter = categoryAdapter
+        entry_txt_date.setOnClickListener { openDialog("DateDialog", DateDialogFragment.newInstance()) }
+        entry_txt_account.setOnClickListener { openDialog("AccountDialog", AccountDialogFragment.newInstance())}
+        entry_txt_category.setOnClickListener { openDialog("CategoryDialog", CategoryDialogFragment.newInstance()) }
 
         //Price editText configuration
-        /*entry_edit_price.setSelectAllOnFocus(true)*/
         entry_edit_price.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(s: Editable?) {
                 val price = s.toString()
@@ -100,7 +90,15 @@ class AddEntryActivity: AppCompatActivity(), DateDialogFragment.OnAddDialogFragm
     }
 
     override fun onDateDialogInteraction(date: String) {
-        entry_txt_date.setText(date)
+        entry_txt_date.text = date
+    }
+
+    override fun onAccDialogInteraction(account: String) {
+        entry_txt_account.text = account
+    }
+
+    override fun onCategoryDialogInteraction(category: String) {
+        entry_txt_category.text = category
     }
 
     private fun openDialog(tag: String, dialog: DialogFragment){
