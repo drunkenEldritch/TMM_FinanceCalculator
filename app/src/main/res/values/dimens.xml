@@ -2,4 +2,8 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="chip_padding">4dp</dimen>
     <dimen name="template_btn_horizontal_padding">16dp</dimen>
+
+    <dimen name="min_dialog_width">275dp</dimen>
+
+
 </resources>
