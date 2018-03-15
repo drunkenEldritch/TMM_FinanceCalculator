@@ -4,7 +4,6 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.support.v4.app.Fragment
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_add_entry.*
@@ -12,6 +11,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import com.dreldritch.tmmfinancecalculator.dialogs.DateDialogFragment
 import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryDataObject
 import java.text.SimpleDateFormat
