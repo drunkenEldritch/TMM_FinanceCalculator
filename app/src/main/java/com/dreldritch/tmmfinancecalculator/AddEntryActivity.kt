@@ -6,14 +6,13 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.Menu
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_add_entry.*
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.dreldritch.tmmfinancecalculator.dialogs.DateDialogFragment
 import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryDataObject
+import kotlinx.android.synthetic.main.activity_add_entry.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -41,20 +40,7 @@ class AddEntryActivity: AppCompatActivity(), DateDialogFragment.OnAddDialogFragm
             openDialog("DateDialog", DateDialogFragment.newInstance())
         }
 
-        //Account Spinner
-        val accSpinner = entry_acc_spinner
-        val accAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayOf("Konto1", "Konto2"))
-        accAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        accSpinner.adapter = accAdapter
-
-        //Category Spinner
-        val categorySpinner = entry_category_spinner
-        val categoryAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayOf("Essen", "Miete", "Essen", "Miete", "Essen", "Miete", "Essen", "Miete", "Essen", "Miete", "Essen", "Miete", "Essen", "Miete", "Essen", "Miete"))
-        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        categorySpinner.adapter = categoryAdapter
-
         //Price editText configuration
-        /*entry_edit_price.setSelectAllOnFocus(true)*/
         entry_edit_price.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(s: Editable?) {
                 val price = s.toString()
