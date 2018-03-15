@@ -10,6 +10,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
 import com.dreldritch.tmmfinancecalculator.dialogs.AccountDialogFragment
+import com.dreldritch.tmmfinancecalculator.dialogs.CategoryDialogFragment
 import com.dreldritch.tmmfinancecalculator.dialogs.DateDialogFragment
 import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryDataObject
@@ -19,7 +20,7 @@ import java.util.*
 
 
 class AddEntryActivity: AppCompatActivity(), DateDialogFragment.OnAddDialogFragmentInteractionListener,
-AccountDialogFragment.OnAccountDialogInteractionListener{
+AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment.OnCategoryInteractionListener{
 
     //TODO
     val priceFormat = "."
@@ -38,9 +39,10 @@ AccountDialogFragment.OnAccountDialogInteractionListener{
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         entry_txt_date.setText(SimpleDateFormat(preferedFormat).format(Date()))
-        entry_txt_date.setOnClickListener { openDialog("DateDialog", DateDialogFragment.newInstance()) }
 
+        entry_txt_date.setOnClickListener { openDialog("DateDialog", DateDialogFragment.newInstance()) }
         entry_txt_account.setOnClickListener { openDialog("AccountDialog", AccountDialogFragment.newInstance())}
+        entry_txt_category.setOnClickListener { openDialog("CategoryDialog", CategoryDialogFragment.newInstance()) }
 
         //Price editText configuration
         entry_edit_price.addTextChangedListener(object : TextWatcher{
@@ -93,6 +95,10 @@ AccountDialogFragment.OnAccountDialogInteractionListener{
 
     override fun onAccDialogInteraction(account: String) {
         entry_txt_account.text = account
+    }
+
+    override fun onCategoryDialogInteraction(category: String) {
+        entry_txt_category.text = category
     }
 
     private fun openDialog(tag: String, dialog: DialogFragment){

@@ -22,6 +22,9 @@
     <string name="entry_btn_category">Add new</string>
     <string name="date_header">Date</string>
     <string name="account_dialog_header">Account</string>
+    <string name="category_header">Category</string>
+    <string name="category_add_new_btn_str">Add New</string>
+    <string name="category_edit_text_str">Add new category</string>
 
 
 </resources>
