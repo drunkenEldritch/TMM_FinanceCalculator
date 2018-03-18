@@ -1,26 +1,34 @@
 package com.dreldritch.tmmfinancecalculator.dialogs
 
 import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
+import android.util.Log
+import android.view.*
 import com.dreldritch.tmmfinancecalculator.R
 import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntitiy
 import kotlinx.android.synthetic.main.category_layout.view.*
 import kotlinx.android.synthetic.main.fragment_category_dialog.*
+import java.util.*
+import android.view.MotionEvent
+import android.view.GestureDetector
+import android.widget.TextView
+
 
 class CategoryDialogFragment : DialogFragment() {
 
     //TODO Change string mock to db query
 
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var dialog: CategoryDialogFragment
 
     private var mListenerCategoryDialog: OnCategoryInteractionListener? = null
+
+    init {
+        dialog = this
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -44,13 +52,8 @@ class CategoryDialogFragment : DialogFragment() {
         category_recycler_view.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
-            adapter = CategoryAdapter(listOf(CategoryEntitiy(0, "Cat1"), CategoryEntitiy(1, "Cat2")))
-        }
-    }
-
-    fun onItemPressed(category: String) {
-        if (mListenerCategoryDialog != null) {
-            mListenerCategoryDialog!!.onCategoryDialogInteraction(category)
+            adapter = CategoryAdapter(dialog, listOf(CategoryEntitiy(0, "Cat1"), CategoryEntitiy(1, "Cat2")))
+            addItemDecoration(IconItemDecorator(20))
         }
     }
 
@@ -78,51 +81,42 @@ class CategoryDialogFragment : DialogFragment() {
         }
     }
 
-    class CategoryAdapter(val categories: List<CategoryEntitiy>): RecyclerView.Adapter<CategoryAdapter.ViewHolder>(){
+    fun onItemClicked(category: String){
+        if(mListenerCategoryDialog != null)
+            mListenerCategoryDialog!!.onCategoryDialogInteraction(category)
+    }
 
-        class ViewHolder(val view: View) : RecyclerView.ViewHolder(view)
+    class CategoryAdapter(private val dialog: CategoryDialogFragment, private val categories: List<CategoryEntitiy>): RecyclerView.Adapter<ViewHolder>(){
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryAdapter.ViewHolder{
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder{
             val view = LayoutInflater.from(parent.context).inflate(R.layout.category_layout, parent,false)
-            return ViewHolder(view)
+            return ViewHolder(view, dialog)
         }
 
         override fun getItemCount()= categories.count()
 
-
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.view.category_icon.text = categories[position].category.substring(0..1)
             holder.view.category_txt.text = categories[position].category
+            //val random = Random()
         }
     }
 
-    class MyAdapter(private val myDataset: Array<String>) :
-            RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+    class ViewHolder(val view: View, private val dialog: CategoryDialogFragment) : RecyclerView.ViewHolder(view), View.OnClickListener{
+        init { view.setOnClickListener(this) }
 
-        // Provide a reference to the views for each data item
-        // Complex data items may need more than one view per item, and
-        // you provide access to all the views for a data item in a view holder.
-        // Each data item is just a string in this case that is shown in a TextView.
-        class ViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
-
-
-        // Create new views (invoked by the layout manager)
-        override fun onCreateViewHolder(parent: ViewGroup,
-                                        viewType: Int): MyAdapter.ViewHolder {
-            // create a new view
-            val textView = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.test_text_view, parent, false) as TextView
-            // set the view's size, margins, paddings and layout parameters ...
-            return ViewHolder(textView)
+        override fun onClick(v: View?) {
+            val category = v!!.category_txt.text.toString()
+            Log.d("RecyclerItemClick", category)
+            dialog.onItemClicked(category)
+            dialog.dismiss()
         }
+    }
 
-        // Replace the contents of a view (invoked by the layout manager)
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            // - get element from your dataset at this position
-            // - replace the contents of the view with that element
-            holder.textView.text = myDataset[position]
+    class IconItemDecorator(private val verticalItemSpace: Int): RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView,
+                           state: RecyclerView.State) {
+            outRect.bottom = verticalItemSpace
         }
-
-        // Return the size of your dataset (invoked by the layout manager)
-        override fun getItemCount() = myDataset.size
     }
 }// Required empty public constructor
