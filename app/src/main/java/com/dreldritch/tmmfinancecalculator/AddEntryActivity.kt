@@ -1,6 +1,7 @@
 package com.dreldritch.tmmfinancecalculator
 
 import android.content.Intent
+import android.graphics.drawable.GradientDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -18,11 +19,11 @@ import kotlinx.android.synthetic.main.activity_add_entry.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+//TODO Save state of activity
 
 class AddEntryActivity: AppCompatActivity(), DateDialogFragment.OnAddDialogFragmentInteractionListener,
 AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment.OnCategoryInteractionListener{
 
-    //TODO
     val priceFormat = "."
     val DATESORT = "yyyy-MM-dd"
     val DATESLASH = "dd/MM/yyyy"
@@ -97,8 +98,15 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
         entry_txt_account.text = account
     }
 
-    override fun onCategoryDialogInteraction(category: String) {
+    override fun onCategoryDialogInteraction(category: String, iconColor: Int) {
         entry_txt_category.text = category
+        entry_icon_text_view.apply {
+            text = category.substring(0..1)
+            val shape = resources.getDrawable(R.drawable.category_icon_drawable, null) as GradientDrawable
+            shape.setColor(iconColor)
+            background = shape
+        }
+
     }
 
     private fun openDialog(tag: String, dialog: DialogFragment){

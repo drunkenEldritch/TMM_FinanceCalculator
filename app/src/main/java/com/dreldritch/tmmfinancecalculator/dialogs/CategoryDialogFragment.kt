@@ -75,7 +75,7 @@ class CategoryDialogFragment : DialogFragment() {
     }
 
     interface OnCategoryInteractionListener {
-        fun onCategoryDialogInteraction(category: String)
+        fun onCategoryDialogInteraction(category: String, color: Int)
     }
 
     companion object {
@@ -84,9 +84,9 @@ class CategoryDialogFragment : DialogFragment() {
         }
     }
 
-    fun onItemClicked(category: String){
+    fun onItemClicked(category: String, color: Int){
         if(mListenerCategoryDialog != null)
-            mListenerCategoryDialog!!.onCategoryDialogInteraction(category)
+            mListenerCategoryDialog!!.onCategoryDialogInteraction(category, color)
     }
 
     //TODO Remove CategoryDialogFragment from constructor
@@ -95,7 +95,7 @@ class CategoryDialogFragment : DialogFragment() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder{
             val view = LayoutInflater.from(parent.context).inflate(R.layout.category_layout, parent,false)
-            return ViewHolder(view, dialog)
+            return ViewHolder(view, dialog, null)
         }
 
         override fun getItemCount()= categories.count()
@@ -106,20 +106,24 @@ class CategoryDialogFragment : DialogFragment() {
 
             val random = Random()
             val shape = dialog.resources.getDrawable(R.drawable.category_icon_drawable, null) as GradientDrawable
-            shape.setColor(Color.argb(255, random.nextInt(255), random.nextInt(255), random.nextInt(255)))
+            val color = Color.argb(255, random.nextInt(255), random.nextInt(255), random.nextInt(255))
+            shape.setColor(color)
             holder.view.category_icon.background = shape
+            holder.iconColor = color
+
 
             holder.view.category_icon.text = categories[position].category.substring(0..1)
         }
     }
 
-    class ViewHolder(val view: View, private val dialog: CategoryDialogFragment) : RecyclerView.ViewHolder(view), View.OnClickListener{
+    class ViewHolder(val view: View, private val dialog: CategoryDialogFragment, var iconColor: Int?) : RecyclerView.ViewHolder(view), View.OnClickListener{
         init { view.setOnClickListener(this) }
 
         override fun onClick(v: View?) {
             val category = v!!.category_txt.text.toString()
             Log.d("RecyclerItemClick", category)
-            dialog.onItemClicked(category)
+            val drawable = v.category_icon.background as GradientDrawable
+            dialog.onItemClicked(category, this.iconColor!!)
             dialog.dismiss()
         }
     }
