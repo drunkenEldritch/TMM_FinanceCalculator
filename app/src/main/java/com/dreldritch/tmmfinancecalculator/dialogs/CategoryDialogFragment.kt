@@ -1,7 +1,10 @@
 package com.dreldritch.tmmfinancecalculator.dialogs
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Rect
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.ShapeDrawable
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.widget.LinearLayoutManager
@@ -86,6 +89,8 @@ class CategoryDialogFragment : DialogFragment() {
             mListenerCategoryDialog!!.onCategoryDialogInteraction(category)
     }
 
+    //TODO Remove CategoryDialogFragment from constructor
+    //TODO Save & load color from DB?
     class CategoryAdapter(private val dialog: CategoryDialogFragment, private val categories: List<CategoryEntitiy>): RecyclerView.Adapter<ViewHolder>(){
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder{
@@ -96,9 +101,15 @@ class CategoryDialogFragment : DialogFragment() {
         override fun getItemCount()= categories.count()
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.view.category_icon.text = categories[position].category.substring(0..1)
+
             holder.view.category_txt.text = categories[position].category
-            //val random = Random()
+
+            val random = Random()
+            val shape = dialog.resources.getDrawable(R.drawable.category_icon_drawable, null) as GradientDrawable
+            shape.setColor(Color.argb(255, random.nextInt(255), random.nextInt(255), random.nextInt(255)))
+            holder.view.category_icon.background = shape
+
+            holder.view.category_icon.text = categories[position].category.substring(0..1)
         }
     }
 
