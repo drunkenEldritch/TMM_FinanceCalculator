@@ -64,7 +64,8 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/category_new_text_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/category_new_text_layout"
+        tools:listitem="@layout/category_layout" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline4"

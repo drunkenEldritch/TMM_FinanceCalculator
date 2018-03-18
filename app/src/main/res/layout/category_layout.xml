@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/category_linear_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/category_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/category_icon_drawable"
+        android:padding="@dimen/category_icon_shape_padding"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        tools:text="Ca"></TextView>
+
     <TextView
         android:id="@+id/category_txt"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:textSize="@dimen/category_icon_txt_size"
+        tools:text="Category" />
 
 </LinearLayout>
