@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.dreldritch.tmmfinancecalculator.R
+import com.dreldritch.tmmfinancecalculator.extensions.getAccountStrings
+import com.dreldritch.tmmfinancecalculator.model.entities.AccountEntity
 import kotlinx.android.synthetic.main.fragment_account_dialog.*
 
 class AccountDialogFragment : DialogFragment() {
@@ -15,9 +17,12 @@ class AccountDialogFragment : DialogFragment() {
     //TODO Change string mock to db query
 
     private var mListenerAccountDialog: OnAccountDialogInteractionListener? = null
+    lateinit var accounts : ArrayList<AccountEntity>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if(arguments != null)
+            accounts = arguments.getParcelableArrayList<AccountEntity>(ACCOUNTS)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -27,12 +32,15 @@ class AccountDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, arrayOf("Acc1", "Acc2"))
-        acc_dialog_list_view.adapter = adapter
-        acc_dialog_list_view.setOnItemClickListener { parent, view, position, id ->
-            val result = acc_dialog_list_view.getItemAtPosition(position) as String
-            onItemPressed(result)
-            dismiss()
+
+        acc_dialog_list_view.apply {
+            val adapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, accounts.getAccountStrings())
+            this.adapter = adapter
+            setOnItemClickListener { parent, view, position, id ->
+                val result = acc_dialog_list_view.getItemAtPosition(position) as String
+                onItemPressed(result)
+                dismiss()
+            }
         }
     }
 
@@ -61,8 +69,15 @@ class AccountDialogFragment : DialogFragment() {
     }
 
     companion object {
-        fun newInstance(): AccountDialogFragment {
-            return AccountDialogFragment()
+        const val ACCOUNTS = "accounts"
+
+        fun newInstance(accounts: List<AccountEntity>): AccountDialogFragment {
+            val dialog = AccountDialogFragment()
+            val bundle = Bundle()
+            bundle.putParcelableArrayList(ACCOUNTS, ArrayList(accounts))
+            dialog.arguments = bundle
+            return dialog
         }
     }
+
 }// Required empty public constructor

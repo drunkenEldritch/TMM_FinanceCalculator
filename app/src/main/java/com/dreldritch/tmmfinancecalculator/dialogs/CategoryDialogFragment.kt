@@ -75,7 +75,7 @@ class CategoryDialogFragment : DialogFragment() {
     }
 
     interface OnCategoryInteractionListener {
-        fun onCategoryDialogInteraction(category: String, color: Int)
+        fun onCategoryDialogInteraction(category: String, iconColor: Int)
     }
 
     companion object {
@@ -110,7 +110,6 @@ class CategoryDialogFragment : DialogFragment() {
             shape.setColor(color)
             holder.view.category_icon.background = shape
             holder.iconColor = color
-
 
             holder.view.category_icon.text = categories[position].category.substring(0..1)
         }

@@ -25,9 +25,11 @@ class EntryDbRepository(application: Application){
         entryDao = db.getEntryDao()
     }
 
-    fun insert(entry: EntryDataObject) {
+    fun insertEntryObject(entry: EntryDataObject) {
         InsertAsyncTask(entryDao, dateDao).execute(entry)
     }
+
+    fun getAllAccounts() = accountDao.getAll()
 
     private class InsertAsyncTask(val entryDao: EntryDao, val dateDao: DateDao) : AsyncTask<EntryDataObject, Void, Void>() {
         override fun doInBackground(vararg entry: EntryDataObject): Void? {
