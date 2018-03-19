@@ -7,7 +7,7 @@ import android.arch.persistence.room.PrimaryKey
 
 @Entity(tableName = AccountEntity.TABLE_NAME, indices = [Index(value = ["account"], unique = true)])
 data class AccountEntity(
-        @PrimaryKey(autoGenerate = true) val id: Long,
+        @PrimaryKey(autoGenerate = true) val id: Long?,
         @ColumnInfo(name = "account") var account: String)
 {
     companion object {

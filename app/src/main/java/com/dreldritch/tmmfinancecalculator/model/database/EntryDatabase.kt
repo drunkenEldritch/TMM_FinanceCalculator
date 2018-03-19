@@ -13,8 +13,10 @@ import com.dreldritch.tmmfinancecalculator.model.entities.AccountEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntitiy
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryEntity
+import java.util.concurrent.Executors
 
-@Database(entities = arrayOf(EntryEntity::class, DateEntity::class, CategoryEntitiy::class, AccountEntity::class), version = 1)
+
+@Database(entities = [EntryEntity::class, DateEntity::class, CategoryEntitiy::class, AccountEntity::class], version = 1)
 abstract class EntryDatabase : RoomDatabase() {
 
     abstract fun getEntryDao(): EntryDao
@@ -23,20 +25,28 @@ abstract class EntryDatabase : RoomDatabase() {
     abstract fun getCategoryDao(): CategoryDao
 
     companion object {
-        const val DB_NAME = "entry_db.db"
+        private const val DB_NAME = "entry_db.db"
         private var INSTANCE: EntryDatabase? = null
 
-        fun getDatabase(context: Context): EntryDatabase {
-            if (INSTANCE == null) {
-                synchronized(EntryDatabase::class) {
-                    INSTANCE = Room.databaseBuilder(context.applicationContext,
-                            EntryDatabase::class.java, DB_NAME)
-                            .addMigrations(Migration_1_2())
-                            .build()
+        fun getDatabase(context: Context): EntryDatabase =
+                INSTANCE ?: synchronized(this) {
+                    INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
                 }
-            }
-            return INSTANCE!!
-        }
+
+        private fun buildDatabase(context: Context) =
+                Room.databaseBuilder(context.applicationContext,
+                        EntryDatabase::class.java, DB_NAME)
+                        .addCallback(object : Callback(){
+                            override fun onCreate(db: SupportSQLiteDatabase) {
+                                super.onCreate(db)
+                                Executors.newSingleThreadScheduledExecutor()
+                                        .execute({
+                                            getDatabase(context).getAccountDao().insert(AccountEntity(null, "default"))
+                                        })
+                            }
+                        })
+                        .addMigrations(Migration_1_2())
+                        .build()
     }
 
     fun destroyInstance() {
