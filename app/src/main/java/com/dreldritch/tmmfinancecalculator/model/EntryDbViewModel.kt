@@ -7,4 +7,5 @@ class EntryDbViewModel(application: Application): AndroidViewModel(application) 
     val repository = EntryDbRepository(application)
 
     fun getAllAccounts() = repository.getAllAccounts()
+    fun getAllCategories() = repository.getAllCategory()
 }
