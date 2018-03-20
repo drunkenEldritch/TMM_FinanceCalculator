@@ -17,6 +17,7 @@ import com.dreldritch.tmmfinancecalculator.dialogs.DateDialogFragment
 import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
 import com.dreldritch.tmmfinancecalculator.model.EntryDbViewModel
 import com.dreldritch.tmmfinancecalculator.model.entities.AccountEntity
+import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntitiy
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryDataObject
 import kotlinx.android.synthetic.main.activity_add_entry.*
 import java.text.SimpleDateFormat
@@ -34,6 +35,7 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
     val preferedFormat = DATESORT
 
     lateinit var accountList : List<AccountEntity>
+    lateinit var categoriestList : List<CategoryEntitiy>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,10 +44,22 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
         /*Account dialog setup*/
         val entryViewModel = ViewModelProviders.of(this).get(EntryDbViewModel::class.java)
         entryViewModel.getAllAccounts().observe(this, android.arch.lifecycle.Observer<List<AccountEntity>> {
-            accounts -> accountList = accounts!!
+            accounts -> //accountList = accounts!!
             entry_txt_account.apply {
-                text = accountList[0].account
-                setOnClickListener { openDialog("AccountDialog", AccountDialogFragment.newInstance(accountList))}
+                /*text = accountList[0].account
+                setOnClickListener { openDialog("AccountDialog", AccountDialogFragment.newInstance(accountList))}*/
+                text = accounts!![0].account
+                setOnClickListener { openDialog("AccountDialog", AccountDialogFragment.newInstance(accounts))}
+            }
+        })
+
+        entryViewModel.getAllCategories().observe(this, android.arch.lifecycle.Observer<List<CategoryEntitiy>> {
+            categories -> //categoriestList = categories!!
+            entry_txt_category.apply {
+                /*text = categoriestList[0].category
+                setOnClickListener { openDialog("CategoryDialog", CategoryDialogFragment.newInstance(categoriestList)) }*/
+                text = categories!![0].category
+                setOnClickListener { openDialog("CategoryDialog", CategoryDialogFragment.newInstance(categories!!)) }
             }
         })
 
@@ -58,7 +72,6 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
         entry_txt_date.setText(SimpleDateFormat(preferedFormat).format(Date()))
 
         entry_txt_date.setOnClickListener { openDialog("DateDialog", DateDialogFragment.newInstance()) }
-        entry_txt_category.setOnClickListener { openDialog("CategoryDialog", CategoryDialogFragment.newInstance()) }
 
         //Setup price
         entry_edit_price.addTextChangedListener(object : TextWatcher{
