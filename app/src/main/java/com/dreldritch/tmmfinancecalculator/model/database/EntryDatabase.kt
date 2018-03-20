@@ -5,6 +5,8 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.migration.Migration
 import android.content.Context
+import android.support.v4.content.ContextCompat
+import com.dreldritch.tmmfinancecalculator.R
 import com.dreldritch.tmmfinancecalculator.model.dao.AccountDao
 import com.dreldritch.tmmfinancecalculator.model.dao.CategoryDao
 import com.dreldritch.tmmfinancecalculator.model.dao.DateDao
@@ -36,15 +38,7 @@ abstract class EntryDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context) =
                 Room.databaseBuilder(context.applicationContext,
                         EntryDatabase::class.java, DB_NAME)
-                        .addCallback(object : Callback(){
-                            override fun onCreate(db: SupportSQLiteDatabase) {
-                                super.onCreate(db)
-                                Executors.newSingleThreadScheduledExecutor()
-                                        .execute({
-                                            getDatabase(context).getAccountDao().insert(AccountEntity(null, "default"))
-                                        })
-                            }
-                        })
+                        .addCallback(PrePopulateCallback(context))
                         .addMigrations(Migration_1_2())
                         .build()
     }
@@ -56,6 +50,23 @@ abstract class EntryDatabase : RoomDatabase() {
     class Migration_1_2: Migration(1, 2){
         override fun migrate(database: SupportSQLiteDatabase) {
             //TODO Add migration code to ver 2
+        }
+    }
+
+    class PrePopulateCallback(val context: Context): Callback(){
+        //Prepopulate database
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+            Executors.newSingleThreadExecutor()
+                    .execute({
+                        getDatabase(context).getAccountDao().insert(AccountEntity(null, "default"))
+                        getDatabase(context).getCategoryDao().insert(
+                                CategoryEntitiy(null, context.getString(R.string.category1), ContextCompat.getColor(context, R.color.blue)),
+                                CategoryEntitiy(null, context.getString(R.string.category2), ContextCompat.getColor(context, R.color.green)),
+                                CategoryEntitiy(null, context.getString(R.string.category3), ContextCompat.getColor(context, R.color.red)),
+                                CategoryEntitiy(null, context.getString(R.string.category4), ContextCompat.getColor(context, R.color.orange)),
+                                CategoryEntitiy(null, context.getString(R.string.category5), ContextCompat.getColor(context, R.color.purple)))
+                    })
         }
     }
 }
