@@ -29,36 +29,31 @@ class AddEntryActivity: AppCompatActivity(), DateDialogFragment.OnAddDialogFragm
 AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment.OnCategoryInteractionListener{
 
     val priceFormat = "."
-    val DATESORT = "yyyy-MM-dd"
-    val DATESLASH = "dd/MM/yyyy"
-    val DATEPOINT = "dd.MM.yyyy"
-    val preferedFormat = DATESORT
-
-    lateinit var accountList : List<AccountEntity>
-    lateinit var categoriestList : List<CategoryEntitiy>
+    val dateFormat = "yyyy-MM-dd"
+    //val DATESLASH = "dd/MM/yyyy"
+    //val DATEPOINT = "dd.MM.yyyy"
+    val preferedFormat = dateFormat
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_entry)
 
+
         /*Account dialog setup*/
         val entryViewModel = ViewModelProviders.of(this).get(EntryDbViewModel::class.java)
-        entryViewModel.getAllAccounts().observe(this, android.arch.lifecycle.Observer<List<AccountEntity>> {
-            accounts -> //accountList = accounts!!
+        entryViewModel.getAllAccounts()
+                .observe(this, android.arch.lifecycle.Observer<List<AccountEntity>> {accounts ->
             entry_txt_account.apply {
-                /*text = accountList[0].account
-                setOnClickListener { openDialog("AccountDialog", AccountDialogFragment.newInstance(accountList))}*/
-                text = accounts!![0].account
-                setOnClickListener { openDialog("AccountDialog", AccountDialogFragment.newInstance(accounts))}
+                //TODO Alternative to avoid crash on first start of app (NullPointerException because default data not initialized on first activity start)
+                if(accounts != null)
+                    text = accounts[0].account
+                setOnClickListener { openDialog("AccountDialog", AccountDialogFragment.newInstance(accounts!!))}
             }
         })
 
-        entryViewModel.getAllCategories().observe(this, android.arch.lifecycle.Observer<List<CategoryEntitiy>> {
-            categories -> //categoriestList = categories!!
+        entryViewModel.getAllCategories()
+                .observe(this, android.arch.lifecycle.Observer<List<CategoryEntitiy>> {categories ->
             entry_txt_category.apply {
-                /*text = categoriestList[0].category
-                setOnClickListener { openDialog("CategoryDialog", CategoryDialogFragment.newInstance(categoriestList)) }*/
-                text = categories!![0].category
                 setOnClickListener { openDialog("CategoryDialog", CategoryDialogFragment.newInstance(categories!!)) }
             }
         })

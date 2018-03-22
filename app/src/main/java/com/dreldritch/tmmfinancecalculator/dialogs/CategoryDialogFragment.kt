@@ -106,9 +106,9 @@ class CategoryDialogFragment : DialogFragment() {
 
             holder.view.category_txt.text = categories[position].category
 
-            val shape = dialog.resources.getDrawable(R.drawable.category_icon_drawable, null) as GradientDrawable
-            shape.setColor(categories[position].iconColor)
-            holder.view.category_icon.background = shape
+            val background = dialog.resources.getDrawable(R.drawable.category_icon_drawable, null) as GradientDrawable
+            background.setColor(categories[position].iconColor)
+            holder.view.category_icon.background = background
             holder.iconColor = categories[position].iconColor
 
             holder.view.category_icon.text = categories[position].category.substring(0..1)

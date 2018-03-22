@@ -1,4 +1,7 @@
 package com.dreldritch.tmmfinancecalculator.model.database
+
+import android.app.Application
+import android.arch.lifecycle.MutableLiveData
 import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
@@ -16,6 +19,7 @@ import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntitiy
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryEntity
 import java.util.concurrent.Executors
+import android.arch.lifecycle.LiveData
 
 
 @Database(entities = [EntryEntity::class, DateEntity::class, CategoryEntitiy::class, AccountEntity::class], version = 1)
@@ -25,6 +29,8 @@ abstract class EntryDatabase : RoomDatabase() {
     abstract fun getDateDao(): DateDao
     abstract fun getAccountDao(): AccountDao
     abstract fun getCategoryDao(): CategoryDao
+
+    private var mIsDatabaseCreated = MutableLiveData<Boolean>()
 
     companion object {
         private const val DB_NAME = "entry_db.db"
@@ -41,19 +47,29 @@ abstract class EntryDatabase : RoomDatabase() {
                         .addCallback(PrePopulateCallback(context))
                         .addMigrations(Migration_1_2())
                         .build()
+
+
     }
 
     fun destroyInstance() {
         INSTANCE = null
     }
 
-    class Migration_1_2: Migration(1, 2){
+    private fun setDatabaseCreated() {
+        mIsDatabaseCreated.postValue(true)
+    }
+
+    fun getDatabaseCreated(): LiveData<Boolean> {
+        return mIsDatabaseCreated
+    }
+
+    class Migration_1_2 : Migration(1, 2) {
         override fun migrate(database: SupportSQLiteDatabase) {
             //TODO Add migration code to ver 2
         }
     }
 
-    class PrePopulateCallback(val context: Context): Callback(){
+    class PrePopulateCallback(val context: Context) : Callback() {
         //Prepopulate database
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
@@ -67,6 +83,7 @@ abstract class EntryDatabase : RoomDatabase() {
                                 CategoryEntitiy(null, context.getString(R.string.category4), ContextCompat.getColor(context, R.color.orange)),
                                 CategoryEntitiy(null, context.getString(R.string.category5), ContextCompat.getColor(context, R.color.purple)))
                     })
+            getDatabase(context).setDatabaseCreated()
         }
     }
 }

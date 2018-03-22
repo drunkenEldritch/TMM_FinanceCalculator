@@ -11,7 +11,7 @@ import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryDataObject
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryEntity
 
-class EntryDbRepository(application: Application){
+class EntryDbRepository(val application: Application){
     private val dateDao: DateDao
     private val categoryDao: CategoryDao
     private val accountDao: AccountDao
@@ -32,6 +32,8 @@ class EntryDbRepository(application: Application){
     fun getAllAccounts() = accountDao.getAll()
 
     fun getAllCategory() = categoryDao.getAll()
+
+    fun isDbCreated() = EntryDatabase.getDatabase(application).getDatabaseCreated()
 
     private class InsertAsyncTask(val entryDao: EntryDao, val dateDao: DateDao) : AsyncTask<EntryDataObject, Void, Void>() {
         override fun doInBackground(vararg entry: EntryDataObject): Void? {
