@@ -1,12 +1,14 @@
 package com.dreldritch.tmmfinancecalculator.model
 
 import android.app.Application
+import android.content.Context
 import android.os.AsyncTask
 import com.dreldritch.tmmfinancecalculator.model.dao.AccountDao
 import com.dreldritch.tmmfinancecalculator.model.dao.CategoryDao
 import com.dreldritch.tmmfinancecalculator.model.dao.DateDao
 import com.dreldritch.tmmfinancecalculator.model.dao.EntryDao
 import com.dreldritch.tmmfinancecalculator.model.database.EntryDatabase
+import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntitiy
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryDataObject
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryEntity
@@ -29,6 +31,10 @@ class EntryDbRepository(val application: Application){
         InsertAsyncTask(entryDao, dateDao).execute(entry)
     }
 
+    fun insertCategory(category: CategoryEntitiy) {
+        InsertCategoryAsyncTask(categoryDao).execute(category)
+    }
+
     fun getAllAccounts() = accountDao.getAll()
 
     fun getAllCategory() = categoryDao.getAll()
@@ -49,6 +55,13 @@ class EntryDbRepository(val application: Application){
                     dateId,
                     1,
                     1))
+            return null
+        }
+    }
+
+    private class InsertCategoryAsyncTask(val categoryDao: CategoryDao) : AsyncTask<CategoryEntitiy, Void, Void>() {
+        override fun doInBackground(vararg category: CategoryEntitiy): Void? {
+            categoryDao.insert(category[0])
             return null
         }
     }

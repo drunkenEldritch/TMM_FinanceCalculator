@@ -1,5 +1,6 @@
 package com.dreldritch.tmmfinancecalculator.dialogs
 
+import android.app.Application
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Rect
@@ -10,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import com.dreldritch.tmmfinancecalculator.R
+import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
 import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntitiy
 import kotlinx.android.synthetic.main.category_layout.view.*
 import kotlinx.android.synthetic.main.fragment_category_dialog.*
@@ -42,6 +44,17 @@ class CategoryDialogFragment : DialogFragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = CategoryAdapter(this@CategoryDialogFragment, categories)
             addItemDecoration(IconItemDecorator(20))
+        }
+
+        category_add_btn.setOnClickListener {
+            val repository = EntryDbRepository(context.applicationContext as Application)
+            val colors = resources.getIntArray(R.array.icon_colors)
+            val color = colors[Random().nextInt(colors.size)]
+            val text = category_new_edit_text.text.toString()
+
+            repository.insertCategory(CategoryEntitiy(null, text, color))
+            onItemClicked(text, color)
+            dismiss()
         }
     }
 
@@ -81,7 +94,6 @@ class CategoryDialogFragment : DialogFragment() {
     }
 
     //TODO Remove CategoryDialogFragment from constructor
-    //TODO Save & load color from DB?
     class CategoryAdapter(private val dialog: CategoryDialogFragment, private val categories: List<CategoryEntitiy>): RecyclerView.Adapter<CategoryAdapter.ViewHolder>(){
 
         inner class ViewHolder(val view: View, var iconColor: Int?)

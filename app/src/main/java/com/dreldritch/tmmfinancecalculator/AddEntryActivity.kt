@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 //TODO Save state of activity
+//TODO Let ViewModel observe all fields
 
 class AddEntryActivity: AppCompatActivity(), DateDialogFragment.OnAddDialogFragmentInteractionListener,
 AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment.OnCategoryInteractionListener{
