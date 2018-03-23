@@ -37,7 +37,7 @@ class EntryDbRepository(val application: Application){
 
     fun getAllAccounts() = accountDao.getAll()
 
-    fun getAllCategory() = categoryDao.getAll()
+    fun getAllCategories() = categoryDao.getAll()
 
     fun isDbCreated() = EntryDatabase.getDatabase(application).getDatabaseCreated()
 
