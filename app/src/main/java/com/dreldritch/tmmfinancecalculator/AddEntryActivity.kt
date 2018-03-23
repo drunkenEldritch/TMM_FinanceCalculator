@@ -15,43 +15,47 @@ import com.dreldritch.tmmfinancecalculator.dialogs.AccountDialogFragment
 import com.dreldritch.tmmfinancecalculator.dialogs.CategoryDialogFragment
 import com.dreldritch.tmmfinancecalculator.dialogs.DateDialogFragment
 import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
-import com.dreldritch.tmmfinancecalculator.model.EntryDbViewModel
 import com.dreldritch.tmmfinancecalculator.model.entities.AccountEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntitiy
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryDataObject
 import kotlinx.android.synthetic.main.activity_add_entry.*
-import java.text.SimpleDateFormat
-import java.util.*
 
-//TODO Save state of activity
-//TODO Let ViewModel observe all fields
+//TODO Save state of activity?
+//TODO Set default Account on start
+//TODO DateDialog size & buttons & landscape layout
+//TODO Check landscape mode of all dialogs
+//TODO Alternative to avoid crash on first start of app (NullPointerException because default data not initialized on first activity start)
 
 class AddEntryActivity: AppCompatActivity(), DateDialogFragment.OnAddDialogFragmentInteractionListener,
 AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment.OnCategoryInteractionListener{
 
     val priceFormat = "."
     val dateFormat = "yyyy-MM-dd"
-    //val DATESLASH = "dd/MM/yyyy"
-    //val DATEPOINT = "dd.MM.yyyy"
     val preferedFormat = dateFormat
+
+    private lateinit var entryViewModel: AddEntryViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_entry)
 
+        /*Setup toolbar and menu*/
+        setSupportActionBar(findViewById(R.id.entry_toolbar))
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        entryViewModel = ViewModelProviders.of(this).get(AddEntryViewModel::class.java)
 
         /*Account dialog setup*/
-        val entryViewModel = ViewModelProviders.of(this).get(EntryDbViewModel::class.java)
         entryViewModel.getAllAccounts()
                 .observe(this, android.arch.lifecycle.Observer<List<AccountEntity>> {accounts ->
             entry_txt_account.apply {
-                //TODO Alternative to avoid crash on first start of app (NullPointerException because default data not initialized on first activity start)
-                if(accounts != null)
-                    text = accounts[0].account
+                if(entryViewModel.getCurrentAccount() != null)  text = entryViewModel.getCurrentAccount()
                 setOnClickListener { openDialog("AccountDialog", AccountDialogFragment.newInstance(accounts!!))}
             }
         })
 
+        /*Category dialog setup*/
         entryViewModel.getAllCategories()
                 .observe(this, android.arch.lifecycle.Observer<List<CategoryEntitiy>> {categories ->
             entry_txt_category.apply {
@@ -59,15 +63,22 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
             }
         })
 
-        /*Setup toolbar and menu*/
-        setSupportActionBar(findViewById(R.id.entry_toolbar))
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        if(entryViewModel.getCurrentCategory() != null) {
+            entry_txt_category.text = entryViewModel.getCurrentCategory()
 
-        /*Setup date*/
-        entry_txt_date.setText(SimpleDateFormat(preferedFormat).format(Date()))
+            entry_icon_text_view.apply {
+                text = entryViewModel.getCurrentCategory()!!.substring(0..1)
+                val shape = resources.getDrawable(R.drawable.category_icon_drawable, null) as GradientDrawable
+                shape.setColor(entryViewModel.getIconColor()!!)
+                background = shape
+            }
+        }
 
-        entry_txt_date.setOnClickListener { openDialog("DateDialog", DateDialogFragment.newInstance()) }
+        /*Date setup*/
+        entry_txt_date.apply {
+            text = entryViewModel.getCurrentDate()
+            setOnClickListener { openDialog("DateDialog", DateDialogFragment.newInstance()) }
+        }
 
         //Setup price
         entry_edit_price.addTextChangedListener(object : TextWatcher{
@@ -115,19 +126,25 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
 
     /*DialogInteractionListeners*/
     override fun onDateDialogInteraction(date: String) {
-        entry_txt_date.text = date
+        entryViewModel.setCurrentDate(date)
+        entry_txt_date.text = entryViewModel.getCurrentDate()
     }
 
     override fun onAccDialogInteraction(account: String) {
-        entry_txt_account.text = account
+        entryViewModel.setCurrentAccount(account)
+        entry_txt_account.text = entryViewModel.getCurrentAccount()
     }
 
     override fun onCategoryDialogInteraction(category: String, iconColor: Int) {
-        entry_txt_category.text = category
+        entryViewModel.setCurrentCategory(category)
+        entry_txt_category.text = entryViewModel.getCurrentCategory()
+
+        entryViewModel.setIconColor(iconColor)
+
         entry_icon_text_view.apply {
-            text = category.substring(0..1)
+            text = entryViewModel.getCurrentCategory()!!.substring(0..1)
             val shape = resources.getDrawable(R.drawable.category_icon_drawable, null) as GradientDrawable
-            shape.setColor(iconColor)
+            shape.setColor(entryViewModel.getIconColor()!!)
             background = shape
         }
     }
