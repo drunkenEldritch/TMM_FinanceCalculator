@@ -6,38 +6,38 @@ import android.arch.lifecycle.LiveData
 import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
 import com.dreldritch.tmmfinancecalculator.model.entities.AccountEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntitiy
+import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 import java.text.SimpleDateFormat
 import java.util.*
 
 class AddEntryViewModel(application: Application): AndroidViewModel(application) {
 
     private val preferedFormat = "yyyy-MM-dd"
-    private var currentDate: String
-    private var currentAccount: String? = null
-    private var currentCategory: String? = null
-    private var categoryIconColor: Int? = null
+
+    private var dateEntity: DateEntity
+    private var accountEntity: AccountEntity? = null
+    private var categoryEntitiy: CategoryEntitiy? = null
 
     private val repository = EntryDbRepository(application)
     private var categories: LiveData<List<CategoryEntitiy>>?
     private var accounts: LiveData<List<AccountEntity>>?
 
     init {
-        currentDate = SimpleDateFormat(preferedFormat).format(Date())
+        dateEntity = DateEntity(null,SimpleDateFormat(preferedFormat).format(Date()))
         categories = repository.getAllCategories()
         accounts = repository.getAllAccounts()
     }
 
-    fun getCurrentDate(): String? = currentDate
-    fun setCurrentDate(date: String) {currentDate = date}
+    fun getCurrentDate(): DateEntity? = dateEntity
+    fun setCurrentDate(id: Long?, date: String) {dateEntity = DateEntity(id, date) }
 
-    fun getCurrentAccount(): String? = currentAccount
-    fun setCurrentAccount(account: String) {currentAccount = account}
+    fun getCurrentAccount(): AccountEntity? = accountEntity
+    fun setCurrentAccount(accountEntity: AccountEntity) {this.accountEntity = accountEntity}
 
-    fun getCurrentCategory(): String? = currentCategory
-    fun setCurrentCategory(category: String) {currentCategory = category}
-
-    fun getIconColor(): Int? = categoryIconColor
-    fun setIconColor(iconColor: Int) {categoryIconColor = iconColor}
+    fun getCurrentCategory(): CategoryEntitiy? = categoryEntitiy
+    fun setCurrentCategory(categoryEntitiy: CategoryEntitiy) {
+        this.categoryEntitiy = categoryEntitiy
+    }
 
     /*DB queries*/
     fun getAllAccounts() = repository.getAllAccounts()

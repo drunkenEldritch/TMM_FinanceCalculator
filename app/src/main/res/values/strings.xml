@@ -26,6 +26,9 @@
     <string name="category_add_new_btn_str">Add</string>
     <string name="category_edit_text_str">Add new category</string>
 
+    <string name="no_name_error">Name is missing!</string>
+    <string name="no_price_error">Price is missing!</string>
+
     <!--Default Category-->
     <string name="category1">Rent</string>
     <string name="category2">Food</string>

@@ -52,8 +52,9 @@ class CategoryDialogFragment : DialogFragment() {
             val color = colors[Random().nextInt(colors.size)]
             val text = category_new_edit_text.text.toString()
 
-            repository.insertCategory(CategoryEntitiy(null, text, color))
-            onItemClicked(text, color)
+            val category = CategoryEntitiy(null, text, color)
+            repository.insertCategory(category)
+            onItemClicked(category)
             dismiss()
         }
     }
@@ -73,7 +74,7 @@ class CategoryDialogFragment : DialogFragment() {
     }
 
     interface OnCategoryInteractionListener {
-        fun onCategoryDialogInteraction(category: String, iconColor: Int)
+        fun onCategoryDialogInteraction(category: CategoryEntitiy)
     }
 
     companion object {
@@ -88,21 +89,23 @@ class CategoryDialogFragment : DialogFragment() {
         }
     }
 
-    fun onItemClicked(category: String, color: Int){
+    fun onItemClicked(categoryEntitiy: CategoryEntitiy){
         if(mListenerCategoryDialog != null)
-            mListenerCategoryDialog!!.onCategoryDialogInteraction(category, color)
+            mListenerCategoryDialog!!.onCategoryDialogInteraction(categoryEntitiy)
     }
 
     //TODO Remove CategoryDialogFragment from constructor
     class CategoryAdapter(private val dialog: CategoryDialogFragment, private val categories: List<CategoryEntitiy>): RecyclerView.Adapter<CategoryAdapter.ViewHolder>(){
+
+        val categoryMap = categories.map { it.category to it }.toMap()
 
         inner class ViewHolder(val view: View, var iconColor: Int?)
             : RecyclerView.ViewHolder(view), View.OnClickListener{
             init { view.setOnClickListener(this) }
 
             override fun onClick(v: View?) {
-                val category = v!!.category_txt.text.toString()
-                dialog.onItemClicked(category, this.iconColor!!)
+                val categoryEntity = categoryMap[v!!.category_txt.text.toString()]
+                dialog.onItemClicked(categoryEntity!!)
                 dialog.dismiss()
             }
         }

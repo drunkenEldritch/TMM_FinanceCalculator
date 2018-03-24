@@ -1,7 +1,6 @@
 package com.dreldritch.tmmfinancecalculator.model
 
 import android.app.Application
-import android.content.Context
 import android.os.AsyncTask
 import com.dreldritch.tmmfinancecalculator.model.dao.AccountDao
 import com.dreldritch.tmmfinancecalculator.model.dao.CategoryDao
@@ -27,13 +26,10 @@ class EntryDbRepository(val application: Application){
         entryDao = db.getEntryDao()
     }
 
-    fun insertEntryObject(entry: EntryDataObject) {
-        InsertAsyncTask(entryDao, dateDao).execute(entry)
-    }
+    fun insertEntryObject(entry: EntryDataObject) = InsertEntryDataAsyncTask(entryDao, dateDao).execute(entry)
 
-    fun insertCategory(category: CategoryEntitiy) {
-        InsertCategoryAsyncTask(categoryDao).execute(category)
-    }
+    fun insertCategory(category: CategoryEntitiy) = InsertCategoryAsyncTask(categoryDao).execute(category)
+
 
     fun getAllAccounts() = accountDao.getAll()
 
@@ -41,11 +37,17 @@ class EntryDbRepository(val application: Application){
 
     fun isDbCreated() = EntryDatabase.getDatabase(application).getDatabaseCreated()
 
-    private class InsertAsyncTask(val entryDao: EntryDao, val dateDao: DateDao) : AsyncTask<EntryDataObject, Void, Void>() {
+    //TODO Make dao to insert into multiple tables
+    private class InsertEntryDataAsyncTask(val entryDao: EntryDao, val dateDao: DateDao) : AsyncTask<EntryDataObject, Void, Void>() {
         override fun doInBackground(vararg entry: EntryDataObject): Void? {
 
             var dateId = dateDao.insert(DateEntity(null, entry[0].date))
             if(dateId < 0) dateId = dateDao.getDateId(entry[0].date)
+
+            val categoryId = if(entry[0].categoryEntitiy == null) null else entry[0].categoryEntitiy!!.id
+
+            //1 = default account
+            val accountId = if(entry[0].accountEntity == null) 1 else entry[0].accountEntity!!.id
 
             entryDao.insert(EntryEntity(null,
                     entry[0].name,
@@ -53,8 +55,8 @@ class EntryDbRepository(val application: Application){
                     entry[0].description,
                     entry[0].in_out,
                     dateId,
-                    1,
-                    1))
+                    categoryId,
+                    accountId!!))
             return null
         }
     }

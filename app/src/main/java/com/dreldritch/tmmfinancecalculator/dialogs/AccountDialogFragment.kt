@@ -37,16 +37,16 @@ class AccountDialogFragment : DialogFragment() {
             val adapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, accounts.getAccountStrings())
             this.adapter = adapter
             setOnItemClickListener { parent, view, position, id ->
-                val result = acc_dialog_list_view.getItemAtPosition(position) as String
-                onItemPressed(result)
+                //val result = acc_dialog_list_view.getItemAtPosition(position) as String
+                onItemPressed(accounts[position])
                 dismiss()
             }
         }
     }
 
-    fun onItemPressed(account: String) {
+    fun onItemPressed(accountEntity: AccountEntity) {
         if (mListenerAccountDialog != null) {
-            mListenerAccountDialog!!.onAccDialogInteraction(account)
+            mListenerAccountDialog!!.onAccDialogInteraction(accountEntity)
         }
     }
 
@@ -65,7 +65,7 @@ class AccountDialogFragment : DialogFragment() {
     }
 
     interface OnAccountDialogInteractionListener {
-        fun onAccDialogInteraction(account: String)
+        fun onAccDialogInteraction(accountEntity: AccountEntity)
     }
 
     companion object {
