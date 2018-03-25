@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
+import android.widget.Toast
 import com.dreldritch.tmmfinancecalculator.R
 import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
 import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
@@ -43,16 +44,21 @@ class CategoryDialogFragment : DialogFragment() {
             addItemDecoration(IconItemDecorator(20))
         }
 
+        //TODO Access with ViewModel
         category_add_btn.setOnClickListener {
             val repository = EntryDbRepository(context.applicationContext as Application)
             val colors = resources.getIntArray(R.array.icon_colors)
             val color = colors[Random().nextInt(colors.size)]
             val text = category_new_edit_text.text.toString()
 
-            val category = CategoryEntity(null, text, color)
-            repository.insertCategory(category)
-            onItemClicked(category)
-            dismiss()
+            if(text.isEmpty()){
+                Toast.makeText(context, R.string.no_category_error, Toast.LENGTH_SHORT).show()
+            }else{
+                val category = CategoryEntity(null, text, color)
+                repository.insertCategory(category)
+                onItemClicked(category)
+                dismiss()
+            }
         }
     }
 

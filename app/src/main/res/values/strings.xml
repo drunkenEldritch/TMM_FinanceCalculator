@@ -27,6 +27,7 @@
 
     <string name="no_name_error">Name is missing!</string>
     <string name="no_price_error">Price is missing!</string>
+    <string name="no_category_error">No category added!</string>
 
     <!--Default Category-->
     <string name="category1">Rent</string>
