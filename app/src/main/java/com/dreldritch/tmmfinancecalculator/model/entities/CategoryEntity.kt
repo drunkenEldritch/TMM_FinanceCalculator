@@ -7,8 +7,8 @@ import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
 
-@Entity(tableName = CategoryEntitiy.TABLE_NAME, indices = [Index(value = ["category"], unique = true)])
-data class CategoryEntitiy(
+@Entity(tableName = CategoryEntity.TABLE_NAME, indices = [Index(value = ["category"], unique = true)])
+data class CategoryEntity(
         @PrimaryKey(autoGenerate = true) val id: Long?,
         @ColumnInfo(name = "category") var category: String,
         @ColumnInfo(name = "icon_color") var iconColor: Int): Parcelable {
@@ -28,15 +28,15 @@ data class CategoryEntitiy(
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<CategoryEntitiy> {
+    companion object CREATOR : Parcelable.Creator<CategoryEntity> {
 
         const val TABLE_NAME = "Categories"
 
-        override fun createFromParcel(parcel: Parcel): CategoryEntitiy {
-            return CategoryEntitiy(parcel)
+        override fun createFromParcel(parcel: Parcel): CategoryEntity {
+            return CategoryEntity(parcel)
         }
 
-        override fun newArray(size: Int): Array<CategoryEntitiy?> {
+        override fun newArray(size: Int): Array<CategoryEntity?> {
             return arrayOfNulls(size)
         }
     }

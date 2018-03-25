@@ -14,14 +14,14 @@ import com.dreldritch.tmmfinancecalculator.model.dao.CategoryDao
 import com.dreldritch.tmmfinancecalculator.model.dao.DateDao
 import com.dreldritch.tmmfinancecalculator.model.dao.EntryDao
 import com.dreldritch.tmmfinancecalculator.model.entities.AccountEntity
-import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntitiy
+import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryEntity
 import java.util.concurrent.Executors
 import android.arch.lifecycle.LiveData
 
 
-@Database(entities = [EntryEntity::class, DateEntity::class, CategoryEntitiy::class, AccountEntity::class], version = 1)
+@Database(entities = [EntryEntity::class, DateEntity::class, CategoryEntity::class, AccountEntity::class], version = 1)
 abstract class EntryDatabase : RoomDatabase() {
 
     abstract fun getEntryDao(): EntryDao
@@ -76,11 +76,11 @@ abstract class EntryDatabase : RoomDatabase() {
                     .execute({
                         getDatabase(context).getAccountDao().insert(AccountEntity(null, "default"))
                         getDatabase(context).getCategoryDao().insert(
-                                CategoryEntitiy(null, context.getString(R.string.category1), ContextCompat.getColor(context, R.color.blue)),
-                                CategoryEntitiy(null, context.getString(R.string.category2), ContextCompat.getColor(context, R.color.green)),
-                                CategoryEntitiy(null, context.getString(R.string.category3), ContextCompat.getColor(context, R.color.red)),
-                                CategoryEntitiy(null, context.getString(R.string.category4), ContextCompat.getColor(context, R.color.orange)),
-                                CategoryEntitiy(null, context.getString(R.string.category5), ContextCompat.getColor(context, R.color.purple)))
+                                CategoryEntity(null, context.getString(R.string.category1), ContextCompat.getColor(context, R.color.blue)),
+                                CategoryEntity(null, context.getString(R.string.category2), ContextCompat.getColor(context, R.color.green)),
+                                CategoryEntity(null, context.getString(R.string.category3), ContextCompat.getColor(context, R.color.red)),
+                                CategoryEntity(null, context.getString(R.string.category4), ContextCompat.getColor(context, R.color.orange)),
+                                CategoryEntity(null, context.getString(R.string.category5), ContextCompat.getColor(context, R.color.purple)))
                     })
             getDatabase(context).setDatabaseCreated()
         }

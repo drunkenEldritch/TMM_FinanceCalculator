@@ -11,7 +11,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import com.dreldritch.tmmfinancecalculator.R
 import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
-import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntitiy
+import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
 import kotlinx.android.synthetic.main.category_layout.view.*
 import kotlinx.android.synthetic.main.fragment_category_dialog.*
 import java.util.*
@@ -20,7 +20,7 @@ import java.util.*
 class CategoryDialogFragment : DialogFragment() {
 
     private var mListenerCategoryDialog: OnCategoryInteractionListener? = null
-    private lateinit var categories: List<CategoryEntitiy>
+    private lateinit var categories: List<CategoryEntity>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +49,7 @@ class CategoryDialogFragment : DialogFragment() {
             val color = colors[Random().nextInt(colors.size)]
             val text = category_new_edit_text.text.toString()
 
-            val category = CategoryEntitiy(null, text, color)
+            val category = CategoryEntity(null, text, color)
             repository.insertCategory(category)
             onItemClicked(category)
             dismiss()
@@ -71,13 +71,13 @@ class CategoryDialogFragment : DialogFragment() {
     }
 
     interface OnCategoryInteractionListener {
-        fun onCategoryDialogInteraction(category: CategoryEntitiy)
+        fun onCategoryDialogInteraction(categoryEntity: CategoryEntity)
     }
 
     companion object {
         const val CATEGORIES = "categories"
 
-        fun newInstance(categories: List<CategoryEntitiy>): CategoryDialogFragment {
+        fun newInstance(categories: List<CategoryEntity>): CategoryDialogFragment {
             val dialog = CategoryDialogFragment()
             val bundle = Bundle()
             bundle.putParcelableArrayList(CATEGORIES, ArrayList(categories))
@@ -86,13 +86,13 @@ class CategoryDialogFragment : DialogFragment() {
         }
     }
 
-    fun onItemClicked(categoryEntitiy: CategoryEntitiy){
+    fun onItemClicked(categoryEntity: CategoryEntity){
         if(mListenerCategoryDialog != null)
-            mListenerCategoryDialog!!.onCategoryDialogInteraction(categoryEntitiy)
+            mListenerCategoryDialog!!.onCategoryDialogInteraction(categoryEntity)
     }
 
     //TODO Remove CategoryDialogFragment from constructor
-    class CategoryAdapter(private val dialog: CategoryDialogFragment, private val categories: List<CategoryEntitiy>): RecyclerView.Adapter<CategoryAdapter.ViewHolder>(){
+    class CategoryAdapter(private val dialog: CategoryDialogFragment, private val categories: List<CategoryEntity>): RecyclerView.Adapter<CategoryAdapter.ViewHolder>(){
 
         val categoryMap = categories.map { it.category to it }.toMap()
 

@@ -16,8 +16,7 @@ import com.dreldritch.tmmfinancecalculator.dialogs.CategoryDialogFragment
 import com.dreldritch.tmmfinancecalculator.dialogs.DateDialogFragment
 import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
 import com.dreldritch.tmmfinancecalculator.model.entities.AccountEntity
-import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntitiy
-import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
+import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryDataObject
 import kotlinx.android.synthetic.main.activity_add_entry.*
 
@@ -57,7 +56,7 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
 
         /*Category dialog setup*/
         entryViewModel.getAllCategories()
-                .observe(this, android.arch.lifecycle.Observer<List<CategoryEntitiy>> {categories ->
+                .observe(this, android.arch.lifecycle.Observer<List<CategoryEntity>> { categories ->
             entry_txt_category.apply {
                 setOnClickListener { openDialog("CategoryDialog", CategoryDialogFragment.newInstance(categories!!)) }
             }
@@ -138,8 +137,8 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
         entry_txt_account.text = entryViewModel.getCurrentAccount()!!.account
     }
 
-    override fun onCategoryDialogInteraction(categoryEntitiy: CategoryEntitiy) {
-        entryViewModel.setCurrentCategory(categoryEntitiy)
+    override fun onCategoryDialogInteraction(categoryEntity: CategoryEntity) {
+        entryViewModel.setCurrentCategory(categoryEntity)
         entry_txt_category.text = entryViewModel.getCurrentCategory()!!.category
 
 
@@ -157,7 +156,7 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
         dialog.show(fm, tag)
     }
 
-    private fun createEntryDbObject(category: CategoryEntitiy?, account: AccountEntity?)
+    private fun createEntryDbObject(category: CategoryEntity?, account: AccountEntity?)
             : EntryDataObject?{
 
         val name = entry_edit_name.text.toString()

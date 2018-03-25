@@ -2,17 +2,21 @@ package com.dreldritch.tmmfinancecalculator.model
 
 import android.app.Application
 import android.os.AsyncTask
+import android.util.Log
 import com.dreldritch.tmmfinancecalculator.model.dao.AccountDao
 import com.dreldritch.tmmfinancecalculator.model.dao.CategoryDao
 import com.dreldritch.tmmfinancecalculator.model.dao.DateDao
 import com.dreldritch.tmmfinancecalculator.model.dao.EntryDao
 import com.dreldritch.tmmfinancecalculator.model.database.EntryDatabase
-import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntitiy
+import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryDataObject
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryEntity
 
+private const val REPOSITORY_TAG = "EntryDbRepository"
+
 class EntryDbRepository(val application: Application){
+
     private val dateDao: DateDao
     private val categoryDao: CategoryDao
     private val accountDao: AccountDao
@@ -30,7 +34,7 @@ class EntryDbRepository(val application: Application){
         InsertEntryDataAsyncTask(entryDao, dateDao).execute(entry)
     }
 
-    fun insertCategory(category: CategoryEntitiy) {
+    fun insertCategory(category: CategoryEntity) {
         InsertCategoryAsyncTask(categoryDao).execute(category)
     }
 
@@ -46,12 +50,12 @@ class EntryDbRepository(val application: Application){
             var dateId = dateDao.insert(DateEntity(null, entry[0].date))
             if(dateId < 0) dateId = dateDao.getDateId(entry[0].date)
 
-            val categoryId = if(entry[0].categoryEntitiy == null) null else entry[0].categoryEntitiy!!.id
+            val categoryId = if(entry[0].categoryEntity == null) null else entry[0].categoryEntity!!.id
 
             //1 = default account
             val accountId = if(entry[0].accountEntity == null) 1 else entry[0].accountEntity!!.id
 
-            entryDao.insert(EntryEntity(null,
+            val id = entryDao.insert(EntryEntity(null,
                     entry[0].name,
                     entry[0].price,
                     entry[0].description,
@@ -59,13 +63,27 @@ class EntryDbRepository(val application: Application){
                     dateId,
                     categoryId,
                     accountId!!))
+
+            Log.d(REPOSITORY_TAG, "id = $id,\n" +
+                    "name = ${entry[0].name},\n" +
+                    "price = ${entry[0].price},\n" +
+                    "desc = ${entry[0].description},\n" +
+                    "type = ${entry[0].in_out},\n" +
+                    "dateId = $dateId,\n" +
+                    "catId = $categoryId,\n" +
+                    "accId = $accountId\n" +
+                    "with $entryDao")
             return null
         }
     }
 
-    private class InsertCategoryAsyncTask(val categoryDao: CategoryDao) : AsyncTask<CategoryEntitiy, Void, Void>() {
-        override fun doInBackground(vararg category: CategoryEntitiy): Void? {
+    private class InsertCategoryAsyncTask(val categoryDao: CategoryDao) : AsyncTask<CategoryEntity, Void, Void>() {
+        override fun doInBackground(vararg category: CategoryEntity): Void? {
             categoryDao.insert(category[0])
+            Log.d(REPOSITORY_TAG, "categoryID = ${category[0].id},\n" +
+                    "category = ${category[0].category},\n" +
+                    "iconColor = ${category[0].iconColor}\n" +
+                    "with $categoryDao")
             return null
         }
     }

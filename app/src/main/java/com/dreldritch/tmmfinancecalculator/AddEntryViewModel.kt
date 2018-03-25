@@ -5,7 +5,7 @@ import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
 import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
 import com.dreldritch.tmmfinancecalculator.model.entities.AccountEntity
-import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntitiy
+import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,10 +16,10 @@ class AddEntryViewModel(application: Application): AndroidViewModel(application)
 
     private var dateEntity: DateEntity
     private var accountEntity: AccountEntity? = null
-    private var categoryEntitiy: CategoryEntitiy? = null
+    private var categoryEntity: CategoryEntity? = null
 
     private val repository = EntryDbRepository(application)
-    private var categories: LiveData<List<CategoryEntitiy>>?
+    private var categories: LiveData<List<CategoryEntity>>?
     private var accounts: LiveData<List<AccountEntity>>?
 
     init {
@@ -34,9 +34,9 @@ class AddEntryViewModel(application: Application): AndroidViewModel(application)
     fun getCurrentAccount(): AccountEntity? = accountEntity
     fun setCurrentAccount(accountEntity: AccountEntity) {this.accountEntity = accountEntity}
 
-    fun getCurrentCategory(): CategoryEntitiy? = categoryEntitiy
-    fun setCurrentCategory(categoryEntitiy: CategoryEntitiy) {
-        this.categoryEntitiy = categoryEntitiy
+    fun getCurrentCategory(): CategoryEntity? = categoryEntity
+    fun setCurrentCategory(categoryEntity: CategoryEntity) {
+        this.categoryEntity = categoryEntity
     }
 
     /*DB queries*/

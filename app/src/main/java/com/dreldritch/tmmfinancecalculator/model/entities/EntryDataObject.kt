@@ -7,6 +7,5 @@ data class EntryDataObject(
         var description: String,
         var in_out: Int,
         var date: String,
-        var categoryEntitiy: CategoryEntitiy?,
-        var accountEntity: AccountEntity?
-)
+        var categoryEntity: CategoryEntity?,
+        var accountEntity: AccountEntity?)
