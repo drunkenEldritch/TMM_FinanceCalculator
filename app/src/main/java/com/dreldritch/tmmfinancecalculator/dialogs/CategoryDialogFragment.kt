@@ -2,7 +2,6 @@ package com.dreldritch.tmmfinancecalculator.dialogs
 
 import android.app.Application
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -20,10 +19,8 @@ import java.util.*
 
 class CategoryDialogFragment : DialogFragment() {
 
-    //TODO Change string mock to db query
-
     private var mListenerCategoryDialog: OnCategoryInteractionListener? = null
-    lateinit var categories: List<CategoryEntitiy>
+    private lateinit var categories: List<CategoryEntitiy>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

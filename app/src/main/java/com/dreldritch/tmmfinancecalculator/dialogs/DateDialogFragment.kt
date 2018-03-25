@@ -14,17 +14,9 @@ import java.util.*
 
 class DateDialogFragment : DialogFragment() {
 
-    val DATESORT = "yyyy-MM-dd"
-    val DATESLASH = "dd/MM/yyyy"
-    val DATEPOINT = "dd.MM.yyyy"
-
-    val preferedFormat = DATESORT
+    private val preferedFormat = "yyyy-MM-dd"
 
     private var mListenerAddDialog: OnAddDialogFragmentInteractionListener? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -44,7 +36,7 @@ class DateDialogFragment : DialogFragment() {
         }
     }
 
-    fun onOkButtonPressed() {
+    private fun onOkButtonPressed() {
         if (mListenerAddDialog != null) {
             mListenerAddDialog!!.onDateDialogInteraction(getDate(preferedFormat))
         }

@@ -26,18 +26,20 @@ class EntryDbRepository(val application: Application){
         entryDao = db.getEntryDao()
     }
 
-    fun insertEntryObject(entry: EntryDataObject) = InsertEntryDataAsyncTask(entryDao, dateDao).execute(entry)
+    fun insertEntryObject(entry: EntryDataObject){
+        InsertEntryDataAsyncTask(entryDao, dateDao).execute(entry)
+    }
 
-    fun insertCategory(category: CategoryEntitiy) = InsertCategoryAsyncTask(categoryDao).execute(category)
-
+    fun insertCategory(category: CategoryEntitiy) {
+        InsertCategoryAsyncTask(categoryDao).execute(category)
+    }
 
     fun getAllAccounts() = accountDao.getAll()
 
     fun getAllCategories() = categoryDao.getAll()
 
-    fun isDbCreated() = EntryDatabase.getDatabase(application).getDatabaseCreated()
+    /*fun isDbCreated() = EntryDatabase.getDatabase(application).getDatabaseCreated()*/
 
-    //TODO Make dao to insert into multiple tables
     private class InsertEntryDataAsyncTask(val entryDao: EntryDao, val dateDao: DateDao) : AsyncTask<EntryDataObject, Void, Void>() {
         override fun doInBackground(vararg entry: EntryDataObject): Void? {
 

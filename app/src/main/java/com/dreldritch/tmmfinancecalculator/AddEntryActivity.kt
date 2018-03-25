@@ -21,7 +21,6 @@ import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryDataObject
 import kotlinx.android.synthetic.main.activity_add_entry.*
 
-//TODO Save state of activity?
 //TODO Set default Account on start
 //TODO DateDialog size & buttons & landscape layout
 //TODO Check landscape mode of all dialogs

@@ -1,7 +1,6 @@
 package com.dreldritch.tmmfinancecalculator.extensions
 
 import com.dreldritch.tmmfinancecalculator.model.entities.AccountEntity
-import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntitiy
 
 //ArrayList
 fun List<AccountEntity>.getAccountStrings(): List<String>{

@@ -1,6 +1,5 @@
 package com.dreldritch.tmmfinancecalculator.model.database
 
-import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.Database
@@ -45,15 +44,15 @@ abstract class EntryDatabase : RoomDatabase() {
                 Room.databaseBuilder(context.applicationContext,
                         EntryDatabase::class.java, DB_NAME)
                         .addCallback(PrePopulateCallback(context))
-                        .addMigrations(Migration_1_2())
+                        .addMigrations(Migration2())
                         .build()
 
 
     }
 
-    fun destroyInstance() {
+    /*fun destroyInstance() {
         INSTANCE = null
-    }
+    }*/
 
     private fun setDatabaseCreated() {
         mIsDatabaseCreated.postValue(true)
@@ -63,9 +62,9 @@ abstract class EntryDatabase : RoomDatabase() {
         return mIsDatabaseCreated
     }
 
-    class Migration_1_2 : Migration(1, 2) {
+    class Migration2 : Migration(1, 2) {
         override fun migrate(database: SupportSQLiteDatabase) {
-            //TODO Add migration code to ver 2
+            //Add migration code to ver 2
         }
     }
 
