@@ -42,6 +42,8 @@ class EntryDbRepository(val application: Application){
 
     fun getAllCategories() = categoryDao.getAll()
 
+    fun getAllDates() = dateDao.getAll()
+
     /*fun isDbCreated() = EntryDatabase.getDatabase(application).getDatabaseCreated()*/
 
     private class InsertEntryDataAsyncTask(val entryDao: EntryDao, val dateDao: DateDao) : AsyncTask<EntryDataObject, Void, Void>() {

@@ -21,11 +21,13 @@ class AddEntryViewModel(application: Application): AndroidViewModel(application)
     private val repository = EntryDbRepository(application)
     private var categories: LiveData<List<CategoryEntity>>?
     private var accounts: LiveData<List<AccountEntity>>?
+    private var dates: LiveData<List<DateEntity>>?
 
     init {
         dateEntity = DateEntity(null,SimpleDateFormat(preferedFormat).format(Date()))
         categories = repository.getAllCategories()
         accounts = repository.getAllAccounts()
+        dates = repository.getAllDates()
     }
 
     fun getCurrentDate(): DateEntity? = dateEntity
@@ -42,4 +44,5 @@ class AddEntryViewModel(application: Application): AndroidViewModel(application)
     /*DB queries*/
     fun getAllAccounts() = repository.getAllAccounts()
     fun getAllCategories() = repository.getAllCategories()
+    fun getAllDates() = repository.getAllDates()
 }

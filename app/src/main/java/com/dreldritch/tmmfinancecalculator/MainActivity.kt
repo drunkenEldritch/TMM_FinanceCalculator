@@ -16,5 +16,9 @@ class MainActivity : AppCompatActivity() {
             val addIntent = Intent(this, AddEntryActivity::class.java)
             startActivity(addIntent)
         }
+
+        BBbutton.setOnClickListener{
+            startActivity(Intent(this, FilterActivity::class.java))
+        }
     }
 }

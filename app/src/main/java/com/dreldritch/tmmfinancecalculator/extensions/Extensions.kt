@@ -1,6 +1,7 @@
 package com.dreldritch.tmmfinancecalculator.extensions
 
 import com.dreldritch.tmmfinancecalculator.model.entities.AccountEntity
+import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 
 //ArrayList
 fun List<AccountEntity>.getAccountStrings(): List<String>{
@@ -10,3 +11,4 @@ fun List<AccountEntity>.getAccountStrings(): List<String>{
     return list
 }
 
+fun List<DateEntity>.getDateStrings() = this.map { it.date.substring(0..it.date.length - 4) }.toSet().toList()
