@@ -7,10 +7,9 @@
     <dimen name="min_dialog_height">275dp</dimen>
 
     <!--Category Icon-->
-    <dimen name="category_icon_shape">20dp</dimen>
+    <dimen name="category_icon_shape">35dp</dimen>
     <dimen name="category_icon_shape_padding">8dp</dimen>
     <dimen name="category_icon_txt_size">16dp</dimen>
-    <dimen name="category_icon_layout_margin">8dp</dimen>
 
 
 </resources>

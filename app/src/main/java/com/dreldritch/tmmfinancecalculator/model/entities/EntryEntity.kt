@@ -12,7 +12,7 @@ data class EntryEntity(
         @ColumnInfo(name = "description") var description: String,
         @ColumnInfo(name = "in_out") var in_out: Int,
         @ColumnInfo(name = "date_id") var dateId: Long,
-        @ColumnInfo(name = "category_id") var categoryId: Long,
+        @ColumnInfo(name = "category_id") var categoryId: Long?,
         @ColumnInfo(name = "account_id") var accountId: Long)
 {
     companion object {

@@ -9,8 +9,8 @@
 
     <TextView
         android:id="@+id/category_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/category_icon_shape"
+        android:layout_height="@dimen/category_icon_shape"
         android:background="@drawable/category_icon_drawable"
         android:padding="@dimen/category_icon_shape_padding"
         android:textAlignment="center"

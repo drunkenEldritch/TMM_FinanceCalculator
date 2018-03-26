@@ -52,11 +52,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/add_new_entry_txt"
                 android:textAlignment="center"
-                android:textSize="24sp"
-                android:textStyle="bold"
+                android:textAppearance="@style/AddTransactionTextStyle.Header.Large"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -65,9 +64,10 @@
                 android:id="@+id/entry_layout_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="24dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
+                app:hintTextAppearance="@style/AddTransactionTextStyle.Header.Small"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/entry_header">
@@ -78,7 +78,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_entry_name"
                     android:selectAllOnFocus="true"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textAppearance="@style/AddTransactionTextStyle" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -88,6 +89,7 @@
                 android:layout_marginEnd="64dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
+                app:hintTextAppearance="@style/AddTransactionTextStyle.Header.Small"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_50"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/entry_layout_name">
@@ -101,6 +103,7 @@
                     android:inputType="numberDecimal"
                     android:selectAllOnFocus="true"
                     android:text="@string/entry_standard_price"
+                    android:textAppearance="@style/AddTransactionTextStyle"
                     app:layout_constraintEnd_toStartOf="@+id/guideline_50"
                     app:layout_constraintStart_toStartOf="parent" />
             </android.support.design.widget.TextInputLayout>
@@ -112,7 +115,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/date_header"
-                android:textSize="12sp"
+                android:textAppearance="@style/AddTransactionTextStyle.Header.Small"
                 app:layout_constraintStart_toStartOf="@+id/guideline_50"
                 app:layout_constraintTop_toBottomOf="@+id/entry_layout_name" />
 
@@ -123,20 +126,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:textSize="18sp"
+                android:layout_marginTop="4dp"
+                android:textAppearance="@style/AddTransactionTextStyle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline_50"
-                app:layout_constraintTop_toBottomOf="@+id/entry_txt_date_header"
-                tools:text="23.02.2014" />
+                app:layout_constraintTop_toBottomOf="@+id/entry_txt_date_header" />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/entry_layout_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="24dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
+                app:hintTextAppearance="@style/AddTransactionTextStyle.Header.Small"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/entry_layout_price">
@@ -145,7 +148,8 @@
                     android:id="@+id/entry_edit_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_entry_desc" />
+                    android:hint="@string/hint_entry_desc"
+                    android:textAppearance="@style/AddTransactionTextStyle" />
             </android.support.design.widget.TextInputLayout>
 
             <RadioGroup
@@ -154,25 +158,28 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
                 android:checkedButton="@+id/entry_out_btn"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline66"
-                app:layout_constraintTop_toTopOf="@+id/entry_txt_account">
+                app:layout_constraintTop_toBottomOf="@+id/entry_txt_account_header">
 
                 <RadioButton
                     android:id="@+id/entry_in_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/entry_radio_in" />
+                    android:text="@string/entry_radio_in"
+                    android:textAppearance="@style/AddTransactionTextStyle.Header.Small" />
 
                 <RadioButton
                     android:id="@+id/entry_out_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/entry_radio_out" />
+                    android:text="@string/entry_radio_out"
+                    android:textAppearance="@style/AddTransactionTextStyle.Header.Small" />
             </RadioGroup>
 
             <TextView
@@ -182,7 +189,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/entry_txt_acc"
-                android:textSize="12sp"
+                android:textAppearance="@style/AddTransactionTextStyle.Header.Small"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/entry_layout_description" />
 
@@ -192,9 +199,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
-                android:textSize="18sp"
+                android:textAppearance="@style/AddTransactionTextStyle"
                 app:layout_constraintEnd_toStartOf="@+id/guideline66"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/entry_txt_account_header" />
@@ -206,7 +213,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/entry_txt_category"
-                android:textSize="14sp"
+                android:textAppearance="@style/AddTransactionTextStyle.Header.Small"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/entry_txt_account" />
 
@@ -216,23 +223,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
-                android:textSize="18sp"
+                android:textAppearance="@style/AddTransactionTextStyle"
                 app:layout_constraintEnd_toStartOf="@+id/guideline66"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/entry_txt_category_header" />
 
             <TextView
                 android:id="@+id/entry_icon_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
+                android:layout_width="@dimen/category_icon_shape"
+                android:layout_height="@dimen/category_icon_shape"
                 android:padding="@dimen/category_icon_shape_padding"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"
-                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline66"
                 app:layout_constraintTop_toBottomOf="@+id/entry_txt_category_header" />

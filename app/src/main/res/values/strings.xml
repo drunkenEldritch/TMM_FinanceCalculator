@@ -12,7 +12,6 @@
     <string name="hint_entry_desc">Description</string>
     <string name="add_new_entry_txt">Add new entry</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="entry_radio_in">in</string>
     <string name="entry_radio_out">out</string>
@@ -25,6 +24,18 @@
     <string name="category_header">Category</string>
     <string name="category_add_new_btn_str">Add</string>
     <string name="category_edit_text_str">Add new category</string>
+
+    <string name="no_name_error">Name is missing!</string>
+    <string name="no_price_error">Price is missing!</string>
+    <string name="no_category_error">No category added!</string>
+
+    <!--Default Category-->
+    <string name="category1">Rent</string>
+    <string name="category2">Food</string>
+    <string name="category3">Car</string>
+    <string name="category4">Hobby</string>
+    <string name="category5">Electronic</string>
+
 
 
 </resources>

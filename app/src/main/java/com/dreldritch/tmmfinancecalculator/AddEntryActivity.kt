@@ -15,50 +15,69 @@ import com.dreldritch.tmmfinancecalculator.dialogs.AccountDialogFragment
 import com.dreldritch.tmmfinancecalculator.dialogs.CategoryDialogFragment
 import com.dreldritch.tmmfinancecalculator.dialogs.DateDialogFragment
 import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
-import com.dreldritch.tmmfinancecalculator.model.EntryDbViewModel
 import com.dreldritch.tmmfinancecalculator.model.entities.AccountEntity
+import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryDataObject
 import kotlinx.android.synthetic.main.activity_add_entry.*
-import java.text.SimpleDateFormat
-import java.util.*
 
-//TODO Save state of activity
+//TODO Set default Account on start
+//TODO DateDialog size & buttons & landscape layout
+//TODO Check landscape mode of all dialogs
+//TODO Alternative to avoid crash on first start of app (NullPointerException because default data not initialized on first activity start)
 
 class AddEntryActivity: AppCompatActivity(), DateDialogFragment.OnAddDialogFragmentInteractionListener,
 AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment.OnCategoryInteractionListener{
 
     val priceFormat = "."
-    val DATESORT = "yyyy-MM-dd"
-    val DATESLASH = "dd/MM/yyyy"
-    val DATEPOINT = "dd.MM.yyyy"
-    val preferedFormat = DATESORT
+    val dateFormat = "yyyy-MM-dd"
+    val preferedFormat = dateFormat
 
-    lateinit var accountList : List<AccountEntity>
+    private lateinit var entryViewModel: AddEntryViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_entry)
-
-        /*Account dialog setup*/
-        val entryViewModel = ViewModelProviders.of(this).get(EntryDbViewModel::class.java)
-        entryViewModel.getAllAccounts().observe(this, android.arch.lifecycle.Observer<List<AccountEntity>> {
-            accounts -> accountList = accounts!!
-            entry_txt_account.apply {
-                text = accountList[0].account
-                setOnClickListener { openDialog("AccountDialog", AccountDialogFragment.newInstance(accountList))}
-            }
-        })
 
         /*Setup toolbar and menu*/
         setSupportActionBar(findViewById(R.id.entry_toolbar))
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        /*Setup date*/
-        entry_txt_date.setText(SimpleDateFormat(preferedFormat).format(Date()))
+        entryViewModel = ViewModelProviders.of(this).get(AddEntryViewModel::class.java)
 
-        entry_txt_date.setOnClickListener { openDialog("DateDialog", DateDialogFragment.newInstance()) }
-        entry_txt_category.setOnClickListener { openDialog("CategoryDialog", CategoryDialogFragment.newInstance()) }
+        /*Account dialog setup*/
+        entryViewModel.getAllAccounts()
+                .observe(this, android.arch.lifecycle.Observer<List<AccountEntity>> {accounts ->
+            entry_txt_account.apply {
+                if(entryViewModel.getCurrentAccount() != null)  text = entryViewModel.getCurrentAccount()!!.account
+                setOnClickListener { openDialog("AccountDialog", AccountDialogFragment.newInstance(accounts!!))}
+            }
+        })
+
+        /*Category dialog setup*/
+        entryViewModel.getAllCategories()
+                .observe(this, android.arch.lifecycle.Observer<List<CategoryEntity>> { categories ->
+            entry_txt_category.apply {
+                setOnClickListener { openDialog("CategoryDialog", CategoryDialogFragment.newInstance(categories!!)) }
+            }
+        })
+
+        if(entryViewModel.getCurrentCategory() != null) {
+            entry_txt_category.text = entryViewModel.getCurrentCategory()!!.category
+
+            entry_icon_text_view.apply {
+                text = entryViewModel.getCurrentCategory()!!.category.substring(0..1)
+                val shape = resources.getDrawable(R.drawable.category_icon_drawable, null) as GradientDrawable
+                shape.setColor(entryViewModel.getCurrentCategory()!!.iconColor)
+                background = shape
+            }
+        }
+
+        /*Date setup*/
+        entry_txt_date.apply {
+            text = entryViewModel.getCurrentDate()!!.date
+            setOnClickListener { openDialog("DateDialog", DateDialogFragment.newInstance()) }
+        }
 
         //Setup price
         entry_edit_price.addTextChangedListener(object : TextWatcher{
@@ -95,10 +114,13 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
         }
 
         R.id.action_save_entry -> {
-            val entryRepository = EntryDbRepository(application)
-            entryRepository.insertEntryObject(createEntryDbObject())
-            Toast.makeText(this, "Entry saved!", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, MainActivity::class.java))
+            val entryDataObject = createEntryDbObject(entryViewModel.getCurrentCategory(), entryViewModel.getCurrentAccount())
+            if(entryDataObject != null){
+                val entryRepository = EntryDbRepository(application)
+                entryRepository.insertEntryObject(entryDataObject)
+                Toast.makeText(this, "Entry saved!", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, MainActivity::class.java))
+            }
             true
         }
         else -> { super.onOptionsItemSelected(item) }
@@ -106,19 +128,24 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
 
     /*DialogInteractionListeners*/
     override fun onDateDialogInteraction(date: String) {
-        entry_txt_date.text = date
+        entryViewModel.setCurrentDate(null, date)
+        entry_txt_date.text = entryViewModel.getCurrentDate()!!.date
     }
 
-    override fun onAccDialogInteraction(account: String) {
-        entry_txt_account.text = account
+    override fun onAccDialogInteraction(accountEntity: AccountEntity) {
+        entryViewModel.setCurrentAccount(accountEntity)
+        entry_txt_account.text = entryViewModel.getCurrentAccount()!!.account
     }
 
-    override fun onCategoryDialogInteraction(category: String, iconColor: Int) {
-        entry_txt_category.text = category
+    override fun onCategoryDialogInteraction(categoryEntity: CategoryEntity) {
+        entryViewModel.setCurrentCategory(categoryEntity)
+        entry_txt_category.text = entryViewModel.getCurrentCategory()!!.category
+
+
         entry_icon_text_view.apply {
-            text = category.substring(0..1)
+            text = entryViewModel.getCurrentCategory()!!.category.substring(0..1)
             val shape = resources.getDrawable(R.drawable.category_icon_drawable, null) as GradientDrawable
-            shape.setColor(iconColor)
+            shape.setColor(entryViewModel.getCurrentCategory()!!.iconColor)
             background = shape
         }
     }
@@ -129,18 +156,31 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
         dialog.show(fm, tag)
     }
 
-    private fun createEntryDbObject(): EntryDataObject{
+    private fun createEntryDbObject(category: CategoryEntity?, account: AccountEntity?)
+            : EntryDataObject?{
+
+        val name = entry_edit_name.text.toString()
+        if(name == ""){
+            Toast.makeText(this, R.string.no_name_error, Toast.LENGTH_SHORT).show()
+            return null
+        }
+
+        val price = entry_edit_price.text.toString()
+        if(price == ""){
+            Toast.makeText(this, R.string.no_price_error, Toast.LENGTH_SHORT).show()
+            return null
+        }
+
         val inOut = if(entry_in_btn.isChecked) 1 else 0
+
+        //TODO Make category nullable, set default account
         return EntryDataObject(null,
-                entry_edit_name.text.toString(),
-                entry_edit_price.text.toString().toDouble(),
+                name,
+                price.toDouble(),
                 entry_edit_description.text.toString(),
                 inOut,
-                null,
                 entry_txt_date.text.toString(),
-                null,
-                "none",
-                null,
-                "konto1")
+                category,
+                account)
     }
 }

@@ -14,10 +14,8 @@ import kotlinx.android.synthetic.main.fragment_account_dialog.*
 
 class AccountDialogFragment : DialogFragment() {
 
-    //TODO Change string mock to db query
-
     private var mListenerAccountDialog: OnAccountDialogInteractionListener? = null
-    lateinit var accounts : ArrayList<AccountEntity>
+    private lateinit var accounts : ArrayList<AccountEntity>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,17 +34,17 @@ class AccountDialogFragment : DialogFragment() {
         acc_dialog_list_view.apply {
             val adapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, accounts.getAccountStrings())
             this.adapter = adapter
-            setOnItemClickListener { parent, view, position, id ->
-                val result = acc_dialog_list_view.getItemAtPosition(position) as String
-                onItemPressed(result)
+            setOnItemClickListener { _, _, position, _ ->
+                //val result = acc_dialog_list_view.getItemAtPosition(position) as String
+                onItemPressed(accounts[position])
                 dismiss()
             }
         }
     }
 
-    fun onItemPressed(account: String) {
+    private fun onItemPressed(accountEntity: AccountEntity) {
         if (mListenerAccountDialog != null) {
-            mListenerAccountDialog!!.onAccDialogInteraction(account)
+            mListenerAccountDialog!!.onAccDialogInteraction(accountEntity)
         }
     }
 
@@ -65,7 +63,7 @@ class AccountDialogFragment : DialogFragment() {
     }
 
     interface OnAccountDialogInteractionListener {
-        fun onAccDialogInteraction(account: String)
+        fun onAccDialogInteraction(accountEntity: AccountEntity)
     }
 
     companion object {
