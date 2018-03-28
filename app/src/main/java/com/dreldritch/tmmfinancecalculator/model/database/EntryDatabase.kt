@@ -9,16 +9,13 @@ import android.arch.persistence.room.migration.Migration
 import android.content.Context
 import android.support.v4.content.ContextCompat
 import com.dreldritch.tmmfinancecalculator.R
-import com.dreldritch.tmmfinancecalculator.model.dao.AccountDao
-import com.dreldritch.tmmfinancecalculator.model.dao.CategoryDao
-import com.dreldritch.tmmfinancecalculator.model.dao.DateDao
-import com.dreldritch.tmmfinancecalculator.model.dao.EntryDao
 import com.dreldritch.tmmfinancecalculator.model.entities.AccountEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryEntity
 import java.util.concurrent.Executors
 import android.arch.lifecycle.LiveData
+import com.dreldritch.tmmfinancecalculator.model.dao.*
 
 
 @Database(entities = [EntryEntity::class, DateEntity::class, CategoryEntity::class, AccountEntity::class], version = 1)
@@ -28,6 +25,7 @@ abstract class EntryDatabase : RoomDatabase() {
     abstract fun getDateDao(): DateDao
     abstract fun getAccountDao(): AccountDao
     abstract fun getCategoryDao(): CategoryDao
+    abstract fun getFullTransactionDataDao(): FullTransactionDao
 
     private var mIsDatabaseCreated = MutableLiveData<Boolean>()
 

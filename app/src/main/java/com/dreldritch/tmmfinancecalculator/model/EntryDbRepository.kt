@@ -3,10 +3,7 @@ package com.dreldritch.tmmfinancecalculator.model
 import android.app.Application
 import android.os.AsyncTask
 import android.util.Log
-import com.dreldritch.tmmfinancecalculator.model.dao.AccountDao
-import com.dreldritch.tmmfinancecalculator.model.dao.CategoryDao
-import com.dreldritch.tmmfinancecalculator.model.dao.DateDao
-import com.dreldritch.tmmfinancecalculator.model.dao.EntryDao
+import com.dreldritch.tmmfinancecalculator.model.dao.*
 import com.dreldritch.tmmfinancecalculator.model.database.EntryDatabase
 import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
@@ -21,6 +18,7 @@ class EntryDbRepository(val application: Application){
     private val categoryDao: CategoryDao
     private val accountDao: AccountDao
     private val entryDao: EntryDao
+    private val fullDataDao: FullTransactionDao
 
     init {
         val db = EntryDatabase.getDatabase(application)
@@ -28,6 +26,7 @@ class EntryDbRepository(val application: Application){
         categoryDao = db.getCategoryDao()
         accountDao = db.getAccountDao()
         entryDao = db.getEntryDao()
+        fullDataDao = db.getFullTransactionDataDao()
     }
 
     fun insertEntryObject(entry: EntryDataObject){
@@ -43,6 +42,8 @@ class EntryDbRepository(val application: Application){
     fun getAllCategories() = categoryDao.getAll()
 
     fun getAllDates() = dateDao.getAll()
+
+    fun getAllTransactions() = fullDataDao.getAllTransactions()
 
     /*fun isDbCreated() = EntryDatabase.getDatabase(application).getDatabaseCreated()*/
 

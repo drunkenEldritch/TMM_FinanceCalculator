@@ -45,4 +45,5 @@ class AddEntryViewModel(application: Application): AndroidViewModel(application)
     fun getAllAccounts() = repository.getAllAccounts()
     fun getAllCategories() = repository.getAllCategories()
     fun getAllDates() = repository.getAllDates()
+    fun getAllTransactions() = repository.getAllTransactions()
 }
