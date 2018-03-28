@@ -10,8 +10,8 @@ class FullTransactionData(
         val in_out: Int,
         val date_id: Long, val date: String,
         val account_id: Long, val account: String,
-        val category_id: Long?, val category: String?)
-    : Parcelable{
+        val category_id: Long?, val category: String?, val icon_color: Int?)
+    : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readValue(Long::class.java.classLoader) as? Long,
             parcel.readString(),
@@ -23,7 +23,8 @@ class FullTransactionData(
             parcel.readLong(),
             parcel.readString(),
             parcel.readValue(Long::class.java.classLoader) as? Long,
-            parcel.readString()) {
+            parcel.readString(),
+            parcel.readValue(Int::class.java.classLoader) as? Int) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -38,6 +39,7 @@ class FullTransactionData(
         parcel.writeString(account)
         parcel.writeValue(category_id)
         parcel.writeString(category)
+        parcel.writeValue(icon_color)
     }
 
     override fun describeContents(): Int {
@@ -53,5 +55,4 @@ class FullTransactionData(
             return arrayOfNulls(size)
         }
     }
-
 }

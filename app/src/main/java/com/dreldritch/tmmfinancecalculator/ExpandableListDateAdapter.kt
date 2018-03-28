@@ -1,6 +1,7 @@
 package com.dreldritch.tmmfinancecalculator
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +16,13 @@ class ExpandableListDateAdapter(val context: Context, private val groupList:List
                                 private val groupChildMap: Map<Long, List<FullTransactionData>>)
     : BaseExpandableListAdapter() {
 
-    override fun getGroupCount() = groupList.size
+    private val DATE_ADAPTER_TAG = "DateAdapter"
+
+    override fun getGroupCount(): Int {
+        val numGroup = groupList.size
+        Log.d(DATE_ADAPTER_TAG, "numGroup: $numGroup")
+        return numGroup
+    }
 
     override fun getGroup(p0: Int): Any = groupList[p0]
 
@@ -28,7 +35,12 @@ class ExpandableListDateAdapter(val context: Context, private val groupList:List
         return groupLayout
     }
 
-    override fun getChildrenCount(p0: Int) = groupChildMap[groupList[p0].id]!!.size
+    //override fun getChildrenCount(p0: Int) = groupChildMap[groupList[p0].id]!!.size
+    override fun getChildrenCount(p0: Int): Int{
+        val numChild = groupChildMap[groupList[p0].id]!!.size
+        Log.d(DATE_ADAPTER_TAG, "ChildrenCount: $numChild")
+        return numChild
+    }
 
     override fun getChild(p0: Int, p1: Int): Any = groupChildMap[groupList[p0].id]!![p1]
 
