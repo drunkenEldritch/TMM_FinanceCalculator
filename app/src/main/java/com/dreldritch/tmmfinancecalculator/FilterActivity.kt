@@ -2,6 +2,7 @@ package com.dreldritch.tmmfinancecalculator
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
@@ -19,9 +20,14 @@ import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 import kotlinx.android.synthetic.main.activity_filter.*
 import kotlinx.android.synthetic.main.app_bar_filter.*
 
-class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
+FilterListFragment.OnFragmentInteractionListener{
+    override fun onFragmentInteraction(uri: Uri) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     private lateinit var entryViewModel: AddEntryViewModel
+    private var dateList: List<DateEntity>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +65,22 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+
+        entryViewModel = ViewModelProviders.of(this).get(AddEntryViewModel::class.java)
+
+        entryViewModel.getAllDates().observe(this, Observer<List<DateEntity>> { dates ->
+            if(dates != null)
+                dateList = dates
+        })
+
+        entryViewModel.getAllTransactions().observe(this, Observer { transactions ->
+            if(dateList != null && transactions != null){
+                val fragmentTransaction = supportFragmentManager.beginTransaction()
+                fragmentTransaction.replace(R.id.filter_list_fragment_container,
+                        FilterListFragment.newInstance(dateList!!, transactions))
+                fragmentTransaction.commit()
+            }
+        })
     }
 
     override fun onBackPressed() {
