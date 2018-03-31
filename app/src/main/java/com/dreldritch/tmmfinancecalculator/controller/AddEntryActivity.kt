@@ -6,6 +6,8 @@ import android.graphics.drawable.GradientDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v4.app.NavUtils
+import android.support.v4.app.TaskStackBuilder
 import android.view.Menu
 import android.view.MenuItem
 import android.text.Editable
@@ -40,8 +42,10 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
 
         /*Setup toolbar and menu*/
         setSupportActionBar(findViewById(R.id.entry_toolbar))
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.apply {
+            setDisplayShowTitleEnabled(false)
+            setDisplayHomeAsUpEnabled(true)
+        }
 
         entryViewModel = ViewModelProviders.of(this).get(AddEntryViewModel::class.java)
 
@@ -109,7 +113,7 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_save_template -> {
-            // User chose the "Settings" item, show the app settings UI...
+            Toast.makeText(this, "BlaBlaSave", Toast.LENGTH_SHORT).show()
             true
         }
 
@@ -123,6 +127,13 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
             }
             true
         }
+
+        //Switch to last activity
+        android.R.id.home -> {
+            onBackPressed()
+            true
+        }
+
         else -> { super.onOptionsItemSelected(item) }
     }
 

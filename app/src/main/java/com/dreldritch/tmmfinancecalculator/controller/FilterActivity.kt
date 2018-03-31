@@ -3,6 +3,7 @@ package com.dreldritch.tmmfinancecalculator.controller
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -34,9 +35,9 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         setContentView(R.layout.activity_filter)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+        fab.setOnClickListener {
+            val addIntent = Intent(this, AddEntryActivity::class.java)
+            startActivity(addIntent)
         }
 
         supportActionBar!!.setDisplayShowTitleEnabled(false)
