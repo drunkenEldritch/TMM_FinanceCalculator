@@ -2,6 +2,7 @@ package com.dreldritch.tmmfinancecalculator.controller
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -17,7 +18,6 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.dreldritch.tmmfinancecalculator.R
 import com.dreldritch.tmmfinancecalculator.adapter.ExpandableListDateAdapter
-import com.dreldritch.tmmfinancecalculator.extensions.getDateStrings
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 import com.dreldritch.tmmfinancecalculator.viewmodel.FilterActivityViewModel
 import kotlinx.android.synthetic.main.activity_filter.*
@@ -27,11 +27,7 @@ import kotlinx.android.synthetic.main.fragment_filter_list.*
 class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
         FilterListFragment.OnFragmentInteractionListener {
 
-
-
-
     private lateinit var filterActivityViewModel: FilterActivityViewModel
-    private var dateList: List<DateEntity>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,27 +46,19 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         filterActivityViewModel.getAllDates().observe(this, Observer<List<DateEntity>> { dates ->
             if(dates != null){
                 //Cache dates
-                dateList = dates
+                val monthList = dates.map { it.date.substring(0..it.date.length - 4) }.toSet().toList()
 
                 //Initialize adapter for spinner
-                val dateAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, dates.getDateStrings())
+                val dateAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, monthList)
                 dateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
                 //Initialize spinner
                 filter_date_spinner.apply {
                     adapter = dateAdapter
-                    onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-                        override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-                        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                            setCurrentTransactions(dateList!![position].date.substring(0..7))
-                            Toast.makeText(context, dates.getDateStrings()[position], Toast.LENGTH_SHORT).show()
-                        }
-                    }
+                    onItemSelectedListener = MonthSpinnerAdapter(context, monthList)
                 }
-
                 //Initialize ExpandableList
-                setCurrentTransactions(dates[0].date.substring(0..7))
+                setCurrentTransactions(monthList[0])
             }
         })
 
@@ -147,5 +135,14 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    inner class MonthSpinnerAdapter(val context: Context, private val monthList: List<String>): AdapterView.OnItemSelectedListener{
+        override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            setCurrentTransactions(monthList[position])
+            Toast.makeText(context, monthList[position], Toast.LENGTH_SHORT).show()
+        }
     }
 }

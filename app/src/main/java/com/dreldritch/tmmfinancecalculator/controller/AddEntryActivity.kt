@@ -31,8 +31,6 @@ class AddEntryActivity: AppCompatActivity(), DateDialogFragment.OnAddDialogFragm
 AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment.OnCategoryInteractionListener{
 
     val priceFormat = "."
-    val dateFormat = "yyyy-MM-dd"
-    val preferedFormat = dateFormat
 
     private lateinit var entryViewModel: AddEntryViewModel
 

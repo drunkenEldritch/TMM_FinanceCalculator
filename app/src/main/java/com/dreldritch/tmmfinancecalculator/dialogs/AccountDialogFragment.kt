@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.dreldritch.tmmfinancecalculator.R
-import com.dreldritch.tmmfinancecalculator.extensions.getAccountStrings
 import com.dreldritch.tmmfinancecalculator.model.entities.AccountEntity
 import kotlinx.android.synthetic.main.fragment_account_dialog.*
 
@@ -32,7 +31,7 @@ class AccountDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         acc_dialog_list_view.apply {
-            val adapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, accounts.getAccountStrings())
+            val adapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, accounts.map { it.account })
             this.adapter = adapter
             setOnItemClickListener { _, _, position, _ ->
                 //val result = acc_dialog_list_view.getItemAtPosition(position) as String
