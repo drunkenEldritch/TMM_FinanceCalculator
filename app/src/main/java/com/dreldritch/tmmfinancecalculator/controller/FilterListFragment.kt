@@ -1,4 +1,4 @@
-package com.dreldritch.tmmfinancecalculator
+package com.dreldritch.tmmfinancecalculator.controller
 
 import android.content.Context
 import android.net.Uri
@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.dreldritch.tmmfinancecalculator.R
+import com.dreldritch.tmmfinancecalculator.adapter.ExpandableListDateAdapter
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.FullTransactionData
 import kotlinx.android.synthetic.main.fragment_filter_list.*

@@ -1,4 +1,4 @@
-package com.dreldritch.tmmfinancecalculator
+package com.dreldritch.tmmfinancecalculator.viewmodel
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel

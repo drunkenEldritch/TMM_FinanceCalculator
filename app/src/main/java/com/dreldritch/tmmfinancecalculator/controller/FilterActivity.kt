@@ -1,4 +1,4 @@
-package com.dreldritch.tmmfinancecalculator
+package com.dreldritch.tmmfinancecalculator.controller
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -15,13 +15,15 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import com.dreldritch.tmmfinancecalculator.viewmodel.AddEntryViewModel
+import com.dreldritch.tmmfinancecalculator.R
 import com.dreldritch.tmmfinancecalculator.extensions.getDateStrings
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 import kotlinx.android.synthetic.main.activity_filter.*
 import kotlinx.android.synthetic.main.app_bar_filter.*
 
 class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
-FilterListFragment.OnFragmentInteractionListener{
+        FilterListFragment.OnFragmentInteractionListener {
     override fun onFragmentInteraction(uri: Uri) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -40,6 +42,7 @@ FilterListFragment.OnFragmentInteractionListener{
         }
 
         supportActionBar!!.setDisplayShowTitleEnabled(false)
+
         entryViewModel = ViewModelProviders.of(this).get(AddEntryViewModel::class.java)
         entryViewModel.getAllDates().observe(this, Observer<List<DateEntity>> {dates ->
             val dateAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, dates!!.getDateStrings())
@@ -65,8 +68,6 @@ FilterListFragment.OnFragmentInteractionListener{
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
-
-        entryViewModel = ViewModelProviders.of(this).get(AddEntryViewModel::class.java)
 
         entryViewModel.getAllDates().observe(this, Observer<List<DateEntity>> { dates ->
             if(dates != null)

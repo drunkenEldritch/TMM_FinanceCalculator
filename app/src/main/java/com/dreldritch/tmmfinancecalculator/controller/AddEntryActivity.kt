@@ -1,4 +1,4 @@
-package com.dreldritch.tmmfinancecalculator
+package com.dreldritch.tmmfinancecalculator.controller
 
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
@@ -11,6 +11,8 @@ import android.view.MenuItem
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
+import com.dreldritch.tmmfinancecalculator.viewmodel.AddEntryViewModel
+import com.dreldritch.tmmfinancecalculator.R
 import com.dreldritch.tmmfinancecalculator.dialogs.AccountDialogFragment
 import com.dreldritch.tmmfinancecalculator.dialogs.CategoryDialogFragment
 import com.dreldritch.tmmfinancecalculator.dialogs.DateDialogFragment

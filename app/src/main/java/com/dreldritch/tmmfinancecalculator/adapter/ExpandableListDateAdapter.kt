@@ -1,4 +1,4 @@
-package com.dreldritch.tmmfinancecalculator
+package com.dreldritch.tmmfinancecalculator.adapter
 
 import android.content.Context
 import android.util.Log
@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
+import com.dreldritch.tmmfinancecalculator.R
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
-import com.dreldritch.tmmfinancecalculator.model.entities.EntryDataObject
 import com.dreldritch.tmmfinancecalculator.model.entities.FullTransactionData
 import kotlinx.android.synthetic.main.exp_date_header.view.*
 import kotlinx.android.synthetic.main.exp_date_list_item.view.*
