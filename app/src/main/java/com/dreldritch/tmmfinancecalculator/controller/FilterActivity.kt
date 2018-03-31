@@ -15,7 +15,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import com.dreldritch.tmmfinancecalculator.viewmodel.AddEntryViewModel
 import com.dreldritch.tmmfinancecalculator.R
 import com.dreldritch.tmmfinancecalculator.extensions.getDateStrings
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
@@ -25,9 +24,9 @@ import kotlinx.android.synthetic.main.app_bar_filter.*
 
 class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
         FilterListFragment.OnFragmentInteractionListener {
-    override fun onFragmentInteraction(uri: Uri) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+
+
+
 
     private lateinit var filterActivityViewModel: FilterActivityViewModel
     private var dateList: List<DateEntity>? = null
@@ -45,18 +44,26 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         supportActionBar!!.setDisplayShowTitleEnabled(false)
 
         filterActivityViewModel = ViewModelProviders.of(this).get(FilterActivityViewModel::class.java)
-        filterActivityViewModel.getAllDates().observe(this, Observer<List<DateEntity>> { dates ->
-            val dateAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, dates!!.getDateStrings())
-            dateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            filter_date_spinner.apply {
-                adapter = dateAdapter
-                onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-                        Toast.makeText(context, "Nothing!", Toast.LENGTH_SHORT).show()
-                    }
 
-                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                        Toast.makeText(context, dates.getDateStrings()[position], Toast.LENGTH_SHORT).show()
+        filterActivityViewModel.getAllDates().observe(this, Observer<List<DateEntity>> { dates ->
+            if(dates != null){
+                dateList = dates
+                setCurrentTransactions(dates!![0].date.substring(0..7))
+
+                val dateAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, dates!!.getDateStrings())
+                dateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+                filter_date_spinner.apply {
+                    adapter = dateAdapter
+                    onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                            Toast.makeText(context, "Nothing!", Toast.LENGTH_SHORT).show()
+                        }
+
+                        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                            setCurrentTransactions(dateList!![position].date.substring(0..7))
+                            Toast.makeText(context, dates.getDateStrings()[position], Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }
@@ -69,14 +76,21 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        filterActivityViewModel.getAllTransactions().observe(this, Observer { transactions ->
-            if(transactions != null){
-                val fragmentTransaction = supportFragmentManager.beginTransaction()
-                fragmentTransaction.replace(R.id.filter_list_fragment_container,
-                        FilterListFragment.newInstance(transactions))
-                fragmentTransaction.commit()
-            }
-        })
+    }
+
+    private fun setCurrentTransactions(date:String){
+        filterActivityViewModel.getAllTransactionsFromDate("%$date%")
+                .observe(this, Observer { transactions ->
+                    if(transactions != null){
+                        val fragmentTransaction = supportFragmentManager.beginTransaction()
+                        fragmentTransaction.replace(R.id.filter_list_fragment_container, FilterListFragment.newInstance(transactions.sortedBy { it.date }))
+                        fragmentTransaction.commit()
+                    }
+                })
+    }
+
+    override fun onFragmentInteraction(uri: Uri) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onBackPressed() {
