@@ -57,7 +57,6 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                         Toast.makeText(context, dates.getDateStrings()[position], Toast.LENGTH_SHORT).show()
                     }
-
                 }
             }
         })
@@ -69,16 +68,11 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        entryViewModel.getAllDates().observe(this, Observer<List<DateEntity>> { dates ->
-            if(dates != null)
-                dateList = dates
-        })
-
         entryViewModel.getAllTransactions().observe(this, Observer { transactions ->
-            if(dateList != null && transactions != null){
+            if(transactions != null){
                 val fragmentTransaction = supportFragmentManager.beginTransaction()
                 fragmentTransaction.replace(R.id.filter_list_fragment_container,
-                        FilterListFragment.newInstance(dateList!!, transactions))
+                        FilterListFragment.newInstance(transactions))
                 fragmentTransaction.commit()
             }
         })
