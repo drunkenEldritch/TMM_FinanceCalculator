@@ -19,6 +19,7 @@ import com.dreldritch.tmmfinancecalculator.viewmodel.AddEntryViewModel
 import com.dreldritch.tmmfinancecalculator.R
 import com.dreldritch.tmmfinancecalculator.extensions.getDateStrings
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
+import com.dreldritch.tmmfinancecalculator.viewmodel.FilterActivityViewModel
 import kotlinx.android.synthetic.main.activity_filter.*
 import kotlinx.android.synthetic.main.app_bar_filter.*
 
@@ -28,7 +29,7 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    private lateinit var entryViewModel: AddEntryViewModel
+    private lateinit var filterActivityViewModel: FilterActivityViewModel
     private var dateList: List<DateEntity>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,8 +44,8 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         supportActionBar!!.setDisplayShowTitleEnabled(false)
 
-        entryViewModel = ViewModelProviders.of(this).get(AddEntryViewModel::class.java)
-        entryViewModel.getAllDates().observe(this, Observer<List<DateEntity>> {dates ->
+        filterActivityViewModel = ViewModelProviders.of(this).get(FilterActivityViewModel::class.java)
+        filterActivityViewModel.getAllDates().observe(this, Observer<List<DateEntity>> { dates ->
             val dateAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, dates!!.getDateStrings())
             dateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             filter_date_spinner.apply {
@@ -68,7 +69,7 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        entryViewModel.getAllTransactions().observe(this, Observer { transactions ->
+        filterActivityViewModel.getAllTransactions().observe(this, Observer { transactions ->
             if(transactions != null){
                 val fragmentTransaction = supportFragmentManager.beginTransaction()
                 fragmentTransaction.replace(R.id.filter_list_fragment_container,
