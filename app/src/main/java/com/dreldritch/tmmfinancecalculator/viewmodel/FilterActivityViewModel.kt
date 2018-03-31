@@ -10,4 +10,5 @@ class FilterActivityViewModel(application: Application): AndroidViewModel(applic
 
     fun getAllDates() = repository.getAllDates()
     fun getAllTransactions() = repository.getAllTransactions()
+    fun getAllTransactionsFromDate(date: String) = repository.getAllTransactionsFromDate(date)
 }
