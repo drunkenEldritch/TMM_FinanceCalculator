@@ -16,11 +16,13 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.dreldritch.tmmfinancecalculator.R
+import com.dreldritch.tmmfinancecalculator.adapter.ExpandableListDateAdapter
 import com.dreldritch.tmmfinancecalculator.extensions.getDateStrings
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 import com.dreldritch.tmmfinancecalculator.viewmodel.FilterActivityViewModel
 import kotlinx.android.synthetic.main.activity_filter.*
 import kotlinx.android.synthetic.main.app_bar_filter.*
+import kotlinx.android.synthetic.main.fragment_filter_list.*
 
 class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
         FilterListFragment.OnFragmentInteractionListener {
@@ -47,18 +49,18 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         filterActivityViewModel.getAllDates().observe(this, Observer<List<DateEntity>> { dates ->
             if(dates != null){
+                //Cache dates
                 dateList = dates
-                setCurrentTransactions(dates!![0].date.substring(0..7))
 
-                val dateAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, dates!!.getDateStrings())
+                //Initialize adapter for spinner
+                val dateAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, dates.getDateStrings())
                 dateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
+                //Initialize spinner
                 filter_date_spinner.apply {
                     adapter = dateAdapter
                     onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-                        override fun onNothingSelected(parent: AdapterView<*>?) {
-                            Toast.makeText(context, "Nothing!", Toast.LENGTH_SHORT).show()
-                        }
+                        override fun onNothingSelected(parent: AdapterView<*>?) {}
 
                         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                             setCurrentTransactions(dateList!![position].date.substring(0..7))
@@ -66,6 +68,9 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                         }
                     }
                 }
+
+                //Initialize ExpandableList
+                setCurrentTransactions(dates[0].date.substring(0..7))
             }
         })
 
@@ -82,9 +87,9 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         filterActivityViewModel.getAllTransactionsFromDate("%$date%")
                 .observe(this, Observer { transactions ->
                     if(transactions != null){
-                        val fragmentTransaction = supportFragmentManager.beginTransaction()
-                        fragmentTransaction.replace(R.id.filter_list_fragment_container, FilterListFragment.newInstance(transactions.sortedBy { it.date }))
-                        fragmentTransaction.commit()
+
+                        val fragment = supportFragmentManager.findFragmentById(R.id.filter_fragment)
+                        fragment.exp_list_view.setAdapter(ExpandableListDateAdapter(this, transactions))
                     }
                 })
     }

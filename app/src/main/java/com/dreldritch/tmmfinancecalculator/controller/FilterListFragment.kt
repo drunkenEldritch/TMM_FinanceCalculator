@@ -12,9 +12,9 @@ import com.dreldritch.tmmfinancecalculator.adapter.ExpandableListDateAdapter
 import com.dreldritch.tmmfinancecalculator.model.entities.FullTransactionData
 import kotlinx.android.synthetic.main.fragment_filter_list.*
 
+//TODO Remove fragment
 class FilterListFragment: Fragment() {
 
-    // TODO: Rename and change types of parameters
     private var transactionsList: ArrayList<FullTransactionData>? = null
 
     private var mListener: OnFragmentInteractionListener? = null
@@ -32,12 +32,6 @@ class FilterListFragment: Fragment() {
         return inflater!!.inflate(R.layout.fragment_filter_list, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        exp_list_view.setAdapter(ExpandableListDateAdapter(context, transactionsList!!))
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {
         if (mListener != null) {
             mListener!!.onFragmentInteraction(uri)
