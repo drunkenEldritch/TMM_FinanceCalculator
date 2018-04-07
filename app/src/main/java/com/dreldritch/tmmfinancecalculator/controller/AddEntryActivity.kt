@@ -1,5 +1,6 @@
 package com.dreldritch.tmmfinancecalculator.controller
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
@@ -27,8 +28,8 @@ import kotlinx.android.synthetic.main.activity_add_entry.*
 //TODO Check landscape mode of all dialogs
 //TODO Alternative to avoid crash on first start of app (NullPointerException because default data not initialized on first activity start)
 
-class AddEntryActivity: AppCompatActivity(), DateDialogFragment.OnAddDialogFragmentInteractionListener,
-AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment.OnCategoryInteractionListener{
+class AddEntryActivity : AppCompatActivity(), DateDialogFragment.OnAddDialogFragmentInteractionListener,
+        AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment.OnCategoryInteractionListener {
 
     val priceFormat = "."
 
@@ -49,46 +50,49 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
 
         /*Account dialog setup*/
         entryViewModel.getAllAccounts()
-                .observe(this, android.arch.lifecycle.Observer<List<AccountEntity>> {accounts ->
-            entry_txt_account.apply {
-                if(entryViewModel.getCurrentAccount() != null)  text = entryViewModel.getCurrentAccount()!!.account
-                setOnClickListener { openDialog("AccountDialog", AccountDialogFragment.newInstance(accounts!!))}
-            }
+                .observe(this, Observer<List<AccountEntity>> { accounts ->
+                    entry_txt_account.setOnClickListener { openDialog("AccountDialog", AccountDialogFragment.newInstance(accounts!!)) }
+                })
+
+        entryViewModel.getCurrentAccount().observe(this, Observer {accountEntity ->
+            entry_txt_account.text = accountEntity?.account
         })
 
         /*Category dialog setup*/
         entryViewModel.getAllCategories()
-                .observe(this, android.arch.lifecycle.Observer<List<CategoryEntity>> { categories ->
-            entry_txt_category.apply {
-                setOnClickListener { openDialog("CategoryDialog", CategoryDialogFragment.newInstance(categories!!)) }
+                .observe(this, Observer<List<CategoryEntity>> { categories ->
+                    entry_txt_category.apply {
+                        setOnClickListener { openDialog("CategoryDialog", CategoryDialogFragment.newInstance(categories!!)) }
+                    }
+                })
+
+        entryViewModel.getCurrentCategory().observe(this, Observer { categoryEntity ->
+            if (categoryEntity != null){
+                entry_txt_category.text = categoryEntity.category
+
+                entry_icon_text_view.apply {
+                    text = categoryEntity.category.substring(0..1)
+                    val shape = resources.getDrawable(R.drawable.category_icon_drawable, null) as GradientDrawable
+                    shape.setColor(categoryEntity.iconColor)
+                    background = shape
+                }
             }
         })
 
-        if(entryViewModel.getCurrentCategory() != null) {
-            entry_txt_category.text = entryViewModel.getCurrentCategory()!!.category
-
-            entry_icon_text_view.apply {
-                text = entryViewModel.getCurrentCategory()!!.category.substring(0..1)
-                val shape = resources.getDrawable(R.drawable.category_icon_drawable, null) as GradientDrawable
-                shape.setColor(entryViewModel.getCurrentCategory()!!.iconColor)
-                background = shape
-            }
-        }
-
         /*Date setup*/
-        entry_txt_date.apply {
-            text = entryViewModel.getCurrentDate()!!.date
-            setOnClickListener { openDialog("DateDialog", DateDialogFragment.newInstance()) }
-        }
+        entryViewModel.getCurrentDate().observe(this, Observer { dateEntity ->
+            entry_txt_date.text = dateEntity?.date })
+
+        entry_txt_date.setOnClickListener { openDialog("DateDialog", DateDialogFragment.newInstance()) }
 
         //Setup price
-        entry_edit_price.addTextChangedListener(object : TextWatcher{
+        entry_edit_price.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val price = s.toString()
-                val decimalPos : Int
-                if(!price.contains(priceFormat)) return else decimalPos = price.indexOf(priceFormat)
+                val decimalPos: Int
+                if (!price.contains(priceFormat)) return else decimalPos = price.indexOf(priceFormat)
 
-                if (price.substring(decimalPos).length > 3){
+                if (price.substring(decimalPos).length > 3) {
                     val newPrice = price.substring(0..decimalPos + 2)
                     entry_edit_price.removeTextChangedListener(this)
                     entry_edit_price.setText(newPrice)
@@ -96,6 +100,7 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
                     entry_edit_price.addTextChangedListener(this)
                 }
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
@@ -116,8 +121,8 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
         }
 
         R.id.action_save_entry -> {
-            val fullDataObject = createFullDataObject(entryViewModel.getCurrentCategory(), entryViewModel.getCurrentAccount())
-            if(fullDataObject != null){
+            val fullDataObject = createFullDataObject()
+            if (fullDataObject != null) {
                 val repo = EntryDbRepository(application)
                 repo.insertFullDataObject(fullDataObject)
                 Toast.makeText(this, "Entry saved!", Toast.LENGTH_SHORT).show()
@@ -126,69 +131,59 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
             true
         }
 
-        //Switch to last activity
+    //Switch to last activity
         android.R.id.home -> {
             onBackPressed()
             true
         }
-        else -> { super.onOptionsItemSelected(item) }
+        else -> {
+            super.onOptionsItemSelected(item)
+        }
     }
 
     /*DialogInteractionListeners*/
     override fun onDateDialogInteraction(date: String) {
         entryViewModel.setCurrentDate(null, date)
-        entry_txt_date.text = entryViewModel.getCurrentDate()!!.date
     }
 
     override fun onAccDialogInteraction(accountEntity: AccountEntity) {
         entryViewModel.setCurrentAccount(accountEntity)
-        entry_txt_account.text = entryViewModel.getCurrentAccount()!!.account
     }
 
     override fun onCategoryDialogInteraction(categoryEntity: CategoryEntity) {
         entryViewModel.setCurrentCategory(categoryEntity)
-        entry_txt_category.text = entryViewModel.getCurrentCategory()!!.category
-
-
-        entry_icon_text_view.apply {
-            text = entryViewModel.getCurrentCategory()!!.category.substring(0..1)
-            val shape = resources.getDrawable(R.drawable.category_icon_drawable, null) as GradientDrawable
-            shape.setColor(entryViewModel.getCurrentCategory()!!.iconColor)
-            background = shape
-        }
     }
 
     /*Helper functions*/
-    private fun openDialog(tag: String, dialog: DialogFragment){
+    private fun openDialog(tag: String, dialog: DialogFragment) {
         val fm = supportFragmentManager
         dialog.show(fm, tag)
     }
 
     //TODO Check nullability of objects
-    private fun createFullDataObject(category: CategoryEntity?, account: AccountEntity?)
-            : FullTransactionData?{
+    private fun createFullDataObject(): FullTransactionData? {
 
-        val name = entry_edit_name.text.toString()
-        if(name == ""){
+        if (entry_edit_name.text.isEmpty()) {
             Toast.makeText(this, R.string.no_name_error, Toast.LENGTH_SHORT).show()
             return null
         }
 
-        val price = entry_edit_price.text.toString()
-        if(price == ""){
+        if (entry_edit_price.text.isEmpty()) {
             Toast.makeText(this, R.string.no_price_error, Toast.LENGTH_SHORT).show()
             return null
         }
 
-        val inOut = if(entry_in_btn.isChecked) 1 else 0
-
         return FullTransactionData(null,
-                name,
-                price.toDouble(),
+                entry_edit_name.text.toString(),
+                entry_edit_price.text.toString().toDouble(),
                 entry_edit_description.text.toString(),
-                inOut,
-                null, entry_txt_date.text.toString(),
-                account?.id, account!!.account,
-                category?.id, category?.category, category?.iconColor)
+                if (entry_in_btn.isChecked) 1 else 0,
+                entryViewModel.getCurrentDate().value?.id,
+                entryViewModel.getCurrentDate().value?.date!!,
+                entryViewModel.getCurrentAccount().value?.id!!,
+                entryViewModel.getCurrentAccount().value?.account!!,
+                entryViewModel.getCurrentCategory().value?.id,
+                entryViewModel.getCurrentCategory().value?.category,
+                entryViewModel.getCurrentCategory().value?.iconColor)
     }
 }

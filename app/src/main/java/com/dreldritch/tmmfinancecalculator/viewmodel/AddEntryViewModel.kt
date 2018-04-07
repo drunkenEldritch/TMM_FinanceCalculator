@@ -3,6 +3,7 @@ package com.dreldritch.tmmfinancecalculator.viewmodel
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
 import com.dreldritch.tmmfinancecalculator.model.entities.AccountEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
@@ -14,36 +15,40 @@ class AddEntryViewModel(application: Application): AndroidViewModel(application)
 
     private val preferedFormat = "yyyy-MM-dd"
 
-    private var dateEntity: DateEntity
-    private var accountEntity: AccountEntity? = null
-    private var categoryEntity: CategoryEntity? = null
-
     private val repository = EntryDbRepository(application)
-    private var categories: LiveData<List<CategoryEntity>>?
-    private var accounts: LiveData<List<AccountEntity>>?
-    private var dates: LiveData<List<DateEntity>>?
+
+    private var dateEntity =  MutableLiveData<DateEntity>()
+    private var accountEntity = MutableLiveData<AccountEntity>()
+    private var categoryEntity = MutableLiveData<CategoryEntity?>()
+
+    private var categories: LiveData<List<CategoryEntity>>
+    private var accounts: LiveData<List<AccountEntity>>
+    //private var dates: LiveData<List<DateEntity>>?
 
     init {
-        dateEntity = DateEntity(null,SimpleDateFormat(preferedFormat).format(Date()))
+        dateEntity.value = DateEntity(null,SimpleDateFormat(preferedFormat).format(Date()))
+        //TODO Only a test dummy, load real data
+        accountEntity.value = AccountEntity(1, "noobDummy")
+        categoryEntity.value = null
+
+        //dates = repository.getAllDates()
         categories = repository.getAllCategories()
         accounts = repository.getAllAccounts()
-        dates = repository.getAllDates()
+
     }
 
-    fun getCurrentDate(): DateEntity? = dateEntity
-    fun setCurrentDate(id: Long?, date: String) {dateEntity = DateEntity(id, date) }
+    fun getCurrentDate(): MutableLiveData<DateEntity> = dateEntity
+    fun setCurrentDate(id: Long?, date: String) {dateEntity.value = DateEntity(id, date) }
 
-    fun getCurrentAccount(): AccountEntity? = accountEntity
-    fun setCurrentAccount(accountEntity: AccountEntity) {this.accountEntity = accountEntity}
+    fun getCurrentAccount(): MutableLiveData<AccountEntity> = accountEntity
+    fun setCurrentAccount(account: AccountEntity) {accountEntity.value = account}
 
-    fun getCurrentCategory(): CategoryEntity? = categoryEntity
-    fun setCurrentCategory(categoryEntity: CategoryEntity) {
-        this.categoryEntity = categoryEntity
-    }
+    fun getCurrentCategory(): MutableLiveData<CategoryEntity?> = categoryEntity
+    fun setCurrentCategory(category: CategoryEntity) { categoryEntity.value = category }
 
     /*DB queries*/
-    fun getAllAccounts() = repository.getAllAccounts()
-    fun getAllCategories() = repository.getAllCategories()
-    fun getAllDates() = repository.getAllDates()
-    fun getAllTransactions() = repository.getAllTransactions()
+    fun getAllAccounts() = accounts
+    fun getAllCategories() = categories
+    //fun getAllDates() = dates
+    //fun getAllTransactions() = repository.getAllTransactions()
 }
