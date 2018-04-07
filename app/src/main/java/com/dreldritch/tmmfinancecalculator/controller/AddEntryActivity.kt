@@ -121,7 +121,7 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
                 val repo = EntryDbRepository(application)
                 repo.insertFullDataObject(fullDataObject)
                 Toast.makeText(this, "Entry saved!", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, MainActivity::class.java))
+                onBackPressed()
             }
             true
         }
