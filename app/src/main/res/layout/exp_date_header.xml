@@ -1,14 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:paddingBottom="8dp"
+    android:paddingEnd="8dp"
+    android:paddingStart="8dp"
+    android:paddingTop="8dp">
 
     <TextView
-        android:id="@+id/exp_header_txt"
+        android:id="@+id/exp_header_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Test"/>
+        android:layout_weight="8"
+        android:textStyle="bold"
+        tools:text="Test" />
+
+    <TextView
+        android:id="@+id/exp_header_equal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:text="="
+        android:textAlignment="center"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/exp_header_total_sum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAlignment="textEnd"
+        android:textStyle="bold"
+        tools:text="3,50" />
 </LinearLayout>

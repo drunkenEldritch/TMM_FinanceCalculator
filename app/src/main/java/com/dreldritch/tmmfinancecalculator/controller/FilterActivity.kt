@@ -23,6 +23,9 @@ import com.dreldritch.tmmfinancecalculator.viewmodel.FilterActivityViewModel
 import kotlinx.android.synthetic.main.activity_filter.*
 import kotlinx.android.synthetic.main.app_bar_filter.*
 import kotlinx.android.synthetic.main.fragment_filter_list.*
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.*
 
 class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
         FilterListFragment.OnFragmentInteractionListener {
@@ -79,7 +82,7 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                         val fragment = supportFragmentManager.findFragmentById(R.id.filter_fragment)
                         fragment.exp_list_view.setAdapter(ExpandableListDateAdapter(this, transactions))
 
-                        filter_total_sum.text = transactions.sumByDouble { it.price }.toString()
+                        filter_total_sum.text = String.format(Locale.ROOT, "%.2f", transactions.sumByDouble { it.price })
                     }
                 })
     }

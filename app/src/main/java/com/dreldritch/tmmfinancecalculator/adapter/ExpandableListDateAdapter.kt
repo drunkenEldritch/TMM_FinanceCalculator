@@ -1,6 +1,8 @@
 package com.dreldritch.tmmfinancecalculator.adapter
 
 import android.content.Context
+import android.graphics.drawable.GradientDrawable
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +12,8 @@ import com.dreldritch.tmmfinancecalculator.R
 import com.dreldritch.tmmfinancecalculator.model.entities.FullTransactionData
 import kotlinx.android.synthetic.main.exp_date_header.view.*
 import kotlinx.android.synthetic.main.exp_date_list_item.view.*
+import java.text.DecimalFormat
+import java.util.*
 
 class ExpandableListDateAdapter(val context: Context, private val transactionList:List<FullTransactionData>)
     : BaseExpandableListAdapter() {
@@ -29,7 +33,8 @@ class ExpandableListDateAdapter(val context: Context, private val transactionLis
     override fun getGroupView(p0: Int, p1: Boolean, p2: View?, p3: ViewGroup?): View {
         val layoutInflater = this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val groupLayout = layoutInflater.inflate(R.layout.exp_date_header, null)
-        groupLayout.exp_header_txt.text = dateList[p0]
+        groupLayout.exp_header_date.text = dateList[p0]
+        groupLayout.exp_header_total_sum.text = String.format(Locale.ROOT, "%.2f", groupChildMap[dateList[p0]]?.sumByDouble { it.price })
 
         return groupLayout
     }
@@ -42,10 +47,33 @@ class ExpandableListDateAdapter(val context: Context, private val transactionLis
     override fun getChild(p0: Int, p1: Int): Any = groupChildMap[dateList[p0]]!![p1]
 
     override fun getChildView(p0: Int, p1: Int, p2: Boolean, p3: View?, p4: ViewGroup?): View {
-        val entryEntity = groupChildMap[dateList[p0]]?.get(p1)
+
+        val transactionEntity = groupChildMap[dateList[p0]]?.get(p1)
+
         val layoutInflater = this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val childLayout = layoutInflater.inflate(R.layout.exp_date_list_item, null)
-        childLayout.exp_list_item_name.text = entryEntity!!.name
+
+        childLayout.exp_list_item_name.text = transactionEntity!!.name
+        childLayout.exp_list_item_price.text = String.format(Locale.ROOT, "%.2f", transactionEntity!!.price)
+
+        /*if(transactionEntity.category_id != null){
+            childLayout.exp_list_category_icon.apply {
+                text = transactionEntity.category?.substring(0..1)
+                val shape = resources.getDrawable(R.drawable.category_icon_drawable, null) as GradientDrawable
+                shape.setColor(transactionEntity.icon_color!!)
+                background = shape
+            }
+        }*/
+
+            childLayout.exp_list_category_icon.apply {
+                text = transactionEntity.category?.substring(0..1)
+                val shape = resources.getDrawable(R.drawable.category_icon_drawable, null) as GradientDrawable
+
+                if(transactionEntity.icon_color != null) shape.setColor(transactionEntity.icon_color)
+                else shape.setColor(ContextCompat.getColor(context, R.color.icon_default))
+                background = shape
+            }
+
 
         return childLayout
     }

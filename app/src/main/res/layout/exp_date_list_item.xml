@@ -1,14 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="4dp"
+    android:paddingEnd="8dp"
+    android:paddingStart="8dp"
+    android:paddingTop="4dp">
+
+    <TextView
+        android:id="@+id/exp_list_category_icon"
+        android:layout_width="@dimen/category_icon_shape_small"
+        android:layout_height="@dimen/category_icon_shape_small"
+        android:layout_weight="0"
+        android:background="@drawable/category_icon_drawable"
+        android:padding="@dimen/category_icon_shape_padding_small"
+        android:text="X"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/category_icon_txt_size_small" />
 
     <TextView
         android:id="@+id/exp_list_item_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="8"
+        android:paddingStart="8dp"
+        tools:text="test" />
+
+    <TextView
+        android:id="@+id/exp_list_item_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"/>
+        android:layout_weight="1"
+        android:paddingEnd="24dp"
+        android:paddingStart="8dp"
+        tools:text="test" />
 </LinearLayout>
