@@ -47,7 +47,7 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         filterActivityViewModel.getAllDates().observe(this, Observer<List<DateEntity>> { dates ->
             if(dates != null){
                 //Cache dates
-                val monthList = dates.map { it.date.substring(0..it.date.length - 4) }.toSet().toList()
+                val monthList = dates.map { it.date.substring(0..it.date.length - 4) }.distinct().sortedDescending()
 
                 //Initialize adapter for spinner
                 val dateAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, monthList)
