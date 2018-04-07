@@ -7,8 +7,8 @@ import com.dreldritch.tmmfinancecalculator.model.dao.*
 import com.dreldritch.tmmfinancecalculator.model.database.EntryDatabase
 import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
-import com.dreldritch.tmmfinancecalculator.model.entities.EntryDataObject
 import com.dreldritch.tmmfinancecalculator.model.entities.EntryEntity
+import com.dreldritch.tmmfinancecalculator.model.entities.FullTransactionData
 
 private const val REPOSITORY_TAG = "EntryDbRepository"
 
@@ -29,8 +29,8 @@ class EntryDbRepository(val application: Application){
         fullDataDao = db.getFullTransactionDataDao()
     }
 
-    fun insertEntryObject(entry: EntryDataObject){
-        InsertEntryDataAsyncTask(entryDao, dateDao).execute(entry)
+    fun insertFullDataObject(transaction: FullTransactionData){
+        InsertFullDataAsyncTask(entryDao, dateDao).execute(transaction)
     }
 
     fun insertCategory(category: CategoryEntity) {
@@ -49,34 +49,29 @@ class EntryDbRepository(val application: Application){
 
     /*fun isDbCreated() = EntryDatabase.getDatabase(application).getDatabaseCreated()*/
 
-    private class InsertEntryDataAsyncTask(val entryDao: EntryDao, val dateDao: DateDao) : AsyncTask<EntryDataObject, Void, Void>() {
-        override fun doInBackground(vararg entry: EntryDataObject): Void? {
+    private class InsertFullDataAsyncTask(val entryDao: EntryDao, val dateDao: DateDao) : AsyncTask<FullTransactionData, Void, Void>() {
+        override fun doInBackground(vararg transaction: FullTransactionData): Void? {
 
-            var dateId = dateDao.insert(DateEntity(null, entry[0].date))
-            if(dateId < 0) dateId = dateDao.getDateId(entry[0].date)
-
-            val categoryId = if(entry[0].categoryEntity == null) null else entry[0].categoryEntity!!.id
-
-            //1 = default account
-            val accountId = if(entry[0].accountEntity == null) 1 else entry[0].accountEntity!!.id
+            var dateId = dateDao.insert(DateEntity(null, transaction[0].date))
+            if(dateId < 0) dateId = dateDao.getDateId(transaction[0].date)
 
             val id = entryDao.insert(EntryEntity(null,
-                    entry[0].name,
-                    entry[0].price,
-                    entry[0].description,
-                    entry[0].in_out,
+                    transaction[0].name,
+                    transaction[0].price,
+                    transaction[0].description,
+                    transaction[0].in_out,
                     dateId,
-                    categoryId,
-                    accountId!!))
+                    transaction[0].category_id,
+                    transaction[0].account_id ?: 1))
 
             Log.d(REPOSITORY_TAG, "id = $id,\n" +
-                    "name = ${entry[0].name},\n" +
-                    "price = ${entry[0].price},\n" +
-                    "desc = ${entry[0].description},\n" +
-                    "type = ${entry[0].in_out},\n" +
+                    "name = ${transaction[0].name},\n" +
+                    "price = ${transaction[0].price},\n" +
+                    "desc = ${transaction[0].description},\n" +
+                    "type = ${transaction[0].in_out},\n" +
                     "dateId = $dateId,\n" +
-                    "catId = $categoryId,\n" +
-                    "accId = $accountId\n" +
+                    "catId = ${transaction[0].category_id},\n" +
+                    "accId = ${transaction[0].account_id ?: 1}\n" +
                     "with $entryDao")
             return null
         }

@@ -59,7 +59,7 @@ class ExpandableListDateAdapter(val context: Context, private val transactionLis
     }
 
     override fun getGroupId(p0: Int): Long {
-        return transactionList.filter { it.date == dateList[p0] }[0].date_id
+        return transactionList.filter { it.date == dateList[p0] }[0].date_id!!
     }
 
     override fun getChildId(p0: Int, p1: Int): Long {

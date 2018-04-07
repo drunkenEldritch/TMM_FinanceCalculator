@@ -6,8 +6,6 @@ import android.graphics.drawable.GradientDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.support.v4.app.NavUtils
-import android.support.v4.app.TaskStackBuilder
 import android.view.Menu
 import android.view.MenuItem
 import android.text.Editable
@@ -21,7 +19,7 @@ import com.dreldritch.tmmfinancecalculator.dialogs.DateDialogFragment
 import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
 import com.dreldritch.tmmfinancecalculator.model.entities.AccountEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
-import com.dreldritch.tmmfinancecalculator.model.entities.EntryDataObject
+import com.dreldritch.tmmfinancecalculator.model.entities.FullTransactionData
 import kotlinx.android.synthetic.main.activity_add_entry.*
 
 //TODO Set default Account on start
@@ -118,10 +116,10 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
         }
 
         R.id.action_save_entry -> {
-            val entryDataObject = createEntryDbObject(entryViewModel.getCurrentCategory(), entryViewModel.getCurrentAccount())
-            if(entryDataObject != null){
-                val entryRepository = EntryDbRepository(application)
-                entryRepository.insertEntryObject(entryDataObject)
+            val fullDataObject = createFullDataObject(entryViewModel.getCurrentCategory(), entryViewModel.getCurrentAccount())
+            if(fullDataObject != null){
+                val repo = EntryDbRepository(application)
+                repo.insertFullDataObject(fullDataObject)
                 Toast.makeText(this, "Entry saved!", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this, MainActivity::class.java))
             }
@@ -133,7 +131,6 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
             onBackPressed()
             true
         }
-
         else -> { super.onOptionsItemSelected(item) }
     }
 
@@ -167,8 +164,9 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
         dialog.show(fm, tag)
     }
 
-    private fun createEntryDbObject(category: CategoryEntity?, account: AccountEntity?)
-            : EntryDataObject?{
+    //TODO Check nullability of objects
+    private fun createFullDataObject(category: CategoryEntity?, account: AccountEntity?)
+            : FullTransactionData?{
 
         val name = entry_edit_name.text.toString()
         if(name == ""){
@@ -184,14 +182,13 @@ AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment
 
         val inOut = if(entry_in_btn.isChecked) 1 else 0
 
-        //TODO Make category nullable, set default account
-        return EntryDataObject(null,
+        return FullTransactionData(null,
                 name,
                 price.toDouble(),
                 entry_edit_description.text.toString(),
                 inOut,
-                entry_txt_date.text.toString(),
-                category,
-                account)
+                null, entry_txt_date.text.toString(),
+                account?.id, account!!.account,
+                category?.id, category?.category, category?.iconColor)
     }
 }
