@@ -11,7 +11,7 @@ import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AddEntryViewModel(application: Application): AndroidViewModel(application) {
+class AddTransactionViewModel(application: Application): AndroidViewModel(application) {
 
     private val preferedFormat = "yyyy-MM-dd"
 

@@ -19,7 +19,7 @@ class AccountDialogFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if(arguments != null)
-            accounts = arguments.getParcelableArrayList<AccountEntity>(ACCOUNTS)
+            accounts = arguments!!.getParcelableArrayList<AccountEntity>(ACCOUNTS)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

@@ -2,7 +2,6 @@ package com.dreldritch.tmmfinancecalculator.controller
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -12,7 +11,7 @@ import android.view.MenuItem
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
-import com.dreldritch.tmmfinancecalculator.viewmodel.AddEntryViewModel
+import com.dreldritch.tmmfinancecalculator.viewmodel.AddTransactionViewModel
 import com.dreldritch.tmmfinancecalculator.R
 import com.dreldritch.tmmfinancecalculator.dialogs.AccountDialogFragment
 import com.dreldritch.tmmfinancecalculator.dialogs.CategoryDialogFragment
@@ -21,23 +20,23 @@ import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
 import com.dreldritch.tmmfinancecalculator.model.entities.AccountEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.FullTransactionData
-import kotlinx.android.synthetic.main.activity_add_entry.*
+import kotlinx.android.synthetic.main.activity_add_transaction.*
 
 //TODO Set default Account on start
 //TODO DateDialog size & buttons & landscape layout
 //TODO Check landscape mode of all dialogs
 //TODO Alternative to avoid crash on first start of app (NullPointerException because default data not initialized on first activity start)
 
-class AddEntryActivity : AppCompatActivity(), DateDialogFragment.OnAddDialogFragmentInteractionListener,
+class AddTransactionActivity : AppCompatActivity(), DateDialogFragment.OnAddDialogFragmentInteractionListener,
         AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment.OnCategoryInteractionListener {
 
     val priceFormat = "."
 
-    private lateinit var entryViewModel: AddEntryViewModel
+    private lateinit var transactionViewModel: AddTransactionViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_entry)
+        setContentView(R.layout.activity_add_transaction)
 
         /*Setup toolbar and menu*/
         setSupportActionBar(findViewById(R.id.entry_toolbar))
@@ -46,27 +45,27 @@ class AddEntryActivity : AppCompatActivity(), DateDialogFragment.OnAddDialogFrag
             setDisplayHomeAsUpEnabled(true)
         }
 
-        entryViewModel = ViewModelProviders.of(this).get(AddEntryViewModel::class.java)
+        transactionViewModel = ViewModelProviders.of(this).get(AddTransactionViewModel::class.java)
 
         /*Account dialog setup*/
-        entryViewModel.getAllAccounts()
+        transactionViewModel.getAllAccounts()
                 .observe(this, Observer<List<AccountEntity>> { accounts ->
                     entry_txt_account.setOnClickListener { openDialog("AccountDialog", AccountDialogFragment.newInstance(accounts!!)) }
                 })
 
-        entryViewModel.getCurrentAccount().observe(this, Observer {accountEntity ->
+        transactionViewModel.getCurrentAccount().observe(this, Observer { accountEntity ->
             entry_txt_account.text = accountEntity?.account
         })
 
         /*Category dialog setup*/
-        entryViewModel.getAllCategories()
+        transactionViewModel.getAllCategories()
                 .observe(this, Observer<List<CategoryEntity>> { categories ->
                     entry_txt_category.apply {
                         setOnClickListener { openDialog("CategoryDialog", CategoryDialogFragment.newInstance(categories!!)) }
                     }
                 })
 
-        entryViewModel.getCurrentCategory().observe(this, Observer { categoryEntity ->
+        transactionViewModel.getCurrentCategory().observe(this, Observer { categoryEntity ->
             if (categoryEntity != null){
                 entry_txt_category.text = categoryEntity.category
 
@@ -80,7 +79,7 @@ class AddEntryActivity : AppCompatActivity(), DateDialogFragment.OnAddDialogFrag
         })
 
         /*Date setup*/
-        entryViewModel.getCurrentDate().observe(this, Observer { dateEntity ->
+        transactionViewModel.getCurrentDate().observe(this, Observer { dateEntity ->
             entry_txt_date.text = dateEntity?.date })
 
         entry_txt_date.setOnClickListener { openDialog("DateDialog", DateDialogFragment.newInstance()) }
@@ -110,7 +109,7 @@ class AddEntryActivity : AppCompatActivity(), DateDialogFragment.OnAddDialogFrag
     /*Appbar menu*/
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.add_entry_menu, menu)
+        menuInflater.inflate(R.menu.add_transaction_menu, menu)
         return true
     }
 
@@ -143,15 +142,15 @@ class AddEntryActivity : AppCompatActivity(), DateDialogFragment.OnAddDialogFrag
 
     /*DialogInteractionListeners*/
     override fun onDateDialogInteraction(date: String) {
-        entryViewModel.setCurrentDate(null, date)
+        transactionViewModel.setCurrentDate(null, date)
     }
 
     override fun onAccDialogInteraction(accountEntity: AccountEntity) {
-        entryViewModel.setCurrentAccount(accountEntity)
+        transactionViewModel.setCurrentAccount(accountEntity)
     }
 
     override fun onCategoryDialogInteraction(categoryEntity: CategoryEntity) {
-        entryViewModel.setCurrentCategory(categoryEntity)
+        transactionViewModel.setCurrentCategory(categoryEntity)
     }
 
     /*Helper functions*/
@@ -178,12 +177,12 @@ class AddEntryActivity : AppCompatActivity(), DateDialogFragment.OnAddDialogFrag
                 entry_edit_price.text.toString().toDouble(),
                 entry_edit_description.text.toString(),
                 if (entry_in_btn.isChecked) 1 else 0,
-                entryViewModel.getCurrentDate().value?.id,
-                entryViewModel.getCurrentDate().value?.date!!,
-                entryViewModel.getCurrentAccount().value?.id!!,
-                entryViewModel.getCurrentAccount().value?.account!!,
-                entryViewModel.getCurrentCategory().value?.id,
-                entryViewModel.getCurrentCategory().value?.category,
-                entryViewModel.getCurrentCategory().value?.iconColor)
+                transactionViewModel.getCurrentDate().value?.id,
+                transactionViewModel.getCurrentDate().value?.date!!,
+                transactionViewModel.getCurrentAccount().value?.id!!,
+                transactionViewModel.getCurrentAccount().value?.account!!,
+                transactionViewModel.getCurrentCategory().value?.id,
+                transactionViewModel.getCurrentCategory().value?.category,
+                transactionViewModel.getCurrentCategory().value?.iconColor)
     }
 }

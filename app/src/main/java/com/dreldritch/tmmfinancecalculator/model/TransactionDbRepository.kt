@@ -4,33 +4,33 @@ import android.app.Application
 import android.os.AsyncTask
 import android.util.Log
 import com.dreldritch.tmmfinancecalculator.model.dao.*
-import com.dreldritch.tmmfinancecalculator.model.database.EntryDatabase
+import com.dreldritch.tmmfinancecalculator.model.database.TransactionDatabase
 import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
-import com.dreldritch.tmmfinancecalculator.model.entities.EntryEntity
+import com.dreldritch.tmmfinancecalculator.model.entities.TransactionEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.FullTransactionData
 
 private const val REPOSITORY_TAG = "EntryDbRepository"
 
-class EntryDbRepository(val application: Application){
+class EntryDbRepository(application: Application){
 
     private val dateDao: DateDao
     private val categoryDao: CategoryDao
     private val accountDao: AccountDao
-    private val entryDao: EntryDao
+    private val transactionDao: TransactionDao
     private val fullDataDao: FullTransactionDao
 
     init {
-        val db = EntryDatabase.getDatabase(application)
+        val db = TransactionDatabase.getDatabase(application)
         dateDao = db.getDateDao()
         categoryDao = db.getCategoryDao()
         accountDao = db.getAccountDao()
-        entryDao = db.getEntryDao()
+        transactionDao = db.getEntryDao()
         fullDataDao = db.getFullTransactionDataDao()
     }
 
     fun insertFullDataObject(transaction: FullTransactionData){
-        InsertFullDataAsyncTask(entryDao, dateDao).execute(transaction)
+        InsertFullDataAsyncTask(transactionDao, dateDao).execute(transaction)
     }
 
     fun insertCategory(category: CategoryEntity) {
@@ -47,22 +47,22 @@ class EntryDbRepository(val application: Application){
 
     fun getAllTransactionsFromDate(date: String) = fullDataDao.getAllTransactionsFromDate(date)
 
-    /*fun isDbCreated() = EntryDatabase.getDatabase(application).getDatabaseCreated()*/
+    /*fun isDbCreated() = TransactionDatabase.getDatabase(application).getDatabaseCreated()*/
 
-    private class InsertFullDataAsyncTask(val entryDao: EntryDao, val dateDao: DateDao) : AsyncTask<FullTransactionData, Void, Void>() {
+    private class InsertFullDataAsyncTask(val transactionDao: TransactionDao, val dateDao: DateDao) : AsyncTask<FullTransactionData, Void, Void>() {
         override fun doInBackground(vararg transaction: FullTransactionData): Void? {
 
             var dateId = dateDao.insert(DateEntity(null, transaction[0].date))
             if(dateId < 0) dateId = dateDao.getDateId(transaction[0].date)
 
-            val id = entryDao.insert(EntryEntity(null,
+            val id = transactionDao.insert(TransactionEntity(null,
                     transaction[0].name,
                     transaction[0].price,
                     transaction[0].description,
                     transaction[0].in_out,
                     dateId,
                     transaction[0].category_id,
-                    transaction[0].account_id ?: 1))
+                    transaction[0].account_id))
 
             Log.d(REPOSITORY_TAG, "id = $id,\n" +
                     "name = ${transaction[0].name},\n" +
@@ -71,8 +71,8 @@ class EntryDbRepository(val application: Application){
                     "type = ${transaction[0].in_out},\n" +
                     "dateId = $dateId,\n" +
                     "catId = ${transaction[0].category_id},\n" +
-                    "accId = ${transaction[0].account_id ?: 1}\n" +
-                    "with $entryDao")
+                    "accId = ${transaction[0].account_id}\n" +
+                    "with $transactionDao")
             return null
         }
     }

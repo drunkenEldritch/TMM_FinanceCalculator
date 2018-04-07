@@ -11,6 +11,7 @@ import com.dreldritch.tmmfinancecalculator.R
 import com.dreldritch.tmmfinancecalculator.adapter.ExpandableListDateAdapter
 import com.dreldritch.tmmfinancecalculator.model.entities.FullTransactionData
 import kotlinx.android.synthetic.main.fragment_filter_list.*
+import kotlinx.android.synthetic.main.fragment_filter_list.view.*
 
 //TODO Remove fragment
 class FilterListFragment: Fragment() {
@@ -22,13 +23,12 @@ class FilterListFragment: Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if(arguments != null){
-            transactionsList = arguments.getParcelableArrayList<FullTransactionData>(ARG_FULL_DATA)
+            transactionsList = arguments!!.getParcelableArrayList<FullTransactionData>(ARG_FULL_DATA)
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
         return inflater!!.inflate(R.layout.fragment_filter_list, container, false)
     }
 

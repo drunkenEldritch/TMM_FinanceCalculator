@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         fab_main_activity.setOnClickListener {
-            val addIntent = Intent(this, AddEntryActivity::class.java)
+            val addIntent = Intent(this, AddTransactionActivity::class.java)
             startActivity(addIntent)
         }
 

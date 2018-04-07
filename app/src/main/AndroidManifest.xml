@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".controller.AddEntryActivity"
+            android:name=".controller.AddTransactionActivity"
             android:theme="@style/AppTheme">
         </activity>
         <activity

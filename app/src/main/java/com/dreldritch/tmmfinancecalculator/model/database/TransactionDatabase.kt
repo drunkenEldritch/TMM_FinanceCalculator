@@ -12,16 +12,16 @@ import com.dreldritch.tmmfinancecalculator.R
 import com.dreldritch.tmmfinancecalculator.model.entities.AccountEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
-import com.dreldritch.tmmfinancecalculator.model.entities.EntryEntity
+import com.dreldritch.tmmfinancecalculator.model.entities.TransactionEntity
 import java.util.concurrent.Executors
 import android.arch.lifecycle.LiveData
 import com.dreldritch.tmmfinancecalculator.model.dao.*
 
 
-@Database(entities = [EntryEntity::class, DateEntity::class, CategoryEntity::class, AccountEntity::class], version = 1)
-abstract class EntryDatabase : RoomDatabase() {
+@Database(entities = [TransactionEntity::class, DateEntity::class, CategoryEntity::class, AccountEntity::class], version = 1)
+abstract class TransactionDatabase : RoomDatabase() {
 
-    abstract fun getEntryDao(): EntryDao
+    abstract fun getEntryDao(): TransactionDao
     abstract fun getDateDao(): DateDao
     abstract fun getAccountDao(): AccountDao
     abstract fun getCategoryDao(): CategoryDao
@@ -31,16 +31,16 @@ abstract class EntryDatabase : RoomDatabase() {
 
     companion object {
         private const val DB_NAME = "entry_db.db"
-        private var INSTANCE: EntryDatabase? = null
+        private var INSTANCE: TransactionDatabase? = null
 
-        fun getDatabase(context: Context): EntryDatabase =
+        fun getDatabase(context: Context): TransactionDatabase =
                 INSTANCE ?: synchronized(this) {
                     INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
                 }
 
         private fun buildDatabase(context: Context) =
                 Room.databaseBuilder(context.applicationContext,
-                        EntryDatabase::class.java, DB_NAME)
+                        TransactionDatabase::class.java, DB_NAME)
                         .addCallback(PrePopulateCallback(context))
                         .addMigrations(Migration2())
                         .build()

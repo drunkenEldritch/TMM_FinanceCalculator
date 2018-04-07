@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
@@ -36,7 +35,7 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener {
-            val addIntent = Intent(this, AddEntryActivity::class.java)
+            val addIntent = Intent(this, AddTransactionActivity::class.java)
             startActivity(addIntent)
         }
 
@@ -79,6 +78,8 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
                         val fragment = supportFragmentManager.findFragmentById(R.id.filter_fragment)
                         fragment.exp_list_view.setAdapter(ExpandableListDateAdapter(this, transactions))
+
+                        filter_total_sum.text = transactions.sumByDouble { it.price }.toString()
                     }
                 })
     }

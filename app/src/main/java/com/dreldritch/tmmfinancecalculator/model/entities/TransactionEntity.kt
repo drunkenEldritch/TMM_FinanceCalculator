@@ -7,8 +7,8 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(tableName = EntryEntity.TABLE_NAME)
-data class EntryEntity(
+@Entity(tableName = TransactionEntity.TABLE_NAME)
+data class TransactionEntity(
         @PrimaryKey(autoGenerate = true) val id: Long?,
         @ColumnInfo(name = "name") var name: String,
         @ColumnInfo(name = "price") var price: Double,

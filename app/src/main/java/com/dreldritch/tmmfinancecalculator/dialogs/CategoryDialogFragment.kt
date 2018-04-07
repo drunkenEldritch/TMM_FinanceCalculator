@@ -26,7 +26,7 @@ class CategoryDialogFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if(arguments != null)
-            categories = arguments.getParcelableArrayList(CATEGORIES)
+            categories = arguments!!.getParcelableArrayList(CATEGORIES)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -46,7 +46,7 @@ class CategoryDialogFragment : DialogFragment() {
 
         //TODO Access with ViewModel
         category_add_btn.setOnClickListener {
-            val repository = EntryDbRepository(context.applicationContext as Application)
+            val repository = EntryDbRepository(context?.applicationContext as Application)
             val colors = resources.getIntArray(R.array.icon_colors)
             val color = colors[Random().nextInt(colors.size)]
             val text = category_new_edit_text.text.toString()

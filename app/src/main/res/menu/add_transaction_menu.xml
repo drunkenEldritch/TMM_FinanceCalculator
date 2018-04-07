@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".controller.AddEntryActivity">
+    tools:context=".controller.AddTransactionActivity">
     <item
         android:id="@+id/action_save_template"
         android:icon="@drawable/ic_action_template_save"

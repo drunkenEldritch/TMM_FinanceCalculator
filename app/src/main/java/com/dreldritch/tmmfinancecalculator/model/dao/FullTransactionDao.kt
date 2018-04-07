@@ -7,21 +7,21 @@ import com.dreldritch.tmmfinancecalculator.model.entities.*
 
 @Dao
 abstract class FullTransactionDao {
-    @Query ("SELECT ${EntryEntity.TABLE_NAME}.id, " +
-            "${EntryEntity.TABLE_NAME}.name, " +
-            "${EntryEntity.TABLE_NAME}.price, " +
-            "${EntryEntity.TABLE_NAME}.description, " +
-            "${EntryEntity.TABLE_NAME}.in_out, " +
-            "${EntryEntity.TABLE_NAME}.date_id, ${DateEntity.TABLE_NAME}.date, " +
-            "${EntryEntity.TABLE_NAME}.account_id, ${AccountEntity.TABLE_NAME}.account, " +
-            "${EntryEntity.TABLE_NAME}.category_id, ${CategoryEntity.TABLE_NAME}.category, ${CategoryEntity.TABLE_NAME}.icon_color " +
-            "FROM ${EntryEntity.TABLE_NAME} " +
+    @Query ("SELECT ${TransactionEntity.TABLE_NAME}.id, " +
+            "${TransactionEntity.TABLE_NAME}.name, " +
+            "${TransactionEntity.TABLE_NAME}.price, " +
+            "${TransactionEntity.TABLE_NAME}.description, " +
+            "${TransactionEntity.TABLE_NAME}.in_out, " +
+            "${TransactionEntity.TABLE_NAME}.date_id, ${DateEntity.TABLE_NAME}.date, " +
+            "${TransactionEntity.TABLE_NAME}.account_id, ${AccountEntity.TABLE_NAME}.account, " +
+            "${TransactionEntity.TABLE_NAME}.category_id, ${CategoryEntity.TABLE_NAME}.category, ${CategoryEntity.TABLE_NAME}.icon_color " +
+            "FROM ${TransactionEntity.TABLE_NAME} " +
             "INNER JOIN ${DateEntity.TABLE_NAME} ON " +
-            "${EntryEntity.TABLE_NAME}.date_id = ${DateEntity.TABLE_NAME}.id " +
+            "${TransactionEntity.TABLE_NAME}.date_id = ${DateEntity.TABLE_NAME}.id " +
             "INNER JOIN ${AccountEntity.TABLE_NAME} ON " +
-            "${EntryEntity.TABLE_NAME}.account_id = ${AccountEntity.TABLE_NAME}.id " +
+            "${TransactionEntity.TABLE_NAME}.account_id = ${AccountEntity.TABLE_NAME}.id " +
             "LEFT JOIN ${CategoryEntity.TABLE_NAME}  ON " +
-            "${EntryEntity.TABLE_NAME}.category_id = ${CategoryEntity.TABLE_NAME}.id")
+            "${TransactionEntity.TABLE_NAME}.category_id = ${CategoryEntity.TABLE_NAME}.id")
     abstract fun getAllTransactions(): LiveData<List<FullTransactionData>>
 
     @Query ("SELECT Entries.id, Entries.name, Entries.price, Entries.description, Entries.in_out, Entries.date_id, Dates.date, " +
@@ -35,19 +35,19 @@ abstract class FullTransactionDao {
 }
 
 /*
-@Query ("SELECT ${EntryEntity.TABLE_NAME}.id, " +
-        "${EntryEntity.TABLE_NAME}.name, " +
-        "${EntryEntity.TABLE_NAME}.price, " +
-        "${EntryEntity.TABLE_NAME}.description, " +
-        "${EntryEntity.TABLE_NAME}.in_out, " +
-        "${EntryEntity.TABLE_NAME}.date_id, ${DateEntity.TABLE_NAME}.date, " +
-        "${EntryEntity.TABLE_NAME}.account_id, ${AccountEntity.TABLE_NAME}.account, " +
-        "${EntryEntity.TABLE_NAME}.category_id, ${CategoryEntity.TABLE_NAME}.category, ${CategoryEntity.TABLE_NAME}.icon_color " +
-        "FROM ${EntryEntity.TABLE_NAME} " +
+@Query ("SELECT ${TransactionEntity.TABLE_NAME}.id, " +
+        "${TransactionEntity.TABLE_NAME}.name, " +
+        "${TransactionEntity.TABLE_NAME}.price, " +
+        "${TransactionEntity.TABLE_NAME}.description, " +
+        "${TransactionEntity.TABLE_NAME}.in_out, " +
+        "${TransactionEntity.TABLE_NAME}.date_id, ${DateEntity.TABLE_NAME}.date, " +
+        "${TransactionEntity.TABLE_NAME}.account_id, ${AccountEntity.TABLE_NAME}.account, " +
+        "${TransactionEntity.TABLE_NAME}.category_id, ${CategoryEntity.TABLE_NAME}.category, ${CategoryEntity.TABLE_NAME}.icon_color " +
+        "FROM ${TransactionEntity.TABLE_NAME} " +
         "INNER JOIN ${DateEntity.TABLE_NAME} ON " +
-        "${EntryEntity.TABLE_NAME}.date_id = ${DateEntity.TABLE_NAME}.id " +
+        "${TransactionEntity.TABLE_NAME}.date_id = ${DateEntity.TABLE_NAME}.id " +
         "INNER JOIN ${AccountEntity.TABLE_NAME} ON " +
-        "${EntryEntity.TABLE_NAME}.account_id = ${AccountEntity.TABLE_NAME}.id " +
+        "${TransactionEntity.TABLE_NAME}.account_id = ${AccountEntity.TABLE_NAME}.id " +
         "LEFT JOIN ${CategoryEntity.TABLE_NAME}  ON " +
-        "${EntryEntity.TABLE_NAME}.category_id = ${CategoryEntity.TABLE_NAME}.id " +
+        "${TransactionEntity.TABLE_NAME}.category_id = ${CategoryEntity.TABLE_NAME}.id " +
         "WHERE ${DateEntity.TABLE_NAME}.date LIKE :date")*/
