@@ -29,6 +29,8 @@
     <string name="no_price_error">Price is missing!</string>
     <string name="no_category_error">No category added!</string>
 
+    <string name="filter_header_sum_symbol">\u2211</string>
+
     <!--Default Category-->
     <string name="category1">Rent</string>
     <string name="category2">Food</string>
@@ -41,6 +43,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="x">X</string>
 
 
 </resources>
