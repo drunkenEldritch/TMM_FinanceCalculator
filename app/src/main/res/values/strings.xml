@@ -53,6 +53,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_str_settings">Settings</string>
     <string name="nav_str_options">Options</string>
+    <string name="nav_str_filter">Filter</string>
+    <string name="nav_str_overview">Overview</string>
     <!-- ..................................................................................... -->
 
     <!-- Setting strings -->
@@ -67,7 +69,6 @@
 
     <string name="pref_title_date_format">Choose a date format</string>
     <string name="pref_default_date_format">yyyy-MM-dd</string>
-
     <string-array name="pref_date_format_list_values">
         <item>yyyy-MM-dd</item>
         <item>dd.MM.yyyy</item>
@@ -76,7 +77,6 @@
 
     <string name="pref_title_currency">Choose a currency</string>
     <string name="pref_default_currency">€</string>
-
     <string-array name="pref_currency_list_values">
         <item>€</item>
         <item>$</item>

@@ -119,10 +119,10 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_camera -> {
+            R.id.nav_overview -> {
                 // Handle the camera action
             }
-            R.id.nav_manage -> {
+            R.id.nav_filter -> {
 
             }
             R.id.nav_settings -> {
