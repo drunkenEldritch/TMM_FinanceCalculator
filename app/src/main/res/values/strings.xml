@@ -62,24 +62,25 @@
     <string name="pref_group_general">General</string>
     <string name="pref_group_style">Style</string>
 
-    <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
-
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
-
     <string name="pref_title_display_name">Display name</string>
     <string name="pref_default_display_name">John Smith</string>
 
     <string name="pref_title_date_format">Choose a date format</string>
     <string name="pref_default_date_format">yyyy-MM-dd</string>
 
-    <string-array name="pref_date_format_list_titles">
+    <string-array name="pref_date_format_list_values">
         <item>yyyy-MM-dd</item>
         <item>dd.MM.yyyy</item>
         <item>dd/MM/yyyy</item>
+    </string-array>
+
+    <string name="pref_title_currency">Choose a currency</string>
+    <string name="pref_default_currency">€</string>
+
+    <string-array name="pref_currency_list_values">
+        <item>€</item>
+        <item>$</item>
+        <item>\u00A3</item>
     </string-array>
     <!-- ..................................................................................... -->
 

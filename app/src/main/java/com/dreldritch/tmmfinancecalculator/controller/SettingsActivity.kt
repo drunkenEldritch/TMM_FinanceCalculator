@@ -68,6 +68,7 @@ class SettingsActivity : PreferenceActivity() {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("example_text"))
             bindPreferenceSummaryToValue(findPreference("date_format"))
+            bindPreferenceSummaryToValue(findPreference("currency_format"))
         }
 
         override fun onOptionsItemSelected(item: MenuItem): Boolean {
