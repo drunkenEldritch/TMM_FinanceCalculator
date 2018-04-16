@@ -8,12 +8,12 @@ import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
 @Dao
 abstract class  CategoryDao: BaseDao<CategoryEntity>(){
 
-    @Query("SELECT * FROM ${CategoryEntity.TABLE_NAME}")
+    @Query("SELECT * FROM Categories")
     abstract fun getAll():LiveData<List<CategoryEntity>>
 
-    @Query("DELETE FROM ${CategoryEntity.TABLE_NAME}")
+    @Query("DELETE FROM Categories")
     abstract fun deleteAll()
 
-    @Query("SELECT id FROM ${CategoryEntity.TABLE_NAME} WHERE category = :category")
+    @Query("SELECT id FROM Categories WHERE category = :category")
     abstract fun getCategoryId(category: String): Long
 }
