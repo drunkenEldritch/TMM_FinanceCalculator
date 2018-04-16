@@ -47,6 +47,8 @@ class EntryDbRepository(application: Application){
 
     fun getAllTransactionsFromDate(date: String) = fullDataDao.getAllTransactionsFromDate(date)
 
+    fun findAccountById(id: Long) = accountDao.findById(id)
+
     /*fun isDbCreated() = TransactionDatabase.getDatabase(application).getDatabaseCreated()*/
 
     private class InsertFullDataAsyncTask(val transactionDao: TransactionDao, val dateDao: DateDao) : AsyncTask<FullTransactionData, Void, Void>() {

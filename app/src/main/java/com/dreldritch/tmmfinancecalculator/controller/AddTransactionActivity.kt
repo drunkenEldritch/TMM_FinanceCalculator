@@ -48,10 +48,15 @@ class AddTransactionActivity : AppCompatActivity(), DateDialogFragment.OnAddDial
         transactionViewModel = ViewModelProviders.of(this).get(AddTransactionViewModel::class.java)
 
         /*Account dialog setup*/
-        transactionViewModel.getAllAccounts()
-                .observe(this, Observer<List<AccountEntity>> { accounts ->
-                    entry_txt_account.setOnClickListener { openDialog("AccountDialog", AccountDialogFragment.newInstance(accounts!!)) }
-                })
+        transactionViewModel.getAllAccounts().observe(this, Observer<List<AccountEntity>> { accounts ->
+            entry_txt_account.setOnClickListener { openDialog("AccountDialog", AccountDialogFragment.newInstance(accounts!!)) }
+        })
+
+        transactionViewModel.findDefaultAccount().observe(this, Observer { account ->
+            if(account != null)
+                transactionViewModel.setCurrentAccount(account)
+
+        })
 
         transactionViewModel.getCurrentAccount().observe(this, Observer { accountEntity ->
             entry_txt_account.text = accountEntity?.account
@@ -66,7 +71,7 @@ class AddTransactionActivity : AppCompatActivity(), DateDialogFragment.OnAddDial
                 })
 
         transactionViewModel.getCurrentCategory().observe(this, Observer { categoryEntity ->
-            if (categoryEntity != null){
+            if (categoryEntity != null) {
                 entry_txt_category.text = categoryEntity.category
 
                 entry_icon_text_view.apply {
@@ -80,7 +85,8 @@ class AddTransactionActivity : AppCompatActivity(), DateDialogFragment.OnAddDial
 
         /*Date setup*/
         transactionViewModel.getCurrentDate().observe(this, Observer { dateEntity ->
-            entry_txt_date.text = dateEntity?.date })
+            entry_txt_date.text = dateEntity?.date
+        })
 
         entry_txt_date.setOnClickListener { openDialog("DateDialog", DateDialogFragment.newInstance()) }
 

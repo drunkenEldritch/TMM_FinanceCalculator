@@ -13,6 +13,7 @@ import android.widget.Toast
 import com.dreldritch.tmmfinancecalculator.R
 import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
 import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
+import com.dreldritch.tmmfinancecalculator.viewmodel.AddTransactionViewModel
 import kotlinx.android.synthetic.main.category_layout.view.*
 import kotlinx.android.synthetic.main.fragment_category_dialog.*
 import java.util.*
@@ -46,16 +47,17 @@ class CategoryDialogFragment : DialogFragment() {
 
         //TODO Access with ViewModel
         category_add_btn.setOnClickListener {
-            val repository = EntryDbRepository(context?.applicationContext as Application)
-            val colors = resources.getIntArray(R.array.icon_colors)
-            val color = colors[Random().nextInt(colors.size)]
             val text = category_new_edit_text.text.toString()
 
             if(text.isEmpty()){
                 Toast.makeText(context, R.string.no_category_error, Toast.LENGTH_SHORT).show()
             }else{
+                val colors = resources.getIntArray(R.array.icon_colors)
+                val color = colors[Random().nextInt(colors.size)]
                 val category = CategoryEntity(null, text, color)
-                repository.insertCategory(category)
+
+                val viewmodel = AddTransactionViewModel(context?.applicationContext as Application)
+                viewmodel.insertCategory(category)
                 onItemClicked(category)
                 dismiss()
             }

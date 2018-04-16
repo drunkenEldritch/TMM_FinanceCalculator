@@ -26,22 +26,22 @@ class AddTransactionViewModel(application: Application): AndroidViewModel(applic
     //private var dates: LiveData<List<DateEntity>>?
 
     init {
-        dateEntity.value = DateEntity(null,SimpleDateFormat(preferedFormat).format(Date()))
-        //TODO Only a test dummy, load real data
-        accountEntity.value = AccountEntity(1, "noobDummy")
-        categoryEntity.value = null
-
         //dates = repository.getAllDates()
         categories = repository.getAllCategories()
         accounts = repository.getAllAccounts()
 
+        accountEntity.value = AccountEntity(1, "deaf")
+        dateEntity.value = DateEntity(null,SimpleDateFormat(preferedFormat).format(Date()))
+        categoryEntity.value = null
     }
 
     fun getCurrentDate(): MutableLiveData<DateEntity> = dateEntity
     fun setCurrentDate(id: Long?, date: String) {dateEntity.value = DateEntity(id, date) }
 
-    fun getCurrentAccount(): MutableLiveData<AccountEntity> = accountEntity
+    fun getCurrentAccount(): LiveData<AccountEntity> = accountEntity
     fun setCurrentAccount(account: AccountEntity) {accountEntity.value = account}
+    fun findAccountById(id: Long)= repository.findAccountById(id)
+    fun findDefaultAccount()= repository.findAccountById(1)
 
     fun getCurrentCategory(): MutableLiveData<CategoryEntity?> = categoryEntity
     fun setCurrentCategory(category: CategoryEntity) { categoryEntity.value = category }
@@ -51,4 +51,6 @@ class AddTransactionViewModel(application: Application): AndroidViewModel(applic
     fun getAllCategories() = categories
     //fun getAllDates() = dates
     //fun getAllTransactions() = repository.getAllTransactions()
+
+    fun insertCategory(category: CategoryEntity) = repository.insertCategory(category)
 }
