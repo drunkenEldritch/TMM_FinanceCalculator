@@ -15,5 +15,8 @@ abstract class  CategoryDao: BaseDao<CategoryEntity>(){
     abstract fun deleteAll()
 
     @Query("SELECT id FROM Categories WHERE category = :category")
-    abstract fun getCategoryId(category: String): Long
+    abstract fun getCategoryId(category: String):LiveData<Long>
+
+    @Query("SELECT * FROM Categories WHERE category = :category")
+    abstract fun getCategoryEntity(category: String):LiveData<CategoryEntity>
 }

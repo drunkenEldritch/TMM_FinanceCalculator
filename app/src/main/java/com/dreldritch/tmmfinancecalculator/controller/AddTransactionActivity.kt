@@ -125,6 +125,7 @@ class AddTransactionActivity : AppCompatActivity(), DateDialogFragment.OnAddDial
             true
         }
 
+        //TODO Access with ViewModel
         R.id.action_save_entry -> {
             val fullDataObject = createFullDataObject()
             if (fullDataObject != null) {

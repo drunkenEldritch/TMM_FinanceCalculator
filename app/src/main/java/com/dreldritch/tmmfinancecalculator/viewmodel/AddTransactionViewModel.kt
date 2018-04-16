@@ -49,6 +49,7 @@ class AddTransactionViewModel(application: Application): AndroidViewModel(applic
     /*DB queries*/
     fun getAllAccounts() = accounts
     fun getAllCategories() = categories
+    fun getCategoryEntity(category: String) = repository.getCategoryEntity(category)
     //fun getAllDates() = dates
     //fun getAllTransactions() = repository.getAllTransactions()
 

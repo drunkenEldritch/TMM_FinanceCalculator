@@ -1,6 +1,7 @@
 package com.dreldritch.tmmfinancecalculator.dialogs
 
 import android.app.Application
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.graphics.Rect
 import android.graphics.drawable.GradientDrawable
@@ -45,7 +46,6 @@ class CategoryDialogFragment : DialogFragment() {
             addItemDecoration(IconItemDecorator(20))
         }
 
-        //TODO Access with ViewModel
         category_add_btn.setOnClickListener {
             val text = category_new_edit_text.text.toString()
 
@@ -56,10 +56,14 @@ class CategoryDialogFragment : DialogFragment() {
                 val color = colors[Random().nextInt(colors.size)]
                 val category = CategoryEntity(null, text, color)
 
-                val viewmodel = AddTransactionViewModel(context?.applicationContext as Application)
+                val viewmodel = ViewModelProviders.of(activity!!).get(AddTransactionViewModel::class.java)
                 viewmodel.insertCategory(category)
-                onItemClicked(category)
-                dismiss()
+                viewmodel.getCategoryEntity(category.category).observe(activity!!, android.arch.lifecycle.Observer {category ->
+                    if(category != null){
+                        onItemClicked(category)
+                        dismiss()
+                    }
+                })
             }
         }
     }
