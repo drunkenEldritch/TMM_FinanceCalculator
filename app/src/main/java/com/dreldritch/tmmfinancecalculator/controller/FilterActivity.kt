@@ -15,7 +15,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import com.dreldritch.tmmfinancecalculator.R
 import com.dreldritch.tmmfinancecalculator.adapter.ExpandableListDateAdapter
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
@@ -23,8 +22,6 @@ import com.dreldritch.tmmfinancecalculator.viewmodel.FilterActivityViewModel
 import kotlinx.android.synthetic.main.activity_filter.*
 import kotlinx.android.synthetic.main.app_bar_filter.*
 import kotlinx.android.synthetic.main.fragment_filter_list.*
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
 import java.util.*
 
 class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -102,7 +99,7 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.filter, menu)
+        menuInflater.inflate(R.menu.filter_activity_menu, menu)
         return true
     }
 
@@ -125,20 +122,11 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             R.id.nav_camera -> {
                 // Handle the camera action
             }
-            R.id.nav_gallery -> {
-
-            }
-            R.id.nav_slideshow -> {
-
-            }
             R.id.nav_manage -> {
 
             }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
-
+            R.id.nav_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
             }
         }
 
@@ -151,7 +139,7 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
             setCurrentTransactions(monthList[position])
-            Toast.makeText(context, monthList[position], Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context, monthList[position], Toast.LENGTH_SHORT).show()
         }
     }
 }
