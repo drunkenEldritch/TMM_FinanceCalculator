@@ -104,7 +104,7 @@ class CategoryDialogFragment : DialogFragment() {
     }
 
     //TODO Remove CategoryDialogFragment from constructor
-    class CategoryAdapter(private val dialog: CategoryDialogFragment, private val categories: List<CategoryEntity>): RecyclerView.Adapter<CategoryAdapter.ViewHolder>(){
+    inner class CategoryAdapter(private val dialog: CategoryDialogFragment, private val categories: List<CategoryEntity>): RecyclerView.Adapter<CategoryAdapter.ViewHolder>(){
 
         val categoryMap = categories.map { it.category to it }.toMap()
 
@@ -136,6 +136,13 @@ class CategoryDialogFragment : DialogFragment() {
             holder.iconColor = categories[position].iconColor
 
             holder.view.category_icon.text = categories[position].category.substring(0..1)
+
+            //TODO Access via ViewModel
+            holder.view.category_remove_btn.setOnClickListener {
+                val repo = EntryDbRepository(context?.applicationContext as Application)
+                repo.removeCategory(categories[position])
+                dialog.dismiss()
+            }
         }
     }
 

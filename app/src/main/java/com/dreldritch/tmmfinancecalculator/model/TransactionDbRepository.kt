@@ -51,6 +51,10 @@ class EntryDbRepository(application: Application){
 
     fun getCategoryEntity(category: String) = categoryDao.getCategoryEntity(category)
 
+    fun removeCategory(category: CategoryEntity) {
+        RemoveCategoryAsyncTask(categoryDao).execute(category)
+    }
+
     /*fun isDbCreated() = TransactionDatabase.getDatabase(application).getDatabaseCreated()*/
 
     private class InsertFullDataAsyncTask(val transactionDao: TransactionDao, val dateDao: DateDao) : AsyncTask<FullTransactionData, Void, Void>() {
@@ -84,6 +88,17 @@ class EntryDbRepository(application: Application){
     private class InsertCategoryAsyncTask(val categoryDao: CategoryDao) : AsyncTask<CategoryEntity, Void, Void>() {
         override fun doInBackground(vararg category: CategoryEntity): Void? {
             categoryDao.insert(category[0])
+            Log.d(REPOSITORY_TAG, "categoryID = ${category[0].id},\n" +
+                    "category = ${category[0].category},\n" +
+                    "iconColor = ${category[0].iconColor}\n" +
+                    "with $categoryDao")
+            return null
+        }
+    }
+
+    private class RemoveCategoryAsyncTask(val categoryDao: CategoryDao) : AsyncTask<CategoryEntity, Void, Void>() {
+        override fun doInBackground(vararg category: CategoryEntity): Void? {
+            categoryDao.delete(category[0])
             Log.d(REPOSITORY_TAG, "categoryID = ${category[0].id},\n" +
                     "category = ${category[0].category},\n" +
                     "iconColor = ${category[0].iconColor}\n" +
