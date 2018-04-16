@@ -46,6 +46,7 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         filterActivityViewModel = ViewModelProviders.of(this).get(FilterActivityViewModel::class.java)
 
+        //TODO IndexOutOfBoundsException when monthList is empty
         filterActivityViewModel.getAllDates().observe(this, Observer<List<DateEntity>> { dates ->
             if(dates != null){
                 //Cache dates
@@ -110,7 +111,10 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId) {
-            R.id.action_settings -> return true
+            R.id.action_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
+                return true
+            }
             else -> return super.onOptionsItemSelected(item)
         }
     }
