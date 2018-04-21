@@ -53,7 +53,7 @@ class AddTransactionActivity : AppCompatActivity(), DateDialogFragment.OnAddDial
         })
 
         transactionViewModel.findDefaultAccount().observe(this, Observer { account ->
-            if(account != null)
+            if (account != null)
                 transactionViewModel.setCurrentAccount(account)
 
         })
@@ -72,7 +72,10 @@ class AddTransactionActivity : AppCompatActivity(), DateDialogFragment.OnAddDial
                 entry_txt_category.text = categoryEntity.category
 
                 entry_icon_text_view.apply {
-                    text = categoryEntity.category.substring(0..1)
+                    text = if (categoryEntity.category.length > 2)
+                        categoryEntity.category.substring(0..1)
+                    else
+                        categoryEntity.category
                     val shape = resources.getDrawable(R.drawable.category_icon_drawable, null) as GradientDrawable
                     shape.setColor(categoryEntity.iconColor)
                     background = shape
@@ -122,7 +125,7 @@ class AddTransactionActivity : AppCompatActivity(), DateDialogFragment.OnAddDial
             true
         }
 
-        //TODO Access with ViewModel
+    //TODO Access with ViewModel
         R.id.action_save_entry -> {
             val fullDataObject = createFullDataObject()
             if (fullDataObject != null) {

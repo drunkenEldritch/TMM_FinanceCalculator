@@ -1,7 +1,6 @@
 package com.dreldritch.tmmfinancecalculator.dialogs
 
 import android.app.Application
-import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.graphics.Rect
@@ -20,7 +19,7 @@ import kotlinx.android.synthetic.main.category_layout.view.*
 import kotlinx.android.synthetic.main.fragment_category_dialog.*
 import java.util.*
 
-//TODO Create own viewmodel for CategoryDialogFragment
+//TODO ? Create own ViewModel for CategoryDialogFragment
 class CategoryDialogFragment : DialogFragment() {
 
     private var mListenerCategoryDialog: OnCategoryInteractionListener? = null
@@ -36,8 +35,8 @@ class CategoryDialogFragment : DialogFragment() {
 
         viewModel = ViewModelProviders.of(activity!!).get(AddTransactionViewModel::class.java)
 
-        viewModel.getAllCategories().observe(this, android.arch.lifecycle.Observer {categories ->
-            if(categories != null){
+        viewModel.getAllCategories().observe(this, android.arch.lifecycle.Observer { categories ->
+            if (categories != null) {
                 category_recycler_view.apply {
                     setHasFixedSize(true)
                     layoutManager = LinearLayoutManager(context)
@@ -49,16 +48,16 @@ class CategoryDialogFragment : DialogFragment() {
 
         category_add_btn.setOnClickListener {
             val text = category_new_edit_text.text.toString()
-            if(text.isEmpty()){
+            if (text.isEmpty()) {
                 Toast.makeText(context, R.string.no_category_error, Toast.LENGTH_SHORT).show()
-            }else{
+            } else {
                 val colors = resources.getIntArray(R.array.icon_colors)
                 val color = colors[Random().nextInt(colors.size)]
                 val categoryEntity = CategoryEntity(null, text, color)
 
                 viewModel.insertCategory(categoryEntity)
                 viewModel.getCategoryEntity(categoryEntity.category).observe(activity!!, android.arch.lifecycle.Observer { category ->
-                    if(category != null){
+                    if (category != null) {
                         onItemClicked(category)
                         dismiss()
                     }
@@ -86,24 +85,24 @@ class CategoryDialogFragment : DialogFragment() {
     }
 
     companion object {
-        const val CATEGORIES = "categories"
-
         fun newInstance(): CategoryDialogFragment {
             return CategoryDialogFragment()
         }
     }
 
-    fun onItemClicked(categoryEntity: CategoryEntity){
-        if(mListenerCategoryDialog != null)
+    fun onItemClicked(categoryEntity: CategoryEntity) {
+        if (mListenerCategoryDialog != null)
             mListenerCategoryDialog!!.onCategoryDialogInteraction(categoryEntity)
     }
 
-    inner class CategoryAdapter(private val categories: List<CategoryEntity>): RecyclerView.Adapter<CategoryAdapter.ViewHolder>(){
+    inner class CategoryAdapter(private val categories: List<CategoryEntity>) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
         val categoryMap = categories.map { it.category to it }.toMap()
 
         inner class ViewHolder(val view: View, var iconColor: Int?)
-            : RecyclerView.ViewHolder(view), View.OnClickListener{
-            init { view.setOnClickListener(this) }
+            : RecyclerView.ViewHolder(view), View.OnClickListener {
+            init {
+                view.setOnClickListener(this)
+            }
 
             override fun onClick(v: View?) {
                 val categoryEntity = categoryMap[v!!.category_txt.text.toString()]
@@ -112,12 +111,12 @@ class CategoryDialogFragment : DialogFragment() {
             }
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder{
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.category_layout, parent,false)
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.category_layout, parent, false)
             return ViewHolder(view, null)
         }
 
-        override fun getItemCount()= categories.count()
+        override fun getItemCount() = categories.count()
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
@@ -128,9 +127,12 @@ class CategoryDialogFragment : DialogFragment() {
             holder.view.category_icon.background = background
             holder.iconColor = categories[position].iconColor
 
-            holder.view.category_icon.text = categories[position].category.substring(0..1)
+            holder.view.category_icon.text = if (categories[position].category.length > 2)
+                categories[position].category.substring(0..1)
+            else
+                categories[position].category
 
-            //TODO Access via ViewModel
+            //TODO ? Access via ViewModel
             holder.view.category_remove_btn.setOnClickListener {
                 val repo = EntryDbRepository(context?.applicationContext as Application)
                 repo.removeCategory(categories[position])
@@ -138,9 +140,9 @@ class CategoryDialogFragment : DialogFragment() {
         }
     }
 
-    class IconItemDecorator(private val verticalItemSpace: Int): RecyclerView.ItemDecoration() {
+    class IconItemDecorator(private val verticalItemSpace: Int) : RecyclerView.ItemDecoration() {
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView,
-                           state: RecyclerView.State) {
+                                    state: RecyclerView.State) {
             outRect.bottom = verticalItemSpace
         }
     }
