@@ -40,7 +40,8 @@
             android:id="@+id/category_new_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/category_edit_text_str" />
+            android:hint="@string/category_edit_text_str"
+            android:inputType="textCapWords" />
     </android.support.design.widget.TextInputLayout>
 
     <Button
