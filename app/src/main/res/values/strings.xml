@@ -1,68 +1,58 @@
 <resources>
     <string name="app_name">TMM_FinanceCalculator</string>
 
-    <!--Add entry menu-->
+    <!--TransactionActivity......................................................................-->
     <string name="entry_template_txt">Template</string>
     <string name="entry_save_txt">Save</string>
-    <string name="entry_txt_category">Category</string>
 
+    <string name="add_new_entry_header">Add new transaction</string>
     <string name="hint_entry_name">Name</string>
     <string name="hint_entry_price">Price</string>
-    <string name="hint_entry_date">Date</string>
+    <string name="date_header">Date</string>
     <string name="hint_entry_desc">Description</string>
-    <string name="add_new_entry_txt">Add new entry</string>
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="entry_txt_category">Category</string>
+    <string name="entry_txt_acc">Account</string>
     <string name="entry_radio_in">in</string>
     <string name="entry_radio_out">out</string>
-    <string name="entry_txt_acc">Account</string>
+
     <string name="entry_standard_price">0.00</string>
-    <string name="entry_btn_templates">TEMPLATES</string>
-    <string name="entry_btn_category">Add new</string>
-    <string name="date_header">Date</string>
-    <string name="account_dialog_header">Account</string>
-    <string name="category_header">Category</string>
-    <string name="category_add_new_btn_str">Add</string>
-    <string name="category_edit_text_str">Add new category</string>
 
     <string name="no_name_error">Name is missing!</string>
     <string name="no_price_error">Price is missing!</string>
-    <string name="no_category_error">No category added!</string>
 
+    <!--FilterActivity......................................................................-->
+    <string name="title_activity_filter">FilterActivity</string>
     <string name="filter_header_sum_symbol">\u2211</string>
+    <string name="action_settings">Settings</string>
 
-    <!--Default Category-->
+    <!--AccountDialog........................................................................... -->
+    <string name="account_dialog_header">Account</string>
+
+    <!--CategoryDialog.......................................................................... -->
     <string name="category1">Rent</string>
     <string name="category2">Food</string>
     <string name="category3">Car</string>
     <string name="category4">Hobby</string>
     <string name="category5">Electronic</string>
 
-    <string name="title_activity_filter">FilterActivity</string>
+    <string name="category_header">Category</string>
+    <string name="category_add_new_btn_str">Add</string>
+    <string name="category_edit_text_str">Add new category</string>
+    <string name="no_category_error">No category added!</string>
 
-
-
-    <string name="action_settings">Settings</string>
-    <string name="x">X</string>
-    <string name="title_activity_settings">Settings</string>
-    <!-- ..................................................................................... -->
-    <!--Navigation Drawer-->
-    <!-- ..................................................................................... -->
-
+    <!--NAVIGATION DRAWER....................................................................... -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_str_settings">Settings</string>
     <string name="nav_str_options">Options</string>
     <string name="nav_str_filter">Filter</string>
     <string name="nav_str_overview">Overview</string>
-    <!-- ..................................................................................... -->
 
-    <!-- Setting strings -->
-    <!-- ..................................................................................... -->
+    <!--SETTINGS................................................................................ -->
+    <string name="title_activity_settings">Settings</string>
 
-    <!-- Setting groups -->
     <string name="pref_group_general">General</string>
-    <string name="pref_group_style">Style</string>
+    <string name="pref_group_style">Format</string>
 
     <string name="pref_title_display_name">Display name</string>
     <string name="pref_default_display_name">John Smith</string>

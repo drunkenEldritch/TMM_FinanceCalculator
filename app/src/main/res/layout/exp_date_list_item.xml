@@ -27,7 +27,6 @@
                 android:layout_weight="0"
                 android:background="@drawable/category_icon_drawable"
                 android:padding="@dimen/category_icon_shape_padding_small"
-                android:text="@string/x"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/category_icon_txt_size_small" />

@@ -72,6 +72,7 @@ abstract class TransactionDatabase : RoomDatabase() {
             super.onCreate(db)
             Executors.newSingleThreadExecutor()
                     .execute({
+                        //TODO Get array of default categories & colors
                         getDatabase(context).getAccountDao().insert(AccountEntity(null, "default"))
                         getDatabase(context).getCategoryDao().insert(
                                 CategoryEntity(null, context.getString(R.string.category1), ContextCompat.getColor(context, R.color.blue)),
