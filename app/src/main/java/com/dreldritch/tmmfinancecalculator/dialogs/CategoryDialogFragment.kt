@@ -42,7 +42,7 @@ class CategoryDialogFragment : DialogFragment() {
         category_recycler_view.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
-            adapter = CategoryAdapter(this@CategoryDialogFragment, categories)
+            adapter = CategoryAdapter(categories)
             addItemDecoration(IconItemDecorator(20))
         }
 
@@ -103,9 +103,7 @@ class CategoryDialogFragment : DialogFragment() {
             mListenerCategoryDialog!!.onCategoryDialogInteraction(categoryEntity)
     }
 
-    //TODO Remove CategoryDialogFragment from constructor
-    inner class CategoryAdapter(private val dialog: CategoryDialogFragment, private val categories: List<CategoryEntity>): RecyclerView.Adapter<CategoryAdapter.ViewHolder>(){
-
+    inner class CategoryAdapter(private val categories: List<CategoryEntity>): RecyclerView.Adapter<CategoryAdapter.ViewHolder>(){
         val categoryMap = categories.map { it.category to it }.toMap()
 
         inner class ViewHolder(val view: View, var iconColor: Int?)
@@ -114,8 +112,8 @@ class CategoryDialogFragment : DialogFragment() {
 
             override fun onClick(v: View?) {
                 val categoryEntity = categoryMap[v!!.category_txt.text.toString()]
-                dialog.onItemClicked(categoryEntity!!)
-                dialog.dismiss()
+                onItemClicked(categoryEntity!!)
+                dismiss()
             }
         }
 
@@ -130,7 +128,7 @@ class CategoryDialogFragment : DialogFragment() {
 
             holder.view.category_txt.text = categories[position].category
 
-            val background = dialog.resources.getDrawable(R.drawable.category_icon_drawable, null) as GradientDrawable
+            val background = resources.getDrawable(R.drawable.category_icon_drawable, null) as GradientDrawable
             background.setColor(categories[position].iconColor)
             holder.view.category_icon.background = background
             holder.iconColor = categories[position].iconColor
@@ -141,7 +139,7 @@ class CategoryDialogFragment : DialogFragment() {
             holder.view.category_remove_btn.setOnClickListener {
                 val repo = EntryDbRepository(context?.applicationContext as Application)
                 repo.removeCategory(categories[position])
-                dialog.dismiss()
+                dismiss()
             }
         }
     }
