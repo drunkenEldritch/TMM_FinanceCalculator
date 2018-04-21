@@ -45,7 +45,7 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         //TODO IndexOutOfBoundsException when monthList is empty
         filterActivityViewModel.getAllDates().observe(this, Observer<List<DateEntity>> { dates ->
-            if(dates != null){
+            if(dates != null && dates.isNotEmpty()){
                 //Cache dates
                 val monthList = dates.map { it.date.substring(0..it.date.length - 4) }.distinct().sortedDescending()
 
@@ -56,10 +56,16 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 //Initialize spinner
                 filter_date_spinner.apply {
                     adapter = dateAdapter
-                    onItemSelectedListener = MonthSpinnerAdapter(context, monthList)
+                    onItemSelectedListener = MonthSpinnerAdapterListener(context, monthList)
                 }
+
                 //Initialize ExpandableList
-                setCurrentTransactions(monthList[0])
+                setCurrentTransactions(monthList.first())
+            }else{
+                //Initialize adapter for spinner
+                val dateAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayOf("-empty-"))
+                dateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                filter_date_spinner.adapter = dateAdapter
             }
         })
 
@@ -76,7 +82,6 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         filterActivityViewModel.getAllTransactionsFromDate("%$date%")
                 .observe(this, Observer { transactions ->
                     if(transactions != null){
-
                         val fragment = supportFragmentManager.findFragmentById(R.id.filter_fragment)
                         fragment.exp_list_view.setAdapter(ExpandableListDateAdapter(this, transactions))
 
@@ -134,7 +139,7 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         return true
     }
 
-    inner class MonthSpinnerAdapter(val context: Context, private val monthList: List<String>): AdapterView.OnItemSelectedListener{
+    inner class MonthSpinnerAdapterListener(val context: Context, private val monthList: List<String>): AdapterView.OnItemSelectedListener{
         override fun onNothingSelected(parent: AdapterView<*>?) {}
 
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
