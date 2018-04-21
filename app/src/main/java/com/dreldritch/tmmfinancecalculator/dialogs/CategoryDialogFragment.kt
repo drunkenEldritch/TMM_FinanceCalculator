@@ -1,6 +1,7 @@
 package com.dreldritch.tmmfinancecalculator.dialogs
 
 import android.app.Application
+import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.graphics.Rect
@@ -19,17 +20,11 @@ import kotlinx.android.synthetic.main.category_layout.view.*
 import kotlinx.android.synthetic.main.fragment_category_dialog.*
 import java.util.*
 
-
+//TODO Create own viewmodel for CategoryDialogFragment
 class CategoryDialogFragment : DialogFragment() {
 
     private var mListenerCategoryDialog: OnCategoryInteractionListener? = null
-    private lateinit var categories: List<CategoryEntity>
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if(arguments != null)
-            categories = arguments!!.getParcelableArrayList(CATEGORIES)
-    }
+    private lateinit var viewModel: AddTransactionViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -39,26 +34,30 @@ class CategoryDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        category_recycler_view.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
-            adapter = CategoryAdapter(categories)
-            addItemDecoration(IconItemDecorator(20))
-        }
+        viewModel = ViewModelProviders.of(activity!!).get(AddTransactionViewModel::class.java)
+
+        viewModel.getAllCategories().observe(this, android.arch.lifecycle.Observer {categories ->
+            if(categories != null){
+                category_recycler_view.apply {
+                    setHasFixedSize(true)
+                    layoutManager = LinearLayoutManager(context)
+                    adapter = CategoryAdapter(categories)
+                    addItemDecoration(IconItemDecorator(20))
+                }
+            }
+        })
 
         category_add_btn.setOnClickListener {
             val text = category_new_edit_text.text.toString()
-
             if(text.isEmpty()){
                 Toast.makeText(context, R.string.no_category_error, Toast.LENGTH_SHORT).show()
             }else{
                 val colors = resources.getIntArray(R.array.icon_colors)
                 val color = colors[Random().nextInt(colors.size)]
-                val category = CategoryEntity(null, text, color)
+                val categoryEntity = CategoryEntity(null, text, color)
 
-                val viewmodel = ViewModelProviders.of(activity!!).get(AddTransactionViewModel::class.java)
-                viewmodel.insertCategory(category)
-                viewmodel.getCategoryEntity(category.category).observe(activity!!, android.arch.lifecycle.Observer {category ->
+                viewModel.insertCategory(categoryEntity)
+                viewModel.getCategoryEntity(categoryEntity.category).observe(activity!!, android.arch.lifecycle.Observer { category ->
                     if(category != null){
                         onItemClicked(category)
                         dismiss()
@@ -89,12 +88,8 @@ class CategoryDialogFragment : DialogFragment() {
     companion object {
         const val CATEGORIES = "categories"
 
-        fun newInstance(categories: List<CategoryEntity>): CategoryDialogFragment {
-            val dialog = CategoryDialogFragment()
-            val bundle = Bundle()
-            bundle.putParcelableArrayList(CATEGORIES, ArrayList(categories))
-            dialog.arguments = bundle
-            return dialog
+        fun newInstance(): CategoryDialogFragment {
+            return CategoryDialogFragment()
         }
     }
 
@@ -139,7 +134,6 @@ class CategoryDialogFragment : DialogFragment() {
             holder.view.category_remove_btn.setOnClickListener {
                 val repo = EntryDbRepository(context?.applicationContext as Application)
                 repo.removeCategory(categories[position])
-                dismiss()
             }
         }
     }

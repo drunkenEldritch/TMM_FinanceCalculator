@@ -63,12 +63,9 @@ class AddTransactionActivity : AppCompatActivity(), DateDialogFragment.OnAddDial
         })
 
         /*Category dialog setup*/
-        transactionViewModel.getAllCategories()
-                .observe(this, Observer<List<CategoryEntity>> { categories ->
-                    entry_txt_category.apply {
-                        setOnClickListener { openDialog("CategoryDialog", CategoryDialogFragment.newInstance(categories!!)) }
-                    }
-                })
+        entry_txt_category.apply {
+            setOnClickListener { openDialog("CategoryDialog", CategoryDialogFragment.newInstance()) }
+        }
 
         transactionViewModel.getCurrentCategory().observe(this, Observer { categoryEntity ->
             if (categoryEntity != null) {
