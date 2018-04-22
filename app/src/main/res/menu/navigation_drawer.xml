@@ -7,19 +7,19 @@
         <item
             android:id="@+id/nav_overview"
             android:icon="@drawable/ic_insert_chart_black_24dp"
-            android:title="@string/nav_str_overview" />
+            android:title="@string/overview_str" />
         <item
             android:id="@+id/nav_filter"
             android:icon="@drawable/ic_filter_list_black_24dp"
-            android:title="@string/nav_str_filter" />
+            android:title="@string/filter_str" />
     </group>
 
-    <item android:title="@string/nav_str_options">
+    <item android:title="@string/options_str">
         <menu>
             <item
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_settings_black_24dp"
-                android:title="@string/nav_str_settings" />
+                android:title="@string/settings_str" />
         </menu>
     </item>
 

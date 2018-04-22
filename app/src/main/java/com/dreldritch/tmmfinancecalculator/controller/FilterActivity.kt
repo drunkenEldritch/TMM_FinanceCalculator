@@ -16,6 +16,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.dreldritch.tmmfinancecalculator.R
+import com.dreldritch.tmmfinancecalculator.R.id.nav_view
 import com.dreldritch.tmmfinancecalculator.adapter.ExpandableListDateAdapter
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 import com.dreldritch.tmmfinancecalculator.viewmodel.FilterActivityViewModel

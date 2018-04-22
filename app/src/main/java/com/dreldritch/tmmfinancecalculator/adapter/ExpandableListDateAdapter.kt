@@ -54,7 +54,7 @@ class ExpandableListDateAdapter(val context: Context, private val transactionLis
         val childLayout = layoutInflater.inflate(R.layout.exp_date_list_item, null)
 
         childLayout.exp_list_item_name.text = transactionEntity!!.name
-        childLayout.exp_list_item_price.text = String.format(Locale.ROOT, "%.2f", transactionEntity!!.price)
+        childLayout.exp_list_item_price.text = String.format(Locale.ROOT, "%.2f", transactionEntity.price)
 
         /*if(transactionEntity.category_id != null){
             childLayout.exp_list_category_icon.apply {

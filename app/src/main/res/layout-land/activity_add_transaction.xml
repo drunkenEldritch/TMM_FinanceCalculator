@@ -75,7 +75,7 @@
                     android:id="@+id/entry_edit_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_entry_name"
+                    android:hint="@string/name_str"
                     android:singleLine="true"
                     android:imeOptions="flagNoExtractUi"/>
             </android.support.design.widget.TextInputLayout>
@@ -96,7 +96,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="@string/hint_entry_price"
+                    android:hint="@string/price_str"
                     android:inputType="numberDecimal"
                     android:selectAllOnFocus="true"
                     android:text="@string/entry_standard_price"
@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="@string/date_header"
+                android:text="@string/date_str"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@+id/guideline66"
                 app:layout_constraintTop_toBottomOf="@+id/entry_header" />
@@ -145,7 +145,7 @@
                     android:id="@+id/entry_edit_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_entry_desc"
+                    android:hint="@string/description_str"
                     android:imeOptions="flagNoExtractUi"/>
             </android.support.design.widget.TextInputLayout>
 
@@ -164,14 +164,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/entry_radio_in" />
+                    android:text="@string/radio_in_str" />
 
                 <RadioButton
                     android:id="@+id/entry_out_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/entry_radio_out" />
+                    android:text="@string/radio_out_str" />
             </RadioGroup>
 
             <TextView
@@ -180,7 +180,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
-                android:text="@string/entry_txt_acc"
+                android:text="@string/account_str"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/entry_layout_description" />
@@ -203,7 +203,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
-                android:text="@string/entry_txt_category"
+                android:text="@string/category_str"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/entry_txt_account" />

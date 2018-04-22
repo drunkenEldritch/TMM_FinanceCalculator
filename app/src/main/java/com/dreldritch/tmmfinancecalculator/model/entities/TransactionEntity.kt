@@ -1,15 +1,14 @@
 package com.dreldritch.tmmfinancecalculator.model.entities
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
-import android.arch.persistence.room.PrimaryKey
+import android.arch.persistence.room.*
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 //TODO ForeignKey tests
 @Parcelize
 @Entity(tableName = TransactionEntity.TABLE_NAME,
+        indices = [(Index(value = ["category_id"], unique = true)),
+            (Index(value = ["account_id"], unique = true))],
         foreignKeys = [
             ForeignKey(entity = (CategoryEntity::class),
                     parentColumns = arrayOf("id"),

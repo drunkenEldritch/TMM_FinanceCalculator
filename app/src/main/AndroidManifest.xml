@@ -28,7 +28,7 @@
 
         <activity
             android:name=".controller.SettingsActivity"
-            android:label="@string/title_activity_settings"/>
+            android:label="@string/settings_str"/>
     </application>
 
 </manifest> <!-- android:parentActivityName=".controller.MainActivity" -->

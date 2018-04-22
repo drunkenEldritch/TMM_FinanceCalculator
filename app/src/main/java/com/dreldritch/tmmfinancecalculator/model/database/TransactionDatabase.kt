@@ -18,7 +18,10 @@ import android.arch.lifecycle.LiveData
 import com.dreldritch.tmmfinancecalculator.model.dao.*
 
 
-@Database(entities = [TransactionEntity::class, DateEntity::class, CategoryEntity::class, AccountEntity::class], version = 1)
+@Database(
+        entities = [TransactionEntity::class, DateEntity::class, CategoryEntity::class, AccountEntity::class],
+        version = 1,
+        exportSchema = false)
 abstract class TransactionDatabase : RoomDatabase() {
 
     abstract fun getEntryDao(): TransactionDao
