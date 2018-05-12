@@ -10,9 +10,7 @@ import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.TransactionEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.FullTransactionData
 
-private const val REPOSITORY_TAG = "EntryDbRepository"
-
-class EntryDbRepository(application: Application){
+class TransactionDbRepository(application: Application){
 
     private val dateDao: DateDao
     private val categoryDao: CategoryDao
@@ -25,7 +23,7 @@ class EntryDbRepository(application: Application){
         dateDao = db.getDateDao()
         categoryDao = db.getCategoryDao()
         accountDao = db.getAccountDao()
-        transactionDao = db.getEntryDao()
+        transactionDao = db.getTransactionDao()
         fullDataDao = db.getFullTransactionDataDao()
     }
 
@@ -63,16 +61,12 @@ class EntryDbRepository(application: Application){
             var dateId = dateDao.insert(DateEntity(null, transaction[0].date))
             if(dateId < 0) dateId = dateDao.getDateId(transaction[0].date)
 
-            val id = transactionDao.insert(TransactionEntity(null,
-                    transaction[0].name,
-                    transaction[0].price,
-                    transaction[0].description,
-                    transaction[0].in_out,
-                    dateId,
-                    transaction[0].category_id,
-                    transaction[0].account_id))
+            val transactionEntity = TransactionEntity(null, transaction[0].name,
+                    transaction[0].price, transaction[0].description, transaction[0].in_out,
+                    dateId, transaction[0].category_id, transaction[0].account_id)
+            val id = transactionDao.insert(transactionEntity)
 
-            Log.d(REPOSITORY_TAG, "id = $id,\n" +
+            Log.d("TransactionDbRepository", "id = $id,\n" +
                     "name = ${transaction[0].name},\n" +
                     "price = ${transaction[0].price},\n" +
                     "desc = ${transaction[0].description},\n" +
@@ -88,7 +82,7 @@ class EntryDbRepository(application: Application){
     private class InsertCategoryAsyncTask(val categoryDao: CategoryDao) : AsyncTask<CategoryEntity, Void, Void>() {
         override fun doInBackground(vararg category: CategoryEntity): Void? {
             categoryDao.insert(category[0])
-            Log.d(REPOSITORY_TAG, "categoryID = ${category[0].id},\n" +
+            Log.d("TransactionDbRepository", "categoryID = ${category[0].id},\n" +
                     "category = ${category[0].category},\n" +
                     "iconColor = ${category[0].iconColor}\n" +
                     "with $categoryDao")
@@ -99,7 +93,7 @@ class EntryDbRepository(application: Application){
     private class RemoveCategoryAsyncTask(val categoryDao: CategoryDao) : AsyncTask<CategoryEntity, Void, Void>() {
         override fun doInBackground(vararg category: CategoryEntity): Void? {
             categoryDao.delete(category[0])
-            Log.d(REPOSITORY_TAG, "categoryID = ${category[0].id},\n" +
+            Log.d("TransactionDbRepository", "categoryID = ${category[0].id},\n" +
                     "category = ${category[0].category},\n" +
                     "iconColor = ${category[0].iconColor}\n" +
                     "with $categoryDao")

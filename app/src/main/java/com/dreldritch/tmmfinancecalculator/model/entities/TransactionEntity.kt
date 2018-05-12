@@ -3,21 +3,26 @@ package com.dreldritch.tmmfinancecalculator.model.entities
 import android.arch.persistence.room.*
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import android.arch.persistence.room.ForeignKey.CASCADE
+import android.arch.persistence.room.ForeignKey.SET_NULL
+
 
 //TODO ForeignKey tests
 @Parcelize
 @Entity(tableName = TransactionEntity.TABLE_NAME,
-        indices = [(Index(value = ["category_id"], unique = true)),
-            (Index(value = ["account_id"], unique = true))],
+        indices = [(Index(value = ["category_id"])),
+            (Index(value = ["account_id"]))],
         foreignKeys = [
-            ForeignKey(entity = (CategoryEntity::class),
-                    parentColumns = arrayOf("id"),
-                    childColumns = arrayOf("category_id"),
-                    onDelete = ForeignKey.SET_NULL),
-            ForeignKey(entity = (AccountEntity::class),
-                    parentColumns = arrayOf("id"),
-                    childColumns = arrayOf("account_id"),
-                    onDelete = ForeignKey.CASCADE)])
+            ForeignKey(
+                entity = AccountEntity::class,
+                parentColumns = ["id"],
+                childColumns = ["account_id"],
+                onDelete = CASCADE),
+            ForeignKey(
+                    entity = CategoryEntity::class,
+                    parentColumns = ["id"],
+                    childColumns = ["category_id"],
+                    onDelete = SET_NULL)])
 data class TransactionEntity(
         @PrimaryKey(autoGenerate = true) val id: Long?,
         @ColumnInfo(name = "name") var name: String,
@@ -29,6 +34,6 @@ data class TransactionEntity(
         @ColumnInfo(name = "account_id") var accountId: Long)
     : Parcelable {
     companion object {
-        const val TABLE_NAME = "Entries"
+        const val TABLE_NAME = "Transactions"
     }
 }

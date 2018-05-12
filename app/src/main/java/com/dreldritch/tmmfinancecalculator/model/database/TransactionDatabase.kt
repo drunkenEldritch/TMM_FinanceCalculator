@@ -16,15 +16,15 @@ import com.dreldritch.tmmfinancecalculator.model.entities.TransactionEntity
 import java.util.concurrent.Executors
 import android.arch.lifecycle.LiveData
 import com.dreldritch.tmmfinancecalculator.model.dao.*
-
+//,
+//exportSchema = false
 
 @Database(
         entities = [TransactionEntity::class, DateEntity::class, CategoryEntity::class, AccountEntity::class],
-        version = 1,
-        exportSchema = false)
+        version = 1)
 abstract class TransactionDatabase : RoomDatabase() {
 
-    abstract fun getEntryDao(): TransactionDao
+    abstract fun getTransactionDao(): TransactionDao
     abstract fun getDateDao(): DateDao
     abstract fun getAccountDao(): AccountDao
     abstract fun getCategoryDao(): CategoryDao
@@ -76,7 +76,7 @@ abstract class TransactionDatabase : RoomDatabase() {
             Executors.newSingleThreadExecutor()
                     .execute({
                         //TODO Get array of default categories & colors
-                        getDatabase(context).getAccountDao().insert(AccountEntity(null, "default"))
+                        getDatabase(context).getAccountDao().insert(AccountEntity(null, "Konto1"))
                         getDatabase(context).getCategoryDao().insert(
                                 CategoryEntity(null, context.getString(R.string.category1), ContextCompat.getColor(context, R.color.blue)),
                                 CategoryEntity(null, context.getString(R.string.category2), ContextCompat.getColor(context, R.color.green)),
