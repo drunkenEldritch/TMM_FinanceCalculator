@@ -2,6 +2,7 @@ package com.dreldritch.tmmfinancecalculator.dialogs
 
 import android.app.Application
 import android.arch.persistence.room.Transaction
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -10,6 +11,7 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import com.dreldritch.tmmfinancecalculator.R
+import com.dreldritch.tmmfinancecalculator.controller.AddTransactionActivity
 import com.dreldritch.tmmfinancecalculator.model.TransactionDbRepository
 import com.dreldritch.tmmfinancecalculator.model.entities.FullTransactionData
 import kotlinx.android.synthetic.main.fragment_transaction_dialog.*
@@ -51,7 +53,11 @@ class TransactionOverviewDialog: DialogFragment() {
             dismiss()
         }
 
-        edit_button.setOnClickListener {  }
+        edit_button.setOnClickListener {
+            val intent = Intent(context, AddTransactionActivity::class.java)
+            intent.putExtra("transaction", transaction)
+            startActivity(intent)
+        }
     }
 
 

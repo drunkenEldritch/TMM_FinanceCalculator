@@ -44,7 +44,7 @@ class AddTransactionViewModel(application: Application): AndroidViewModel(applic
     fun findDefaultAccount()= repository.findAccountById(1)
 
     fun getCurrentCategory(): MutableLiveData<CategoryEntity?> = categoryEntity
-    fun setCurrentCategory(category: CategoryEntity) { categoryEntity.value = category }
+    fun setCurrentCategory(category: CategoryEntity?) { categoryEntity.value = category }
 
     /*DB queries*/
     fun getAllAccounts() = accounts

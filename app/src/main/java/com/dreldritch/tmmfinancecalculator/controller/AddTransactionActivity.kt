@@ -47,25 +47,37 @@ class AddTransactionActivity : AppCompatActivity(), DateDialogFragment.OnAddDial
 
         transactionViewModel = ViewModelProviders.of(this).get(AddTransactionViewModel::class.java)
 
-        /*Account dialog setup*/
-        transactionViewModel.getAllAccounts().observe(this, Observer<List<AccountEntity>> { accounts ->
-            entry_txt_account.setOnClickListener { openDialog("AccountDialog", AccountDialogFragment.newInstance(accounts!!)) }
-        })
+        if (intent.extras != null) {
+            val transactionData = intent.getParcelableExtra<FullTransactionData>("transaction")
 
-        transactionViewModel.findDefaultAccount().observe(this, Observer { account ->
-            if (account != null)
-                transactionViewModel.setCurrentAccount(account)
+            //TODO RadioButton missing
+            entry_edit_name.setText(transactionData.name)
+            entry_edit_price.setText(transactionData.price.toString())
+            entry_edit_description.setText(transactionData.description)
 
-        })
+            if(transactionData.in_out == 1)
+                entry_in_btn.isChecked = true
+            else
+                entry_out_btn.isChecked = true
+
+            transactionViewModel.setCurrentAccount(AccountEntity(transactionData.account_id,
+                    transactionData.account))
+            transactionViewModel.setCurrentCategory(if(transactionData.category == null) null else CategoryEntity(transactionData.category_id,
+                    transactionData.category!!, transactionData.icon_color!!))
+            transactionViewModel.setCurrentDate(transactionData.date_id, transactionData.date)
+
+        }else{
+            //TODO ??? Why here
+            transactionViewModel.findDefaultAccount().observe(this, Observer { account ->
+                if (account != null)
+                    transactionViewModel.setCurrentAccount(account)
+
+            })
+        }
 
         transactionViewModel.getCurrentAccount().observe(this, Observer { accountEntity ->
             entry_txt_account.text = accountEntity?.account
         })
-
-        /*Category dialog setup*/
-        entry_txt_category.apply {
-            setOnClickListener { openDialog("CategoryDialog", CategoryDialogFragment.newInstance()) }
-        }
 
         transactionViewModel.getCurrentCategory().observe(this, Observer { categoryEntity ->
             if (categoryEntity != null) {
@@ -88,6 +100,14 @@ class AddTransactionActivity : AppCompatActivity(), DateDialogFragment.OnAddDial
             entry_txt_date.text = dateEntity?.date
         })
 
+        /*Account dialog setup*/
+        transactionViewModel.getAllAccounts().observe(this, Observer<List<AccountEntity>> { accounts ->
+            entry_txt_account.setOnClickListener { openDialog("AccountDialog", AccountDialogFragment.newInstance(accounts!!)) }
+        })
+
+        /*Category dialog setup*/
+        entry_txt_category.setOnClickListener { openDialog("CategoryDialog", CategoryDialogFragment.newInstance()) }
+
         entry_txt_date.setOnClickListener { openDialog("DateDialog", DateDialogFragment.newInstance()) }
 
         //Setup price
@@ -107,8 +127,7 @@ class AddTransactionActivity : AppCompatActivity(), DateDialogFragment.OnAddDial
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
     }
 
