@@ -11,7 +11,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.dreldritch.tmm_financecalculator"
-        minSdkVersion 22
+        minSdkVersion 23
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"

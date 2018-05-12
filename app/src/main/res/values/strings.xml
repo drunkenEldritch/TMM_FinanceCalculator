@@ -63,6 +63,7 @@
 
     <string name="pref_title_currency">Choose a currency</string>
     <string name="pref_default_currency">€</string>
+    <string name="back_str">Back</string>
     <string-array name="pref_currency_list_values">
         <item>€</item>
         <item>$</item>

@@ -1,8 +1,10 @@
 package com.dreldritch.tmmfinancecalculator.dialogs
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import com.dreldritch.tmmfinancecalculator.R
@@ -26,6 +28,11 @@ class TransactionOverviewDialog: DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        val color = transaction.icon_color ?: resources.getColor(R.color.icon_default ,null)
+        transaction_dialog_toolbar.setBackgroundColor(color)
+
         name_value.text = transaction.name
         price_value.text = transaction.price.toString()
         date_value.text = transaction.date
@@ -33,7 +40,13 @@ class TransactionOverviewDialog: DialogFragment() {
         category_value.text = transaction.category
         account_value.text = transaction.account
         type_value.text = if(transaction.in_out == 1) "in" else "out"
+
+        back_button.setOnClickListener { dismiss() }
+        delete_button.setOnClickListener {  }
+        edit_button.setOnClickListener {  }
     }
+
+
 
     companion object {
         const val TRANSACTION = "transaction"
