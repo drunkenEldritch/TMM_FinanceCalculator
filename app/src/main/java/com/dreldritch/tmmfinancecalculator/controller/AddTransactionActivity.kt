@@ -16,7 +16,7 @@ import com.dreldritch.tmmfinancecalculator.R
 import com.dreldritch.tmmfinancecalculator.dialogs.AccountDialogFragment
 import com.dreldritch.tmmfinancecalculator.dialogs.CategoryDialogFragment
 import com.dreldritch.tmmfinancecalculator.dialogs.DateDialogFragment
-import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
+import com.dreldritch.tmmfinancecalculator.model.TransactionDbRepository
 import com.dreldritch.tmmfinancecalculator.model.entities.AccountEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.FullTransactionData
@@ -129,7 +129,7 @@ class AddTransactionActivity : AppCompatActivity(), DateDialogFragment.OnAddDial
         R.id.action_save_entry -> {
             val fullDataObject = createFullDataObject()
             if (fullDataObject != null) {
-                val repo = EntryDbRepository(application)
+                val repo = TransactionDbRepository(application)
                 repo.insertFullDataObject(fullDataObject)
                 Toast.makeText(this, "Entry saved!", Toast.LENGTH_SHORT).show()
                 onBackPressed()

@@ -18,7 +18,9 @@ import android.widget.ArrayAdapter
 import com.dreldritch.tmmfinancecalculator.R
 import com.dreldritch.tmmfinancecalculator.R.id.nav_view
 import com.dreldritch.tmmfinancecalculator.adapter.ExpandableListDateAdapter
+import com.dreldritch.tmmfinancecalculator.dialogs.TransactionOverviewDialog
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
+import com.dreldritch.tmmfinancecalculator.model.entities.FullTransactionData
 import com.dreldritch.tmmfinancecalculator.viewmodel.FilterActivityViewModel
 import kotlinx.android.synthetic.main.activity_filter.*
 import kotlinx.android.synthetic.main.app_bar_filter.*
@@ -44,7 +46,6 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         filterActivityViewModel = ViewModelProviders.of(this).get(FilterActivityViewModel::class.java)
 
-        //TODO IndexOutOfBoundsException when monthList is empty
         filterActivityViewModel.getAllDates().observe(this, Observer<List<DateEntity>> { dates ->
             if(dates != null && dates.isNotEmpty()){
                 //Cache dates
@@ -80,12 +81,18 @@ class FilterActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     }
 
     private fun setCurrentTransactions(date:String){
+        val fragment = supportFragmentManager.findFragmentById(R.id.filter_fragment)
+
+        fragment.exp_list_view.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
+            val child = parent.expandableListAdapter.getChild(groupPosition, childPosition) as FullTransactionData
+            TransactionOverviewDialog.newInstance(child).show(supportFragmentManager, "TransactionOverviewDialog")
+            true
+        }
+
         filterActivityViewModel.getAllTransactionsFromDate("%$date%")
                 .observe(this, Observer { transactions ->
                     if(transactions != null){
-                        val fragment = supportFragmentManager.findFragmentById(R.id.filter_fragment)
                         fragment.exp_list_view.setAdapter(ExpandableListDateAdapter(this, transactions))
-
                         filter_total_sum.text = String.format(Locale.ROOT, "%.2f", transactions.sumByDouble { it.price })
                     }
                 })

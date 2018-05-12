@@ -2,21 +2,24 @@
     <string name="app_name">TMM_FinanceCalculator</string>
 
     <string name="settings_str">Settings</string>
-    <string name="category_str">Category</string>
-    <string name="account_str">Account</string>
+    <string name="transaction_str">Transaction</string>
     <string name="options_str">Options</string>
     <string name="filter_str">Filter</string>
     <string name="overview_str">Overview</string>
     <string name="template_str">Template</string>
     <string name="save_str">Save</string>
+    <string name="add_str">Add</string>
+
+    <string name="name_str">Name</string>
     <string name="price_str">Price</string>
     <string name="date_str">Date</string>
     <string name="description_str">Description</string>
-    <string name="name_str">Name</string>
+    <string name="category_str">Category</string>
+    <string name="account_str">Account</string>
     <string name="entry_standard_price">0.00</string>
     <string name="radio_in_str">in</string>
     <string name="radio_out_str">out</string>
-    <string name="add_str">Add</string>
+    <string name="type_str">Type</string>
 
     <!--TransactionActivity......................................................................-->
     <string name="add_new_entry_header">Add new transaction</string>

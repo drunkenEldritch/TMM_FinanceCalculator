@@ -3,13 +3,13 @@ package com.dreldritch.tmmfinancecalculator.viewmodel
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
-import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
+import com.dreldritch.tmmfinancecalculator.model.TransactionDbRepository
 import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
 
 class FilterActivityViewModel(application: Application): AndroidViewModel(application){
 
-    private val repository = EntryDbRepository(application)
+    private val repository = TransactionDbRepository(application)
 
     private var categories: LiveData<List<CategoryEntity>>
     //private var accounts: LiveData<List<AccountEntity>>

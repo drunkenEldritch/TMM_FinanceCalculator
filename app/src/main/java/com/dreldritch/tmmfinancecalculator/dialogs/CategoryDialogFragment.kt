@@ -12,7 +12,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.Toast
 import com.dreldritch.tmmfinancecalculator.R
-import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
+import com.dreldritch.tmmfinancecalculator.model.TransactionDbRepository
 import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
 import com.dreldritch.tmmfinancecalculator.viewmodel.AddTransactionViewModel
 import kotlinx.android.synthetic.main.category_layout.view.*
@@ -134,7 +134,7 @@ class CategoryDialogFragment : DialogFragment() {
 
             //TODO ? Access via ViewModel
             holder.view.category_remove_btn.setOnClickListener {
-                val repo = EntryDbRepository(context?.applicationContext as Application)
+                val repo = TransactionDbRepository(context?.applicationContext as Application)
                 repo.removeCategory(categories[position])
             }
         }

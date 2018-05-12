@@ -4,7 +4,7 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import com.dreldritch.tmmfinancecalculator.model.EntryDbRepository
+import com.dreldritch.tmmfinancecalculator.model.TransactionDbRepository
 import com.dreldritch.tmmfinancecalculator.model.entities.AccountEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.CategoryEntity
 import com.dreldritch.tmmfinancecalculator.model.entities.DateEntity
@@ -15,7 +15,7 @@ class AddTransactionViewModel(application: Application): AndroidViewModel(applic
 
     private val preferedFormat = "yyyy-MM-dd"
 
-    private val repository = EntryDbRepository(application)
+    private val repository = TransactionDbRepository(application)
 
     private var dateEntity =  MutableLiveData<DateEntity>()
     private var accountEntity = MutableLiveData<AccountEntity>()
