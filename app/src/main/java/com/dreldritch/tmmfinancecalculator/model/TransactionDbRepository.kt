@@ -53,6 +53,10 @@ class TransactionDbRepository(application: Application){
         RemoveCategoryAsyncTask(categoryDao).execute(category)
     }
 
+    fun removeTransaction(transaction: FullTransactionData) {
+        RemoveTransactionAsyncTask(transactionDao, dateDao).execute(transaction)
+    }
+
     /*fun isDbCreated() = TransactionDatabase.getDatabase(application).getDatabaseCreated()*/
 
     private class InsertFullDataAsyncTask(val transactionDao: TransactionDao, val dateDao: DateDao) : AsyncTask<FullTransactionData, Void, Void>() {
@@ -96,7 +100,24 @@ class TransactionDbRepository(application: Application){
             Log.d("TransactionDbRepository", "categoryID = ${category[0].id},\n" +
                     "category = ${category[0].category},\n" +
                     "iconColor = ${category[0].iconColor}\n" +
-                    "with $categoryDao")
+                    "removed with $categoryDao")
+            return null
+        }
+    }
+
+    //TODo Remove stub
+    private class RemoveTransactionAsyncTask(val transactionDao: TransactionDao, val dateDao: DateDao) : AsyncTask<FullTransactionData, Void, Void>() {
+        override fun doInBackground(vararg fullTransactionData: FullTransactionData): Void? {
+
+            transactionDao.delete(TransactionEntity(fullTransactionData[0].id,
+                    fullTransactionData[0].name,
+                    fullTransactionData[0].price,
+                    fullTransactionData[0].description,
+                    fullTransactionData[0].in_out,
+                    fullTransactionData[0].date_id!!,
+                    fullTransactionData[0].category_id,
+                    fullTransactionData[0].account_id))
+            //transactionDao.deleteById(fullTransactionData[0].id!!)
             return null
         }
     }

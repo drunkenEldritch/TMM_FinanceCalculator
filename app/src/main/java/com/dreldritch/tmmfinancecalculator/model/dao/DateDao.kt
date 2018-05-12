@@ -16,4 +16,7 @@ abstract class  DateDao: BaseDao<DateEntity>(){
 
     @Query("SELECT id FROM Dates WHERE date = :date")
     abstract fun getDateId(date: String): Long
+
+    @Query("SELECT * FROM Dates WHERE id = :id")
+    abstract fun getDateById(id: Long): LiveData<DateEntity>
 }

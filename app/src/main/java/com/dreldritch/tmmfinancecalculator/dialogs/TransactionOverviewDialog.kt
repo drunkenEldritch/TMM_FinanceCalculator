@@ -1,5 +1,7 @@
 package com.dreldritch.tmmfinancecalculator.dialogs
 
+import android.app.Application
+import android.arch.persistence.room.Transaction
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -8,6 +10,7 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import com.dreldritch.tmmfinancecalculator.R
+import com.dreldritch.tmmfinancecalculator.model.TransactionDbRepository
 import com.dreldritch.tmmfinancecalculator.model.entities.FullTransactionData
 import kotlinx.android.synthetic.main.fragment_transaction_dialog.*
 
@@ -29,7 +32,6 @@ class TransactionOverviewDialog: DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         val color = transaction.icon_color ?: resources.getColor(R.color.icon_default ,null)
         transaction_dialog_toolbar.setBackgroundColor(color)
 
@@ -42,7 +44,13 @@ class TransactionOverviewDialog: DialogFragment() {
         type_value.text = if(transaction.in_out == 1) "in" else "out"
 
         back_button.setOnClickListener { dismiss() }
-        delete_button.setOnClickListener {  }
+
+        delete_button.setOnClickListener {
+            val repo = TransactionDbRepository(context?.applicationContext as Application)
+            repo.removeTransaction(transaction)
+            dismiss()
+        }
+
         edit_button.setOnClickListener {  }
     }
 
