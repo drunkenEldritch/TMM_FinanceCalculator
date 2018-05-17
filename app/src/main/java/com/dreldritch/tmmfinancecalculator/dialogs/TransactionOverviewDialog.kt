@@ -56,11 +56,10 @@ class TransactionOverviewDialog: DialogFragment() {
         edit_button.setOnClickListener {
             val intent = Intent(context, AddTransactionActivity::class.java)
             intent.putExtra("transaction", transaction)
+            dismiss()
             startActivity(intent)
         }
     }
-
-
 
     companion object {
         const val TRANSACTION = "transaction"

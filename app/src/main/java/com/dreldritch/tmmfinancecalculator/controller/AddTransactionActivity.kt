@@ -31,6 +31,7 @@ class AddTransactionActivity : AppCompatActivity(), DateDialogFragment.OnAddDial
         AccountDialogFragment.OnAccountDialogInteractionListener, CategoryDialogFragment.OnCategoryInteractionListener {
 
     val priceFormat = "."
+    var transactionData: FullTransactionData? = null
 
     private lateinit var transactionViewModel: AddTransactionViewModel
 
@@ -48,23 +49,23 @@ class AddTransactionActivity : AppCompatActivity(), DateDialogFragment.OnAddDial
         transactionViewModel = ViewModelProviders.of(this).get(AddTransactionViewModel::class.java)
 
         if (intent.extras != null) {
-            val transactionData = intent.getParcelableExtra<FullTransactionData>("transaction")
+            transactionData = intent.getParcelableExtra<FullTransactionData>("transaction")
 
             //TODO RadioButton missing
-            entry_edit_name.setText(transactionData.name)
-            entry_edit_price.setText(transactionData.price.toString())
-            entry_edit_description.setText(transactionData.description)
+            entry_edit_name.setText(transactionData!!.name)
+            entry_edit_price.setText(transactionData!!.price.toString())
+            entry_edit_description.setText(transactionData!!.description)
 
-            if(transactionData.in_out == 1)
+            if(transactionData!!.in_out == 1)
                 entry_in_btn.isChecked = true
             else
                 entry_out_btn.isChecked = true
 
-            transactionViewModel.setCurrentAccount(AccountEntity(transactionData.account_id,
-                    transactionData.account))
-            transactionViewModel.setCurrentCategory(if(transactionData.category == null) null else CategoryEntity(transactionData.category_id,
-                    transactionData.category!!, transactionData.icon_color!!))
-            transactionViewModel.setCurrentDate(transactionData.date_id, transactionData.date)
+            transactionViewModel.setCurrentAccount(AccountEntity(transactionData!!.account_id,
+                    transactionData!!.account))
+            transactionViewModel.setCurrentCategory(if(transactionData!!.category == null) null else CategoryEntity(transactionData!!.category_id,
+                    transactionData!!.category!!, transactionData!!.icon_color!!))
+            transactionViewModel.setCurrentDate(transactionData!!.date_id, transactionData!!.date)
 
         }else{
             //TODO ??? Why here
@@ -144,12 +145,12 @@ class AddTransactionActivity : AppCompatActivity(), DateDialogFragment.OnAddDial
             true
         }
 
-    //TODO Access with ViewModel
+    //TODO Access with ViewModel?
         R.id.action_save_entry -> {
             val fullDataObject = createFullDataObject()
             if (fullDataObject != null) {
                 val repo = TransactionDbRepository(application)
-                repo.insertFullDataObject(fullDataObject)
+                repo.upsertFullDataObject(fullDataObject)
                 Toast.makeText(this, "Entry saved!", Toast.LENGTH_SHORT).show()
                 onBackPressed()
             }
@@ -198,7 +199,8 @@ class AddTransactionActivity : AppCompatActivity(), DateDialogFragment.OnAddDial
             return null
         }
 
-        return FullTransactionData(null,
+        return FullTransactionData(
+                if(transactionData != null)transactionData!!.id else null,
                 entry_edit_name.text.toString(),
                 entry_edit_price.text.toString().toDouble(),
                 entry_edit_description.text.toString(),

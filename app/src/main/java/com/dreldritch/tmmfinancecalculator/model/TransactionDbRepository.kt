@@ -27,8 +27,8 @@ class TransactionDbRepository(application: Application){
         fullDataDao = db.getFullTransactionDataDao()
     }
 
-    fun insertFullDataObject(transaction: FullTransactionData){
-        InsertFullDataAsyncTask(transactionDao, dateDao).execute(transaction)
+    fun upsertFullDataObject(transaction: FullTransactionData){
+        UpsertFullDataAsyncTask(db ,transactionDao, dateDao).execute(transaction)
     }
 
     fun insertCategory(category: CategoryEntity) {
@@ -57,16 +57,31 @@ class TransactionDbRepository(application: Application){
         RemoveTransactionAsyncTask(db, transactionDao, dateDao).execute(transaction)
     }
 
-    private class InsertFullDataAsyncTask(val transactionDao: TransactionDao, val dateDao: DateDao) : AsyncTask<FullTransactionData, Void, Void>() {
+    private class UpsertFullDataAsyncTask(val db: TransactionDatabase, val transactionDao: TransactionDao, val dateDao: DateDao) : AsyncTask<FullTransactionData, Void, Void>() {
         override fun doInBackground(vararg transaction: FullTransactionData): Void? {
 
             var dateId = dateDao.insert(DateEntity(null, transaction[0].date))
             if(dateId < 0) dateId = dateDao.getDateId(transaction[0].date)
 
-            val transactionEntity = TransactionEntity(null, transaction[0].name,
+            var id: Long? = transaction[0].id
+
+            val transactionEntity = TransactionEntity(id, transaction[0].name,
                     transaction[0].price, transaction[0].description, transaction[0].in_out,
                     dateId, transaction[0].category_id, transaction[0].account_id)
-            val id = transactionDao.insert(transactionEntity)
+
+            if(id == null)
+                id = transactionDao.insert(transactionEntity)
+            else{
+                db.runInTransaction {
+                    transactionDao.update(transactionEntity)
+                    if (transactionDao.checkForLastDate(transactionEntity.dateId) == 0) {
+                        dateDao.deleteById(transactionEntity.dateId)
+                        Log.i("Repository",
+                                "id:${transactionEntity.dateId}")
+                    }
+                }
+            }
+
 
             Log.d("TransactionDbRepository", "id = $id,\n" +
                     "name = ${transaction[0].name},\n" +
