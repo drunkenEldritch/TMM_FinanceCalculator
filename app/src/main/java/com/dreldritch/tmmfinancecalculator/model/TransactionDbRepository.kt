@@ -12,6 +12,7 @@ import com.dreldritch.tmmfinancecalculator.model.entities.FullTransactionData
 
 class TransactionDbRepository(application: Application){
 
+    private val db = TransactionDatabase.getDatabase(application)
     private val dateDao: DateDao
     private val categoryDao: CategoryDao
     private val accountDao: AccountDao
@@ -19,7 +20,6 @@ class TransactionDbRepository(application: Application){
     private val fullDataDao: FullTransactionDao
 
     init {
-        val db = TransactionDatabase.getDatabase(application)
         dateDao = db.getDateDao()
         categoryDao = db.getCategoryDao()
         accountDao = db.getAccountDao()
@@ -54,10 +54,8 @@ class TransactionDbRepository(application: Application){
     }
 
     fun removeTransaction(transaction: FullTransactionData) {
-        RemoveTransactionAsyncTask(transactionDao, dateDao).execute(transaction)
+        RemoveTransactionAsyncTask(db, transactionDao, dateDao).execute(transaction)
     }
-
-    /*fun isDbCreated() = TransactionDatabase.getDatabase(application).getDatabaseCreated()*/
 
     private class InsertFullDataAsyncTask(val transactionDao: TransactionDao, val dateDao: DateDao) : AsyncTask<FullTransactionData, Void, Void>() {
         override fun doInBackground(vararg transaction: FullTransactionData): Void? {
@@ -105,19 +103,18 @@ class TransactionDbRepository(application: Application){
         }
     }
 
-    //TODo Remove stub
-    private class RemoveTransactionAsyncTask(val transactionDao: TransactionDao, val dateDao: DateDao) : AsyncTask<FullTransactionData, Void, Void>() {
+    private class RemoveTransactionAsyncTask(val db: TransactionDatabase, val transactionDao: TransactionDao,
+                                             val dateDao: DateDao) : AsyncTask<FullTransactionData, Void, Void>() {
         override fun doInBackground(vararg fullTransactionData: FullTransactionData): Void? {
-
-            transactionDao.delete(TransactionEntity(fullTransactionData[0].id,
-                    fullTransactionData[0].name,
-                    fullTransactionData[0].price,
-                    fullTransactionData[0].description,
-                    fullTransactionData[0].in_out,
-                    fullTransactionData[0].date_id!!,
-                    fullTransactionData[0].category_id,
-                    fullTransactionData[0].account_id))
-            //transactionDao.deleteById(fullTransactionData[0].id!!)
+            db.runInTransaction {
+                transactionDao.deleteById(fullTransactionData[0].id!!)
+                if (transactionDao.checkForLastDate(fullTransactionData[0].date_id!!) == 0) {
+                    dateDao.deleteById(fullTransactionData[0].date_id!!)
+                    Log.i("Repository",
+                            "id:${fullTransactionData[0].date_id} " +
+                                    "date: ${fullTransactionData[0].date} deleted!")
+                }
+            }
             return null
         }
     }

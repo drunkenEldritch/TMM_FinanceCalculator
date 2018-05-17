@@ -14,6 +14,9 @@ abstract class  DateDao: BaseDao<DateEntity>(){
     @Query("DELETE FROM ${DateEntity.TABLE_NAME}")
     abstract fun deleteAll()
 
+    @Query("DELETE FROM Dates WHERE id = :id")
+    abstract fun deleteById(id: Long)
+
     @Query("SELECT id FROM Dates WHERE date = :date")
     abstract fun getDateId(date: String): Long
 
